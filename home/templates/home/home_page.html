@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
 {% load static %}
 
 {% block body_class %}template-homepage{% endblock %}
@@ -12,6 +13,24 @@ Delete the line below if you're just getting started and want to remove the welc
 {% endblock extra_css %}
 
 {% block content %}
+
+<h1>{{ page.title }}</h1>
+<h3>{{ page.subtitle }}</h3>
+
+{% comment %} -c100 sets the cropping percentage {% endcomment %}
+{% image page.image fill-150x150  %}
+{% image page.image width-20 as custom_img  %}
+<img src="{{ custom_img.url }}" alt="{{ page.image.alt }}" class="custom-image" />
+<p>{{ page.image.caption }}</p>
+
+
+{% comment %}
+
+
+
+{% if page.body %}
+    <p>{{ page.body|richtext }}</p>
+{% endif %}
 
 {% comment %}
 Delete the line below if you're just getting started and want to remove the welcome screen!
