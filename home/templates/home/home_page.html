@@ -38,6 +38,38 @@ Delete the line below if you're just getting started and want to remove the welc
     {% endif %}
 
     {% comment %}
+    CTA_URL
+
+    - kind of messy because we want the title for this when external
+    {% endcomment %}
+    {% if page.get_cta_url %}
+        <p>
+            CTA:
+        <a href="{{ page.get_cta_url }}" class="btn btn-primary">
+            {% if page.cta_url %}
+                {{ page.cta_url.title }}
+            {% else %}
+                {{ page.get_cta_url }}
+            {% endif %}
+            </a>
+        </p>
+    {% endif %}
+
+
+
+    {% comment %}
+    {% if page.custom_text %}
+        <p>{{ page.custom_text }}</p>
+    {% endif %}
+    {% endcomment %}
+
+    {% comment %}
+    {% if page.custom_text %}
+        <p>{{ page.custom_text|richtext }}</p>
+    {% endif %}
+    {% endcomment %}
+
+    {% comment %}
     {% if page.body %}
         <p>{{ page.body|richtext }}</p>
     {% endif %}
