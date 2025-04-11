@@ -32,6 +32,9 @@ class NewsIndex(Page):
         return context
 
 
+from django.core.exceptions import ValidationError
+
+
 class NewsItem(Page):
     """
     A page that displays a specific new article.
@@ -46,3 +49,15 @@ class NewsItem(Page):
         FieldPanel('subtitle'),
         FieldPanel('body'),
     ]
+
+    def clean(self):
+        super().clean()
+
+        errors = {}
+
+        # can set any field errors and conditions in here
+        if "news" in self.title.lower():
+            errors["title"] = "Please don't use the word 'news' in the title."
+
+        if errors:
+            raise ValidationError(errors)
