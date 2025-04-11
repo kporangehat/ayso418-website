@@ -6,9 +6,12 @@ from wagtail.fields import RichTextField
 from wagtail.images import get_image_model
 from wagtail.documents import get_document_model
 
+
 class HomePage(Page):
     # default template when not specified
     # template = "home/home_page.html"
+
+    max_count = 1  # only allow one home page.
 
     subtitle = models.CharField(max_length=255, blank=True, null=True)
     body = RichTextField(blank=True)
