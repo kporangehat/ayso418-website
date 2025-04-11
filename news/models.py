@@ -22,6 +22,15 @@ class NewsIndex(Page):
         FieldPanel('body'),
     ]
 
+    def get_context(self, request):
+        """
+        Add the list of news articles to the context.
+        """
+        context = super().get_context(request)
+        context['newsitems'] = NewsItem.objects.live().public()
+        # context['news_items'] = self.get_children().live().public()
+        return context
+
 
 class NewsItem(Page):
     """
@@ -29,7 +38,6 @@ class NewsItem(Page):
     """
     parent_page_types = ['news.NewsIndex']   # restrict parent page to NewsIndex
     subpage_types = []  # restrict child pages to none
-
 
     subtitle = models.CharField(max_length=100, blank=True)
     body = RichTextField(blank=True)

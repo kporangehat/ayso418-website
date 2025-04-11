@@ -9,4 +9,13 @@
         {{ page.body|richtext }}
     <div>
 
+    <h2>Latest News</h2>
+    <hr>
+    {% for news_item in newsitems %}
+        <p>
+            <a href="{{ news_item.url }}">{{ news_item.title }}</a><br />
+            {{ news_item.subtitle}}
+        </p>
+    {% endfor %}
+
 {% endblock %}
