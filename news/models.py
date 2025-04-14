@@ -43,7 +43,11 @@ class NewsItem(Page):
     subpage_types = []  # restrict child pages to none
 
     subtitle = models.CharField(max_length=100, blank=True)
-    body = RichTextField(blank=True)
+    body = RichTextField(
+        blank=True,
+        features=['h2', 'h3', 'h4', 'bold', 'italic', 'link', 'document-link', 'blockquote', 'image'],
+        help_text="Use the toolbar to format your text and add links.",
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('subtitle'),
