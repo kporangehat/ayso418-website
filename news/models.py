@@ -50,7 +50,7 @@ class NewsItemTags(TaggedItemBase):
 
 from django.core.exceptions import ValidationError
 from wagtail.fields import StreamField
-from wagtail.blocks import TextBlock
+from wagtail.blocks import TextBlock, StreamBlock, StructBlock
 from wagtail.images.blocks import ImageChooserBlock
 
 
@@ -68,9 +68,22 @@ class NewsItem(Page):
         [
             ("text", TextBlock()),
             ("image", ImageChooserBlock()),
+            ("carousel", StreamBlock(
+                [
+                    ("image", ImageChooserBlock()),
+                    ("quotation", StructBlock(
+                        [
+                            ("text", TextBlock()),
+                            ("author", TextBlock()),
+                        ]
+                    )),
+                ],
+                min_num=1,
+                max_num=5,
+            ))
             # Add more StreamField blocks as needed
         ],
-        block_counts = {
+        block_counts={
             "text": {"min_num": 1, "max_num": 3},
             "image": {"min_num": 0, "max_num": 2},
         },
