@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
     <style>
@@ -18,10 +18,19 @@
     <h1>{{ page.title }}</h1>
     <h3>{{ page.subtitle }}</h3>
 
-    {% comment %} good practice to always wrap in richtext class so we can style {% endcomment %}
+    {% comment %} good practice to always wrap in richtext class so we can style
     <div class="richtext">
         {{ page.body|richtext }}
     <div>
+    {% endcomment %}
+
+    {% for block in page.body  %}
+        {% if block.block_type == "text" %}
+            {{ block.value }}
+        {% elif block.block_type == "image" %}
+            {% image block.value fill-800x400 %}
+        {% endif %}
+    {% endfor %}
 
     <h3>Tags</h3>
     <ul>

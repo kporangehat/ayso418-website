@@ -49,6 +49,9 @@ class NewsItemTags(TaggedItemBase):
 
 
 from django.core.exceptions import ValidationError
+from wagtail.fields import StreamField
+from wagtail.blocks import TextBlock
+from wagtail.images.blocks import ImageChooserBlock
 
 
 class NewsItem(Page):
@@ -59,12 +62,22 @@ class NewsItem(Page):
     subpage_types = []  # restrict child pages to none
 
     subtitle = models.CharField(max_length=100, blank=True)
-    body = RichTextField(
-        blank=True,
-        features=['h2', 'h3', 'h4', 'bold', 'italic', 'link', 'document-link', 'blockquote', 'image'],
-        help_text="Use the toolbar to format your text and add links.",
-    )
     tags = ClusterTaggableManager(through=NewsItemTags, blank=True)
+
+    body = StreamField(
+        [
+            ("text", TextBlock()),
+            ("image", ImageChooserBlock()),
+            # Add more StreamField blocks as needed
+        ],
+        block_counts = {
+            "text": {"min_num": 1, "max_num": 3},
+            "image": {"min_num": 0, "max_num": 2},
+        },
+        # use_json_field=True,  # not needed in Wagtail 6+
+        blank=True,
+        null=True,
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('subtitle'),
