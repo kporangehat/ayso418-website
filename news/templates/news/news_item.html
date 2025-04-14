@@ -23,4 +23,12 @@
         {{ page.body|richtext }}
     <div>
 
+    <h3>Tags</h3>
+    <ul>
+        {% for tag in page.tags.all %}
+            {# slug link is not implemented but we could do so #}
+            <li>{{ tag.name }} (<a href="/news/?tag={{ tag.slug }}">{{ tag.slug }}</a>)</li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}

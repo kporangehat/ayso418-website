@@ -32,6 +32,22 @@ class NewsIndex(Page):
         return context
 
 
+from modelcluster.fields import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
+
+
+class NewsItemTags(TaggedItemBase):
+    """
+    A model to manage tags for news items.
+    """
+    content_object = ParentalKey(
+        'news.NewsItem',
+        related_name='tagged_items',
+        on_delete=models.CASCADE
+    )
+
+
 from django.core.exceptions import ValidationError
 
 
@@ -48,10 +64,12 @@ class NewsItem(Page):
         features=['h2', 'h3', 'h4', 'bold', 'italic', 'link', 'document-link', 'blockquote', 'image'],
         help_text="Use the toolbar to format your text and add links.",
     )
+    tags = ClusterTaggableManager(through=NewsItemTags, blank=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('subtitle'),
         FieldPanel('body'),
+        FieldPanel('tags'),
     ]
 
     def clean(self):
