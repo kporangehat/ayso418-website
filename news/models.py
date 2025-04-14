@@ -50,8 +50,21 @@ class NewsItemTags(TaggedItemBase):
 
 from django.core.exceptions import ValidationError
 from wagtail.fields import StreamField
-from wagtail.blocks import TextBlock, StreamBlock, StructBlock
+from wagtail.blocks import TextBlock, StreamBlock, StructBlock, PageChooserBlock, RichTextBlock, CharBlock
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.snippets.blocks import SnippetChooserBlock
+
+
+class Author(models.Model):
+    """
+    A model to represent an author.
+    """
+    name = models.CharField(max_length=100)
+    bio = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 
 class NewsItem(Page):
@@ -66,25 +79,49 @@ class NewsItem(Page):
 
     body = StreamField(
         [
-            ("text", TextBlock()),
             ("image", ImageChooserBlock()),
-            ("carousel", StreamBlock(
+            ("doc", DocumentChooserBlock()),
+            ("page", PageChooserBlock(
+                required=False,
+                page_type=['news.NewsItem'],
+            )),
+            ("author", SnippetChooserBlock(
+                'news.Author',
+                required=False,
+            )),
+            # ("text", TextBlock()),
+            # ("image", ImageChooserBlock()),
+            # ("carousel", StreamBlock(
+            #     [
+            #         ("image", ImageChooserBlock()),
+            #         ("quotation", StructBlock(
+            #             [
+            #                 ("text", TextBlock()),
+            #                 ("author", TextBlock()),
+            #             ]
+            #         )),
+            #     ],
+            #     min_num=1,
+            #     max_num=5,
+            # ))
+            ("call_to_action_1", StructBlock(
                 [
-                    ("image", ImageChooserBlock()),
-                    ("quotation", StructBlock(
-                        [
-                            ("text", TextBlock()),
-                            ("author", TextBlock()),
-                        ]
+                    ("text", RichTextBlock(
+                        features=['bold', 'italic'],
+                        required=True,
+                    )),
+                    ("page", PageChooserBlock()),
+                    ("button_text", CharBlock(
+                        max_lenth=100,
+                        required=False,
                     )),
                 ],
-                min_num=1,
-                max_num=5,
+                label="Call to Action 1",
             ))
             # Add more StreamField blocks as needed
         ],
         block_counts={
-            "text": {"min_num": 1, "max_num": 3},
+            # "text": {"min_num": 1, "max_num": 3},
             "image": {"min_num": 0, "max_num": 2},
         },
         # use_json_field=True,  # not needed in Wagtail 6+

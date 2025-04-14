@@ -25,10 +25,31 @@
     {% endcomment %}
 
     {% for block in page.body  %}
+        {% if block.block_type == "image" %}
+            {% image block.value fill-300x300 %}
+        {% elif block.block_type == "doc" %}
+            <a href="{{ block.value.url }}">{{ block.value.title }}</a>
+        {% elif block.block_type == "page" %}
+            {% comment %} <a href="{{ block.value.url }}">{{ block.value.title }}</a> {% endcomment %}
+        {% elif block.block_type == "author" %}
+            {% comment %} {{ block.value.name  }} {% endcomment %}
+        {% elif block.block_type == "call_to_action_1" %}
+            <div>
+                <div class="rich-text">{{ block.value.text }}</div>
+                <a href="{{ block.value.page.url }}" class="button">
+                    {% if  block.value.button_text %}
+                        {{ block.value.button_text }}
+                    {% else %}
+                        {{ block.value.page.title }}
+                    {% endif %}
+                </a>
+            </div>
+        {% endif %}
+        {% comment %}
         {% if block.block_type == "text" %}
-            {% comment %} {{ block.value }} {% endcomment %}
+             {{ block.value }}
         {% elif block.block_type == "image" %}
-            {% comment %} {% image block.value fill-800x400 %} {% endcomment %}
+            {% image block.value fill-800x400 %}
         {% elif block.block_type == "carousel" %}
             {% for slide in block.value %}
                 {% if slide.block_type == "image" %}
@@ -41,6 +62,7 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
+        {% endcomment %}
     {% endfor %}
 
     <h3>Tags</h3>
