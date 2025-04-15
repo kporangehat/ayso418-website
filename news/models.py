@@ -50,7 +50,7 @@ class NewsItemTags(TaggedItemBase):
 
 from django.core.exceptions import ValidationError
 from wagtail.fields import StreamField
-from wagtail.blocks import TextBlock, StreamBlock, StructBlock, PageChooserBlock, RichTextBlock, CharBlock
+from wagtail.blocks import TextBlock, StreamBlock, StructBlock, PageChooserBlock, RichTextBlock, CharBlock, StaticBlock, ListBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
@@ -79,6 +79,23 @@ class NewsItem(Page):
 
     body = StreamField(
         [
+            ("info", StaticBlock(
+                admin_text="This is a content divider.",
+            )),
+            ("faq", ListBlock(
+                StructBlock(
+                    [
+                        ("question", CharBlock()),
+                        ("answer", RichTextBlock(
+                            features=['bold', 'italic'],
+                        )),
+                    ],
+                    label="FAQ",
+                ),
+                min_num=1,
+                max_num=5,
+                label="FAQs",
+            )),
             ("image", ImageChooserBlock()),
             ("doc", DocumentChooserBlock()),
             ("page", PageChooserBlock(

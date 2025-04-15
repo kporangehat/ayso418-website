@@ -44,6 +44,17 @@
                     {% endif %}
                 </a>
             </div>
+        {% elif block.block_type == "info" %}
+        {% comment %} StaticBlock {% endcomment %}
+            <div class="info" style="background-color: #eee; padding: 10px; margin: 20px 0;">
+                danger
+            </div>
+        {% elif block.block_type == "faq" %}
+            {% for faq in block.value %}
+                <h2>{{ faq.question }}</h2>
+                <div class="rich-text">{{ faq.answer|richtext }}</div>
+            {% endfor %}
+
         {% endif %}
         {% comment %}
         {% if block.block_type == "text" %}
