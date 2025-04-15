@@ -90,6 +90,11 @@ class CallToActionBlock(blocks.StructBlock):
         required=False,
     )
 
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        context['button_label'] = value.get('button_text') or value.get('page').title
+        return context
+
     class Meta:
         template = "blocks/call_to_action_1.html"
         icon = "expand-right"
@@ -99,6 +104,12 @@ class ImageBlock(ImageChooserBlock):
     """
     A block that displays an image.
     """
+    def get_context(self, value, parent_context=None):
+        from news.models import NewsItem
+        context = super().get_context(value, parent_context=parent_context)
+        context["news_items"] = NewsItem.objects.all().live().public()
+        return context
+
     class Meta:
         template = "blocks/image_block.html"
         icon = "image"
