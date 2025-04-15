@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError
+
 from wagtail import blocks
 from wagtail.images.blocks import ImageChooserBlock
 
@@ -13,6 +15,14 @@ class TextBlock(blocks.TextBlock):
             min_length=10,
             max_length=500,
         )
+
+    def clean(self, value):
+        """
+        Custom validation to ensure the text is not empty.
+        """
+        value = super().clean(value)
+        if "fire" in value.lower():
+            raise ValidationError("The word 'fire' is not allowed.")
 
     class Meta:
         template = "blocks/text_block.html"
@@ -32,6 +42,7 @@ class InfoBlock(blocks.StaticBlock):
         group = "Standalone Blocks"
 
 
+
 class FaqBlock(blocks.StructBlock):
     """
     A block that displays a FAQ section.
@@ -41,6 +52,19 @@ class FaqBlock(blocks.StructBlock):
         features=['bold', 'italic']
     )
 
+    def clean(self, value):
+        """
+        Custom validation to ensure the question is not empty.
+        """
+        cleaned_data = super().clean(value)
+        if "fire" in str(cleaned_data['answer']).lower():
+            raise blocks.StructBlockValidationError(
+                block_errors={
+                    "answer": ValidationError("The word 'fire' is not allowed in the FAQ.")
+                }
+            )
+        return cleaned_data
+
 
 class FaqListBlock(blocks.ListBlock):
     """
@@ -48,6 +72,21 @@ class FaqListBlock(blocks.ListBlock):
     """
     def __init__(self, **kwargs):
         super().__init__(FaqBlock(), **kwargs)
+
+    def clean(self, value):
+        """
+        Custom validation to ensure the list of FAQs is not empty.
+        """
+        cleaned_data = super().clean(value)
+        errors = {}
+
+        for index, obj in enumerate(cleaned_data):
+            if "fire" in str(obj["answer"]).lower():
+                errors[index] = ValidationError("The word 'fire' is not allowed in the FAQ.")
+
+        if errors:
+            raise blocks.ListBlockValidationError(block_errors=errors)
+        return cleaned_data
 
     class Meta:
         template = "blocks/faq_list_block.html"
@@ -69,6 +108,22 @@ class CarouselBlock(blocks.StreamBlock):
             ("author", blocks.TextBlock()),
         ]
     )
+
+    def clean(self, value):
+        """
+        Custom validation to ensure the carousel has at least one image.
+        """
+        value = super().clean(value)
+        images = [item for item in value if item.block_type == "image"]
+        quotations = [item for item in value if item.block_type == "quotation"]
+
+        if not images or not quotations:
+            raise ValidationError("At least one image and one quotation are required.")
+
+        if len(images) != len(quotations):
+            raise ValidationError("The number of images and quotations must match.")
+
+        return value
 
     class Meta:
         template = "blocks/carousel_block.html"
