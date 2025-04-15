@@ -1,11 +1,28 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
-from wagtail.models import Page
-from wagtail.admin.panels import FieldPanel
+from wagtail.models import Page, Orderable
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel, PageChooserPanel, FieldRowPanel, HelpPanel, MultipleChooserPanel, TitleFieldPanel
 from wagtail.fields import RichTextField
 from wagtail.images import get_image_model
 from wagtail.documents import get_document_model
+
+from modelcluster.fields import ParentalKey
+
+
+class HomePageGalleryImage(Orderable):
+    page = ParentalKey(
+        'home.HomePage',
+        related_name='gallery_images',
+        on_delete=models.CASCADE,
+    )
+    image = models.ForeignKey(
+        get_image_model(),
+        null=False,
+        blank=False,
+        on_delete=models.CASCADE,
+        related_name='+',  # + means no reverse relation required
+    )
 
 
 class HomePage(Page):
@@ -48,12 +65,72 @@ class HomePage(Page):
 
     # admin panels for the fields
     content_panels = Page.content_panels + [
-        FieldPanel('subtitle', read_only=True),
-        FieldPanel('cta_url'),
-        FieldPanel('cta_external_url'),
-        FieldPanel('body'),
-        FieldPanel('image'),  # ImageChooser is a widget for selecting images
-        FieldPanel('custom_document'),
+        # TitleFieldPanel(
+        #     "subtitle",
+        #     help_text="Subtitle for the home page",
+        #     placeholder="Enter subtitle here"
+        # ),
+
+        # PageChooserPanel(
+        #     'cta_url',
+        #     page_type=['news.NewsItem'],  # can limit this to specific page types
+        #     help_text="Select a news itemm for the call to action button",
+        #     heading="News Item Selection"
+        # ),
+
+        # InlinePanel(
+        #     'gallery_images',
+        #     label="Gallery Images",
+        #     min_num=2,
+        #     max_num=5,
+        # ),
+
+        MultipleChooserPanel(
+            'gallery_images',
+            label="Gallery Images",
+            min_num=2,
+            max_num=5,
+            chooser_field_name='image',
+            icon="image",
+        ),
+
+        # MultiFieldPanel(
+        #     [
+        #         HelpPanel(
+        #             content="<strong>Help Panel</strong><p>Help text goes here",
+        #             heading="Note:"
+        #         ),
+        #         FieldRowPanel(
+        #             [
+        #                 PageChooserPanel(
+        #                     'cta_url',
+        #                     page_type=['news.NewsItem'],  # can limit this to specific page types
+        #                     help_text="Select a news item for the call to action button",
+        #                     heading="News Item Selection",
+        #                     classname="col6",
+        #                 ),
+        #                 FieldPanel(
+        #                     'cta_external_url',
+        #                     help_text="Enter an external URL for the call to action button",
+        #                     heading="External URL",
+        #                     classname="col6",
+        #                 ),
+        #             ],
+        #             help_text="Select a news item or enter an external URL",
+        #             heading="Call to Action URLs",
+        #         ),
+        #     ],
+        #     heading="MultiField Panel",
+        #     help_text="Random help text",
+        #     classname="collapsed",
+        # ),
+
+        # FieldPanel('subtitle', read_only=True),
+        # FieldPanel('cta_url'),
+        # FieldPanel('cta_external_url'),
+        # FieldPanel('body'),
+        # FieldPanel('image'),  # ImageChooser is a widget for selecting images
+        # FieldPanel('custom_document'),
     ]
 
     @property

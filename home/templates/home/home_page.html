@@ -13,7 +13,6 @@ Delete the line below if you're just getting started and want to remove the welc
 {% endblock extra_css %}
 
 {% block content %}
-
     <h1>{{ page.title }}</h1>
     <h3>{{ page.subtitle }}</h3>
 
@@ -55,6 +54,10 @@ Delete the line below if you're just getting started and want to remove the welc
         </p>
     {% endif %}
 
+
+    {% for orderable_obj in page.gallery_images.all %}
+         {% image orderable_obj.image fill-150x150  %}
+    {% endfor %}
 
 
     {% comment %}
