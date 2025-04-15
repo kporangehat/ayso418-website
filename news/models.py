@@ -86,10 +86,15 @@ class NewsItem(Page):
             ("text", custom_blocks.TextBlock()),
             ("carousel", custom_blocks.CarouselBlock()),
             ("image", custom_blocks.ImageBlock()),
-            ("doc", DocumentChooserBlock()),
+            ("doc", DocumentChooserBlock(
+                # can set your own template here if you want
+                # template="blocks/document_block.html",
+                group="Standalone Blocks"
+            )),
             ("page", PageChooserBlock(
                 required=False,
                 page_type=['news.NewsItem'],
+                group="Standalone Blocks"
             )),
             ("author", SnippetChooserBlock('news.Author')),
             ("call_to_action_1", custom_blocks.CallToActionBlock()),
