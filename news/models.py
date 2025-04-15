@@ -1,7 +1,19 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+
+from modelcluster.fields import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
+
 from wagtail.models import Page
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
+from wagtail.fields import StreamField
+from wagtail.blocks import PageChooserBlock
+from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.snippets.blocks import SnippetChooserBlock
+
+from blocks import blocks as custom_blocks
 
 
 # Create your models here.
@@ -32,9 +44,6 @@ class NewsIndex(Page):
         return context
 
 
-from modelcluster.fields import ParentalKey
-from modelcluster.contrib.taggit import ClusterTaggableManager
-from taggit.models import TaggedItemBase
 
 
 class NewsItemTags(TaggedItemBase):
@@ -47,13 +56,6 @@ class NewsItemTags(TaggedItemBase):
         on_delete=models.CASCADE
     )
 
-
-from django.core.exceptions import ValidationError
-from wagtail.fields import StreamField
-from wagtail.blocks import TextBlock, StreamBlock, StructBlock, PageChooserBlock, RichTextBlock, CharBlock, StaticBlock, ListBlock
-from wagtail.images.blocks import ImageChooserBlock
-from wagtail.documents.blocks import DocumentChooserBlock
-from wagtail.snippets.blocks import SnippetChooserBlock
 
 
 class Author(models.Model):
@@ -79,67 +81,22 @@ class NewsItem(Page):
 
     body = StreamField(
         [
-            ("info", StaticBlock(
-                admin_text="This is a content divider.",
-            )),
-            ("faq", ListBlock(
-                StructBlock(
-                    [
-                        ("question", CharBlock()),
-                        ("answer", RichTextBlock(
-                            features=['bold', 'italic'],
-                        )),
-                    ],
-                    label="FAQ",
-                ),
-                min_num=1,
-                max_num=5,
-                label="FAQs",
-            )),
-            ("image", ImageChooserBlock()),
+            ("info", custom_blocks.InfoBlock()),
+            ("faq", custom_blocks.FaqListBlock()),
+            ("text", custom_blocks.TextBlock()),
+            ("carousel", custom_blocks.CarouselBlock()),
+            ("image", custom_blocks.ImageBlock()),
             ("doc", DocumentChooserBlock()),
             ("page", PageChooserBlock(
                 required=False,
                 page_type=['news.NewsItem'],
             )),
-            ("author", SnippetChooserBlock(
-                'news.Author',
-                required=False,
-            )),
-            # ("text", TextBlock()),
-            # ("image", ImageChooserBlock()),
-            # ("carousel", StreamBlock(
-            #     [
-            #         ("image", ImageChooserBlock()),
-            #         ("quotation", StructBlock(
-            #             [
-            #                 ("text", TextBlock()),
-            #                 ("author", TextBlock()),
-            #             ]
-            #         )),
-            #     ],
-            #     min_num=1,
-            #     max_num=5,
-            # ))
-            ("call_to_action_1", StructBlock(
-                [
-                    ("text", RichTextBlock(
-                        features=['bold', 'italic'],
-                        required=True,
-                    )),
-                    ("page", PageChooserBlock()),
-                    ("button_text", CharBlock(
-                        max_lenth=100,
-                        required=False,
-                    )),
-                ],
-                label="Call to Action 1",
-            ))
-            # Add more StreamField blocks as needed
+            ("author", SnippetChooserBlock('news.Author')),
+            ("call_to_action_1", custom_blocks.CallToActionBlock()),
         ],
         block_counts={
             # "text": {"min_num": 1, "max_num": 3},
-            "image": {"min_num": 0, "max_num": 2},
+            # "image": {"min_num": 0, "max_num": 2},
         },
         # use_json_field=True,  # not needed in Wagtail 6+
         blank=True,

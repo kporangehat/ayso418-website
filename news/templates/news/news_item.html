@@ -55,10 +55,9 @@
                 <div class="rich-text">{{ faq.answer|richtext }}</div>
             {% endfor %}
 
-        {% endif %}
-        {% comment %}
-        {% if block.block_type == "text" %}
+        {% elif block.block_type == "text" %}
              {{ block.value }}
+        {% comment %}
         {% elif block.block_type == "image" %}
             {% image block.value fill-800x400 %}
         {% elif block.block_type == "carousel" %}
@@ -72,8 +71,8 @@
                     </p>
                 {% endif %}
             {% endfor %}
-        {% endif %}
         {% endcomment %}
+        {% endif %}
     {% endfor %}
 
     <h3>Tags</h3>
