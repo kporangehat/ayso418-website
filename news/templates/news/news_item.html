@@ -1,26 +1,20 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags wagtail_cache %}
 
 {% block content %}
 
-    <style>
-        .richtext {
-            margin: 20px 0;
-            max-width: 50%;
-        }
-        .richtext-image.thumbnail-150 {
-            {% comment %} border: 10px solid #eee; {% endcomment %}
-            box-shadow: 2px 2px 5px rgb(165, 164, 178);
-            height: auto;
-        }
-    </style>
+    {% comment %}page-specific cache that is also preview-aware{% endcomment %}
+    {% wagtailpagecache 500 "page-title-cache" %}
+        <h1>{{ page.title }}</h1>
+    {% endwagtailpagecache %}
 
-    <h1>{{ page.title }}</h1>
     <h3>{{ page.subtitle }}</h3>
 
-    {% for block in page.body %}
-        {% include_block block %}
-    {% endfor %}
+    {% wagtailpagecache 500 "streamfields" %}
+        {% for block in page.body %}
+            {% include_block block %}
+        {% endfor %}
+    {% endwagtailpagecache %}
 
     <h3>Tags</h3>
     <ul>
