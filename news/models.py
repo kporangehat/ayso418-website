@@ -18,6 +18,10 @@ from wagtail.admin.panels import PublishingPanel
 from wagtail.models import DraftStateMixin, RevisionMixin, LockableMixin, PreviewableMixin
 from wagtail.search import index
 from wagtail.contrib.routable_page.models import RoutablePageMixin, path, re_path
+from wagtail.api import APIField
+from wagtail.images import get_image_model
+
+from rest_framework.fields import Field
 
 from blocks import blocks as custom_blocks
 
@@ -130,6 +134,54 @@ class NewsItemTags(TaggedItemBase):
     )
 
 
+class AuthorSerializer(Field):
+    def to_representation(self, value):
+        return {
+            "id": value.id,
+            "name": value.name,
+            "bio": value.bio,
+        }
+
+
+class ImageSerializer(Field):
+    def to_representation(self, value):
+        return {
+            "original": {
+                "id": value.id,
+                "title": value.title,
+                "url": value.file.url,
+                "width": value.width,
+                "height": value.height,
+            },
+            "thumbnail": {
+                "id": value.get_rendition('max-165x165').id,
+                "url": value.get_rendition('max-165x165').url,
+                "width": value.get_rendition('max-165x165').width,
+                "height": value.get_rendition('max-165x165').height,
+            },
+            "small": {
+                "id": value.get_rendition('max-300x300').id,
+                "url": value.get_rendition('max-300x300').url,
+                "width": value.get_rendition('max-300x300').width,
+                "height": value.get_rendition('max-300x300').height,
+            },
+            "medium": {
+                "id": value.get_rendition('max-700x700').id,
+                "url": value.get_rendition('max-700x700').url,
+                "width": value.get_rendition('max-700x700').width,
+                "height": value.get_rendition('max-700x700').height,
+            },
+        }
+
+
+from wagtail.templatetags.wagtailcore_tags import richtext
+
+
+class RichTextSerializer(Field):
+    def to_representation(self, value):
+        return richtext(value)
+
+
 class NewsItem(Page):
     """
     A page that displays a specific new article.
@@ -150,6 +202,14 @@ class NewsItem(Page):
         on_delete=models.SET_NULL,
         related_name='+',
     )
+    image = models.ForeignKey(
+        get_image_model(),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+    )
+    intro = RichTextField(blank=True)
 
     body = StreamField(
         [
@@ -163,7 +223,7 @@ class NewsItem(Page):
                 # template="blocks/document_block.html",
                 group="Standalone Blocks"
             )),
-            ("page", PageChooserBlock(
+            ("page", custom_blocks.CustomPageChooserBlock(
                 required=False,
                 page_type=['news.NewsItem'],
                 group="Standalone Blocks"
@@ -180,13 +240,31 @@ class NewsItem(Page):
         null=True,
     )
 
+    def custom_content(self):
+        """
+        A custom method to return the body content.
+        """
+        return "custom content here"
+
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel('author'),
             FieldPanel('tags'),
         ], heading="News Item information", permission="news.add_author"),
         FieldPanel('subtitle'),
+        FieldPanel('image'),
+        FieldPanel('intro'),
         FieldPanel('body'),
+    ]
+
+    api_fields = [
+        APIField("subtitle"),
+        APIField("body"),
+        APIField("tags"),
+        APIField("author", serializer=AuthorSerializer()),
+        APIField("image", serializer=ImageSerializer()),
+        APIField("intro", serializer=RichTextSerializer()),
+        APIField("custom_content"),
     ]
 
     def clean(self):

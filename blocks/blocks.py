@@ -24,6 +24,8 @@ class TextBlock(blocks.TextBlock):
         if "fire" in value.lower():
             raise ValidationError("The word 'fire' is not allowed.")
 
+        return value
+
     class Meta:
         template = "blocks/text_block.html"
         icon = "pilcrow"
@@ -40,7 +42,6 @@ class InfoBlock(blocks.StaticBlock):
         admin_text = "This is from InfoBlock"
         label = "General Information"
         group = "Standalone Blocks"
-
 
 
 class FaqBlock(blocks.StructBlock):
@@ -159,6 +160,15 @@ class ImageBlock(ImageChooserBlock):
     """
     A block that displays an image.
     """
+    def get_api_representation(self, value, context=None):
+        return {
+            "id": value.id,
+            "title": value.title,
+            "src": value.file.url,
+            "width": value.width,
+            "height": value.height,
+        }
+
     def get_context(self, value, parent_context=None):
         from news.models import NewsItem
         context = super().get_context(value, parent_context=parent_context)
@@ -169,3 +179,16 @@ class ImageBlock(ImageChooserBlock):
         template = "blocks/image_block.html"
         icon = "image"
         group = "Standalone Blocks"
+
+
+class CustomPageChooserBlock(blocks.PageChooserBlock):
+    """
+    A block that displays a page chooser.
+    """
+    def get_api_representation(self, value, context=None):
+        return {
+            "id": value.id,
+            "title": value.title,
+            "subtitle": value.specific.subtitle,
+            "url": value.url,
+        }
