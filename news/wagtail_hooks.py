@@ -3,6 +3,7 @@
 # 3. add some settings for the snippetviewset
 # 4. register the class as a snippet
 from django.core.cache import cache
+from django.contrib.auth.models import Permission
 
 from wagtail.admin.panels import FieldPanel
 from wagtail.snippets.models import register_snippet
@@ -34,7 +35,6 @@ class AuthorSnippet(SnippetViewSet):
     add_to_admin_menu = False
 
 
-
 # https://docs.wagtail.org/en/stable/reference/hooks.html#hooks
 @hooks.register("after_publish_page")
 def delete_all_cache(request, page):
@@ -42,3 +42,11 @@ def delete_all_cache(request, page):
     Delete all cache when a page is saved.
     """
     cache.clear()
+
+
+@hooks.register("register_permissions")
+def custom_permission_numero_uno():
+    return Permission.objects.filter(
+        content_type__app_label="news",
+        codename="can_edit_author_name"
+    )

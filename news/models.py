@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 
 from modelcluster.fields import ParentalKey
@@ -12,6 +13,9 @@ from wagtail.fields import StreamField
 from wagtail.blocks import PageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
+from wagtail.admin.panels import PublishingPanel
+from wagtail.models import DraftStateMixin, RevisionMixin, LockableMixin, PreviewableMixin
+from wagtail.search import index
 
 from blocks import blocks as custom_blocks
 
@@ -42,8 +46,6 @@ class NewsIndex(Page):
         context['newsitems'] = NewsItem.objects.live().public()
         # context['news_items'] = self.get_children().live().public()
         return context
-
-
 
 
 class NewsItemTags(TaggedItemBase):
@@ -128,12 +130,6 @@ class NewsItem(Page):
         if errors:
             raise ValidationError(errors)
 
-from django.contrib.contenttypes.fields import GenericRelation
-from wagtail.admin.panels import PublishingPanel
-from wagtail.models import DraftStateMixin, RevisionMixin, LockableMixin, PreviewableMixin
-
-from wagtail.search import index
-
 
 class Author(
     PreviewableMixin,
@@ -151,7 +147,7 @@ class Author(
     revisions = GenericRelation('wagtailcore.Revision', related_query_name="author")
 
     panels = [
-        FieldPanel("name"),
+        FieldPanel("name", permission="news.can_edit_author_name"),
         FieldPanel("bio"),
         PublishingPanel(),
     ]
@@ -186,3 +182,8 @@ class Author(
             context["warning"] = "This is a preview in dark mode"
 
         return context
+
+    class Meta:
+        permissions = [
+            ("can_edit_author_name", "Can edit author name"),
+        ]
