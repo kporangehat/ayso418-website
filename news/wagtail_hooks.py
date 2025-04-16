@@ -32,10 +32,7 @@ class TagSnippetViewSet(SnippetViewSet):
 class AuthorSnippet(SnippetViewSet):
     model = Author
     add_to_admin_menu = False
-    panels = [
-        FieldPanel("name"),
-        FieldPanel("bio"),
-    ]
+
 
 
 # https://docs.wagtail.org/en/stable/reference/hooks.html#hooks

@@ -16,6 +16,8 @@
         {% endfor %}
     {% endwagtailpagecache %}
 
+    {% include "includes/author_dark_mode.html" with object=self.author %}
+
     <h3>Tags</h3>
     <ul>
         {% for tag in page.tags.all %}
