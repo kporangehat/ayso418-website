@@ -8,7 +8,7 @@ from wagtail.models import Page
 # uncomment the following line and the lines indicated in the search function
 # (after adding wagtail.contrib.search_promotions to INSTALLED_APPS):
 
-# from wagtail.contrib.search_promotions.models import Query
+from wagtail.contrib.search_promotions.models import Query
 
 
 def search(request):
@@ -21,8 +21,8 @@ def search(request):
 
         # To log this query for use with the "Promoted search results" module:
 
-        # query = Query.get(search_query)
-        # query.add_hit()
+        query = Query.get(search_query)
+        query.add_hit()
 
     else:
         search_results = Page.objects.none()
