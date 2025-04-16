@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+    <h2>News tagged with: {{ tag }}</h2>
+    <hr>
+    {% for news_item in news_items %}
+        <p>
+            <a href="{{ news_item.url }}">{{ news_item.title }}</a><br />
+            {{ news_item.subtitle}}
+        </p>
+    {% endfor %}
+
+{% endblock %}

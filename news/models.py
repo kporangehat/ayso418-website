@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
+from django.http import JsonResponse
 
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -16,12 +17,13 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.admin.panels import PublishingPanel
 from wagtail.models import DraftStateMixin, RevisionMixin, LockableMixin, PreviewableMixin
 from wagtail.search import index
+from wagtail.contrib.routable_page.models import RoutablePageMixin, path, re_path
 
 from blocks import blocks as custom_blocks
 
 
 # Create your models here.
-class NewsIndex(Page):
+class NewsIndex(RoutablePageMixin, Page):
     """
     A page that lists all news articles.
     """
@@ -38,13 +40,82 @@ class NewsIndex(Page):
         FieldPanel('body'),
     ]
 
+    # @path("")
+    # def default_news_page(self, request):
+    #     """
+    #     The default route for the news index page.
+    #     """
+    #     news_headline = "Latest News"
+
+    #     return self.render(
+    #         request,
+    #         context_overrides={
+    #             "news_headline": news_headline,
+    #         },
+    #     )
+
+    # /news/all
+    @path("all/", name="all")
+    def all_news_items(self, request):
+        """
+        A route to display all news articles.
+        """
+        news_items = NewsItem.objects.live().public()
+
+        return self.render(
+            request,
+            context_overrides={
+                "news_items": news_items,
+            },
+        )
+
+    # /news/tag/{tag_name}>
+    @path("tag/<str:tag>/", name="tag")
+    @path("tags/<str:tag>/", name="tags")
+    def news_items_by_tag(self, request, tag=None):
+        """
+        A route to display all news articles.
+        """
+        news_items = NewsItem.objects.live().public().filter(tags__name=tag)
+
+        return self.render(
+            request,
+            context_overrides={
+                "news_items": news_items,
+                "tag": tag,
+            },
+            template="news/news_tag.html",
+        )
+
+    # /news/api/2025
+    @re_path(r"^api/(\d+)/$", name="api")
+    def api_news_items(self, request, year):
+        """
+        A route to display all news articles.
+        """
+        articles = NewsItem.objects.live().public().filter(
+            first_published_at__year=year
+        )
+        return JsonResponse(
+            {
+                "status": "ok",
+                "articles": [
+                    {
+                        "title": article.title,
+                        "url": article.url,  # reminder: url is a method not a property
+                        "first_published_at": article.first_published_at.isoformat(),
+                    }
+                    for article in articles
+                ],
+            }
+        )
+
     def get_context(self, request):
         """
         Add the list of news articles to the context.
         """
         context = super().get_context(request)
         context['newsitems'] = NewsItem.objects.live().public()
-        # context['news_items'] = self.get_children().live().public()
         return context
 
 

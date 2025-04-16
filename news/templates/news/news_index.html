@@ -1,7 +1,12 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block content %}
+
+    {# gets the routable with the name="all" #}
+    {% routablepageurl page "all" %}
+    {# gets the routable with the name="tag" and passes "refs" as the arg #}
+    <a href="{% routablepageurl page 'tag' tag='refs' %}">Ref News</a>
 
     <h1>{{ page.title }}</h1>
     <h3>{{ page.subtitle }}</h3>
@@ -11,7 +16,7 @@
 
     <h2>Latest News</h2>
     <hr>
-    {% for news_item in newsitems %}
+    {% for news_item in news_items %}
         <p>
             <a href="{{ news_item.url }}">{{ news_item.title }}</a><br />
             {{ news_item.subtitle}}
