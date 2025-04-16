@@ -32,6 +32,17 @@
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
+
+        <hr />
+        <a href="/">Home</a>
+        {% for menu_page in navbar_pages %}
+            | <a href="{{ menu_page.url }}">{{ menu_page.title }}</a>
+        {% endfor %}
+        {% if request.user.is_authenticated %}
+            | <a href="/admin/">Admin</a>
+        {% endif %}
+        <hr />
+
         {% wagtailuserbar %}
 
         {% block content %}{% endblock %}
