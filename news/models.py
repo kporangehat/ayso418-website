@@ -7,7 +7,7 @@ from taggit.models import TaggedItemBase
 
 from wagtail.models import Page
 from wagtail.fields import RichTextField
-from wagtail.admin.panels import FieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
 from wagtail.blocks import PageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock
@@ -108,10 +108,12 @@ class NewsItem(Page):
     )
 
     content_panels = Page.content_panels + [
-        FieldPanel('author'),
+        MultiFieldPanel([
+            FieldPanel('author'),
+            FieldPanel('tags'),
+        ], heading="News Item information", permission="news.add_author"),
         FieldPanel('subtitle'),
         FieldPanel('body'),
-        FieldPanel('tags'),
     ]
 
     def clean(self):
