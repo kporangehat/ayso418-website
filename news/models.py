@@ -76,6 +76,10 @@ class NewsItem(Page):
     parent_page_types = ['news.NewsIndex']   # restrict parent page to NewsIndex
     subpage_types = []  # restrict child pages to none
 
+    # can always override the default template from base.py
+    # https://docs.wagtail.org/en/stable/advanced_topics/privacy.html
+    # password_required_template = "news/news_item_password_required.html"
+
     subtitle = models.CharField(max_length=100, blank=True)
     tags = ClusterTaggableManager(through=NewsItemTags, blank=True)
 

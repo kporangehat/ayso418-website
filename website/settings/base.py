@@ -195,3 +195,7 @@ WAGTAILIMAGES_EXTENSIONS = ['jpeg', 'jpg', 'gif', 'png', 'svg', 'webp']
 WAGTAILDOCS_DOCUMENT_MODEL = "documents.CustomDocument"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# https://docs.wagtail.org/en/stable/advanced_topics/privacy.html
+WAGTAIL_FRONTEND_LOGIN_TEMPLATE = "login.html"
+WAGTAIL_PASSWORD_REQUIRED_TEMPLATE = "password_required.html"
