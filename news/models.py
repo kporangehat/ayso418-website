@@ -44,19 +44,25 @@ class NewsIndex(RoutablePageMixin, Page):
         FieldPanel('body'),
     ]
 
-    # @path("")
-    # def default_news_page(self, request):
-    #     """
-    #     The default route for the news index page.
-    #     """
-    #     news_headline = "Latest News"
+    def get_sitemap_urls(self, request=None):
+        # we need to add sitemap entries for routable pages.
+        # manually append the important ones to the sitemap
+        sitemap = super().get_sitemap_urls(request)
+        last_mod = NewsItem.objects.live().public().order_by('-last_published_at').first()
+        sitemap.append({
+            # even if the path changes it will be auto-updated because we're using the
+            # named attribute 'all' to point to that url
+            'location': self.get_full_url(request) + self.reverse_subpage('all'),
+            'lastmod': last_mod.last_published_at or last_mod.latest_revision_created_at,
+        })
+        sitemap.append({
+            'location': self.get_full_url(request) + self.reverse_subpage('tag', args=['refs']),
+        })
+        sitemap.append({
+            'location': self.get_full_url(request) + self.reverse_subpage('tag', args=['refs']),
+        })
 
-    #     return self.render(
-    #         request,
-    #         context_overrides={
-    #             "news_headline": news_headline,
-    #         },
-    #     )
+        return sitemap
 
     # /news/all
     @path("all/", name="all")
