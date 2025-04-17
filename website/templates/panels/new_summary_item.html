@@ -1,0 +1,11 @@
+{% load i18n wagtailadmin_tags %}
+<li>
+    {% icon name="form" %}
+    <a href="{% url 'wagtaildocs:index' %}">
+        {% blocktrans trimmed count counter=news_item_count with news_item_count|intcomma as total %}
+            {{ total }} News Item <span class="w-sr-only">created in {{ site_name }}</span>
+        {% plural %}
+            {{ total }} News Items <span class="w-sr-only">created in {{ site_name }}</span>
+        {% endblocktrans %}
+    </a>
+</li>

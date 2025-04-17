@@ -1,0 +1,11 @@
+{% load i18n wagtailadmin_tags %}
+<li>
+    {% icon name="doc-empty" %}
+    <a href="{% url 'wagtaildocs:index' %}">
+        {% blocktrans trimmed count counter=unpublished_pages with unpublished_pages|intcomma as total %}
+            {{ total }} Unpublished Page <span class="w-sr-only">created in {{ site_name }}</span>
+        {% plural %}
+            {{ total }} Unpublished Pages <span class="w-sr-only">created in {{ site_name }}</span>
+        {% endblocktrans %}
+    </a>
+</li>

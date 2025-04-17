@@ -11,7 +11,6 @@ from wagtail.models import Page
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
-from wagtail.blocks import PageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.admin.panels import PublishingPanel
@@ -20,6 +19,7 @@ from wagtail.search import index
 from wagtail.contrib.routable_page.models import RoutablePageMixin, path, re_path
 from wagtail.api import APIField
 from wagtail.images import get_image_model
+from wagtail.templatetags.wagtailcore_tags import richtext
 
 from rest_framework.fields import Field
 
@@ -172,9 +172,6 @@ class ImageSerializer(Field):
                 "height": value.get_rendition('max-700x700').height,
             },
         }
-
-
-from wagtail.templatetags.wagtailcore_tags import richtext
 
 
 class RichTextSerializer(Field):
