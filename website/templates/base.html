@@ -47,6 +47,16 @@
 
         {% block content %}{% endblock %}
 
+        {% block footer %}
+            {% if page %}
+                {% for translation in page.get_translations.live %}
+                    <a href="{% pageurl translation %}">
+                        {{ translation.locale.language_name_local }}
+                    </a>
+                {% endfor %}
+            {% endif %}
+        {% endblock footer %}
+
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/website.js' %}"></script>
 

@@ -20,7 +20,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, path, re_pat
 from wagtail.api import APIField
 from wagtail.images import get_image_model
 from wagtail.templatetags.wagtailcore_tags import richtext
-
+from wagtail.models import TranslatableMixin, BootstrapTranslatableMixin, Locale
 from rest_framework.fields import Field
 
 from blocks import blocks as custom_blocks
@@ -70,7 +70,9 @@ class NewsIndex(RoutablePageMixin, Page):
         """
         A route to display all news articles.
         """
-        news_items = NewsItem.objects.live().public()
+        current_locale = Locale.get_active()
+        news_items = NewsItem.objects.live().public().filter(locale=current_locale)
+        # news_items = NewsItem.objects.live().public()
 
         return self.render(
             request,
@@ -125,7 +127,8 @@ class NewsIndex(RoutablePageMixin, Page):
         Add the list of news articles to the context.
         """
         context = super().get_context(request)
-        context['newsitems'] = NewsItem.objects.live().public()
+        current_locale = Locale.get_active()
+        context['news_items'] = NewsItem.objects.live().public().filter(locale=current_locale)
         return context
 
 
@@ -284,6 +287,7 @@ class NewsItem(Page):
 
 
 class Author(
+    TranslatableMixin,
     PreviewableMixin,
     LockableMixin,
     DraftStateMixin,
@@ -335,7 +339,7 @@ class Author(
 
         return context
 
-    class Meta:
+    class Meta(TranslatableMixin.Meta):
         permissions = [
             ("can_edit_author_name", "Can edit author name"),
         ]
