@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 django = "<5.2,>=5.1"
 wagtail = "<6.5,>=6.4"
+wagtail-localize = "*"
 
 [dev-packages]
 
