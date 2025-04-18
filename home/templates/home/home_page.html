@@ -21,14 +21,16 @@ Delete the line below if you're just getting started and want to remove the welc
     IMAGES
     -c100 sets the cropping percentage
     {% endcomment %}
-    {% image page.image fill-150x150  %}
-    {% image page.image width-20 as custom_img  %}
-    <img src="{{ custom_img.url }}" alt="{{ page.image.alt }}" class="custom-image" />
+    {% if page.image %}
+        {% image page.image fill-150x150  %}
+        {% image page.image width-20 as custom_img  %}
+        <img src="{{ custom_img.url }}" alt="{{ page.image.alt }}" class="custom-image" />
 
-    {% comment %} dynamic image - generates just the url as a str gets created on-demand {% endcomment %}
-    {% image_url page.image "fill-150x150|jpegquality-100" as custom_img2 %}
-    <img src="{{ custom_img2 }}" alt="{{ page.image.alt }}" class="custom-image" />
-    <p>{{ page.image.caption }}</p>
+        {% comment %} dynamic image - generates just the url as a str gets created on-demand {% endcomment %}
+        {% image_url page.image "fill-150x150|jpegquality-100" as custom_img2 %}
+        <img src="{{ custom_img2 }}" alt="{{ page.image.alt }}" class="custom-image" />
+        <p>{{ page.image.caption }}</p>
+    {% endif %}
 
     {% comment %}
     DOCUMENTS

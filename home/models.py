@@ -65,17 +65,16 @@ class HomePage(Page):
 
     # admin panels for the fields
     content_panels = Page.content_panels + [
-        TitleFieldPanel(
+        FieldPanel(
             "subtitle",
             help_text="Subtitle for the home page",
-            placeholder="Enter subtitle here"
         ),
 
         PageChooserPanel(
             'cta_url',
             page_type=['news.NewsItem'],  # can limit this to specific page types
             help_text="Select a news itemm for the call to action button",
-            heading="News Item Selection"
+            heading="Call to Action - News Item",
         ),
 
         # CAN'T HAVE BOTH InlinePanel and MultipleChooserPanel named gallery_images
@@ -127,12 +126,7 @@ class HomePage(Page):
         #     classname="collapsed",
         # ),
 
-        # FieldPanel('subtitle', read_only=True),
-        # FieldPanel('cta_url'),
-        # FieldPanel('cta_external_url'),
         FieldPanel('body'),
-        # FieldPanel('image'),  # ImageChooser is a widget for selecting images
-        # FieldPanel('custom_document'),
     ]
 
     @property
