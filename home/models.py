@@ -78,6 +78,8 @@ class HomePage(Page):
             heading="News Item Selection"
         ),
 
+        # CAN'T HAVE BOTH InlinePanel and MultipleChooserPanel named gallery_images
+        # so we comment one out before deploying
         # InlinePanel(
         #     'gallery_images',
         #     label="Gallery Images",

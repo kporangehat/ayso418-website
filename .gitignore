@@ -91,3 +91,5 @@ db.sqlite3
 .venv/
 Pipfile.lock
 node_modules/
+static/
+!website/static/
