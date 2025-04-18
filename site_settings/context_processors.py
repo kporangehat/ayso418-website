@@ -1,4 +1,4 @@
-from wagtail.models import Page
+from wagtail.models import Page, Locale
 
 
 def navbar(request):
@@ -11,9 +11,9 @@ def navbar(request):
     if request.user.is_authenticated:
         # If the user is authenticated, show all pages
         return {
-            "navbar_pages": Page.objects.all().in_menu(),
+            "navbar_pages": Page.objects.all().in_menu().filter(locale=Locale.get_active())
         }
     else:
         return {
-            "navbar_pages": Page.objects.live().in_menu().public(),
+            "navbar_pages": Page.objects.live().in_menu().public().filter(locale=Locale.get_active())
         }
