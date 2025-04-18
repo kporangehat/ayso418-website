@@ -12,6 +12,11 @@ from wagtail.contrib.sitemaps.views import sitemap
 from search import views as search_views
 from .api import api_router
 
+
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
+
 urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
@@ -20,6 +25,7 @@ urlpatterns = [
     re_path(r'^images/([^/]*)/(\d*)/([^/]*)/[^/]*$', ServeView.as_view(), name='wagtailimages_serve'),
     path("api/v2/", api_router.urls),
     path("sitemap.xml", sitemap),
+    path('sentry-debug/', trigger_error),
 ]
 
 

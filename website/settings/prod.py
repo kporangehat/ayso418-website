@@ -1,5 +1,6 @@
 from .base import *  # noqa
 import os
+import sentry_sdk
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -35,3 +36,10 @@ DATABASES = {
 }
 
 WAGTAILADMIN_BASE_URL = f"http://{os.environ['VIRTUAL_HOST']}"
+
+sentry_sdk.init(
+    dsn="https://bb7228c88b0dac77326a2caec3313469@o155705.ingest.us.sentry.io/4509176694833152",
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+)
