@@ -1,3 +1,4 @@
 Django>=5.1,<5.2
 wagtail>=6.4,<6.5
 wagtail-localize==1.11.3
+sentry-sdk[django]==2.26.1
