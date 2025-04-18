@@ -90,3 +90,4 @@ media/
 db.sqlite3
 .venv/
 Pipfile.lock
+node_modules/
