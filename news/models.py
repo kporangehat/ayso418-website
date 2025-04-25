@@ -215,6 +215,7 @@ class NewsItem(Page):
         on_delete=models.SET_NULL,
         related_name='+',
     )
+    # TODO: limit to 175 characters so it fits on cards
     intro = RichTextField(blank=True)
 
     body = StreamField(

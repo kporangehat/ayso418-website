@@ -3,7 +3,11 @@
 
 {% block content %}
 
-    {{ page.body|richtext }}
+<section class="">
+    <h2 class="text-2xl font-extrabold">{{ page.title }}</h2>
+    <p class="text-lg font-normal">
+        {{ page.body|richtext }}
+    </p>
 
     <form action="" method="POST">
         {% csrf_token %}

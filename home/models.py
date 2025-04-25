@@ -6,6 +6,9 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel, PageC
 from wagtail.fields import RichTextField
 from wagtail.images import get_image_model
 from wagtail.documents import get_document_model
+from wagtail.models import Locale
+
+from news.models import NewsItem
 
 from modelcluster.fields import ParentalKey
 
@@ -69,6 +72,7 @@ class HomePage(Page):
             "subtitle",
             help_text="Subtitle for the home page",
         ),
+        FieldPanel('image'),
 
         PageChooserPanel(
             'cta_url',
@@ -153,3 +157,12 @@ class HomePage(Page):
 
         if errors:
             raise ValidationError(errors)
+
+    def get_context(self, request):
+        """
+        Add the list of 6 latest news articles to the context.
+        """
+        context = super().get_context(request)
+        current_locale = Locale.get_active()
+        context['news_articles'] = NewsItem.objects.live().public().filter(locale=current_locale).order_by("-first_published_at")[:6]
+        return context
