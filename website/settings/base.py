@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "images",
     "documents",
     "news",
+    "programs",
     "blocks",
     "site_settings",
     "contact",

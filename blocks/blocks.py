@@ -32,17 +32,49 @@ class TextBlock(blocks.TextBlock):
         group = "Standalone Blocks"
 
 
-class InfoBlock(blocks.StaticBlock):
+class RichTextBlock(blocks.RichTextBlock):
+    """
+    A block that displays a rich text section.
+    """
+    def __init__(self, **kwargs):
+        super().__init__(
+            **kwargs,
+            help_text="This is from RichTextBlock. Help text here.",
+            min_length=10,
+        )
+
+    def clean(self, value):
+        """
+        Custom validation to ensure the text is not empty.
+        """
+        value = super().clean(value)
+        return value
+
+    class Meta:
+        template = "blocks/rich_text_block.html"
+        icon = "pilcrow"
+        group = "Standalone Blocks"
+
+
+class SixPhilosophiesBlock(blocks.StaticBlock):
     """
     A block that displays a static divider.
     """
+    class Meta:
+        template = "blocks/six_philosophies_block.html"
+        icon = "info-circle"
+        admin_text = "AYSO six philosophies"
+        label = "AYSO 6 philosophies"
+        group = "Standalone Blocks"
+
+
+class InfoBlock(blocks.StaticBlock):
     class Meta:
         template = "blocks/info_block.html"
         icon = "info-circle"
         admin_text = "This is from InfoBlock"
         label = "General Information"
         group = "Standalone Blocks"
-
 
 class FaqBlock(blocks.StructBlock):
     """
