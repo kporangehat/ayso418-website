@@ -14,8 +14,22 @@
 </div>
 
 <div class="relative flex flex-col justify-center overflow-hidden bg-slate-100 w-2/3 mx-auto mt-6">
+<div class="flex justify-center items-center ">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for program in program_list %}
+            <div class="p-4 shadow-md rounded-lg border border-gray-900 bg-teal-900 text-white">
+                <h2 class="text-xl font-bold mb-2 text-teal-300">
+                    <a href="{{ program.url }}">{{ program.title }}</a>
+                </h2>
+                <p>{{ program.subtitle|richtext }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+</div>
 
-        {% comment %} <div class="min-h-28 "> {% endcomment %}
+{% comment %} <div class="relative flex flex-col justify-center overflow-hidden bg-slate-100 w-2/3 mx-auto mt-6">
+
           <div class="max-w-screen-xl mx-auto py-4">
             <div class="flex gap-6">
 
@@ -46,6 +60,5 @@
 
             </div>
           </div>
-        {% comment %} </div> {% endcomment %}
-      </div>
+      </div> {% endcomment %}
 {% endblock %}

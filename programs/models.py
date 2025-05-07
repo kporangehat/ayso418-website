@@ -50,6 +50,13 @@ class Program(Page):
     # password_required_template = "news/news_item_password_required.html"
 
     subtitle = models.CharField(max_length=200, blank=True)
+    ages = models.CharField(max_length=200, blank=True)
+    tryouts = RichTextField(blank=True)
+    equipment = RichTextField(blank=True)
+    schedule = RichTextField(blank=True)
+    location = RichTextField(max_length=200, blank=True)
+    registration = RichTextField(blank=True)
+
     # header image
     image = models.ForeignKey(
         get_image_model(),
@@ -91,6 +98,12 @@ class Program(Page):
         FieldPanel('subtitle'),
         FieldPanel('image'),
         FieldPanel('logo'),
+        FieldPanel('ages'),
+        FieldPanel('tryouts'),
+        FieldPanel('equipment'),
+        FieldPanel('schedule'),
+        FieldPanel('location'),
+        FieldPanel('registration'),
         FieldPanel('body'),
     ]
 

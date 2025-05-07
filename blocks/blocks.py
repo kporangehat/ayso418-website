@@ -76,6 +76,7 @@ class InfoBlock(blocks.StaticBlock):
         label = "General Information"
         group = "Standalone Blocks"
 
+
 class FaqBlock(blocks.StructBlock):
     """
     A block that displays a FAQ section.

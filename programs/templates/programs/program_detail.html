@@ -4,6 +4,28 @@
 {% block content %}
 
 
+{% if page.image %}
+{% image_url page.image "original" as hero_img %}
+{% comment %} <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 min-w-screen" style="background-image: url({{ hero_img }})"> {% endcomment %}
+{% comment %} <div class="mx-auto py-6 sm:px-6 lg:px-8 min-w-screen" style="background-image: url({{ hero_img }})"> {% endcomment %}
+<div class="bg-cover bg-center " style="background-image: url({{ hero_img }});">
+    <div class="px-4 py-6 sm:px-0 backdrop-brightness-50 bg-black/30">
+        <div class="border-1 border-dashed border-gray-200 rounded-lg h-96 flex items-center justify-center">
+            <div>
+                {% if page.logo %}
+                    {% image_url page.logo "original" as logo %}
+                    <div class="flex justify-start">
+                        <img class="rounded-full" src="{{ logo }}" alt="{{ page.logo.title }}">
+                    </div>
+                {% endif %}
+                <h1 class="block text-6xl font-extrabold text-white">{{ page.title }}</h1>
+                <h3 class="text-lg font-normal mb-5 text-slate-100">{{ page.subtitle }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 
 <!-- Blog Article -->
 <div class="max-w-5xl px-4 pt-6 lg:pt-10 pb-12 sm:px-6 lg:px-8 mx-auto">
@@ -109,27 +131,35 @@
             {{ page.title }}
         </h2>
 
-
-        {% if page.logo %}
-            {% image_url page.logo "original" as logo %}
-            <div class="flex justify-start">
-                <img class="rounded-full" src="{{ logo }}" alt="{{ page.logo.title }}">
-            </div>
-            <blockquote class="flex text-center p-4 sm:px-7">
-                <p class="text-xl font-medium text-gray-400 md:text-2xl md:leading-normal xl:text-2xl xl:leading-normal">
-                    {{ page.subtitle}}
-                </p>
-            </blockquote>
-        {% endif %}
-
-        {% if page.image %}
-        <div class="flex justify-center">
-          <img class="size-12 rounded-full" src="{{ page.image.url }}" alt="Image">
-        </div>
-        {% endif %}
-
         <div class="prose prose-slate max-w-none text-gray-800">
+
+            <h1 class="text-2xl font-semibold text-gray-800">
+                Ages
+            </h1>
+            <p class="text-gray-500">
+                {{ page.ages }}
+            </p>
+            <h1 class="text-2xl font-semibold text-gray-800">
+                Schedule
+            </h1>
+            <p class="text-gray-500">
+                {{ page.schedule|richtext }}
+            </p>
+            <h1 class="text-2xl font-semibold text-gray-800">
+                Location
+            </h1>
+            <p class="text-gray-500">
+                {{ page.location|richtext }}
+            </p>
+            <h1 class="text-2xl font-semibold text-gray-800">
+                Tryouts
+            </h1>
+            <p class="text-gray-500">
+                {{ page.tryouts|richtext }}
+            </p>
+
             {{ page.body }}
+
         </div>
       </div>
 
