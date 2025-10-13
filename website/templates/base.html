@@ -1,3 +1,4 @@
+
 {% load static wagtailcore_tags wagtailuserbar %}
 
 <!DOCTYPE html>
@@ -24,7 +25,8 @@
         {% endif %}
 
         {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.min.css' %}">
+        <script type="text/javascript" src="{% static 'js/main.min.js' %}"></script>
 
         {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
