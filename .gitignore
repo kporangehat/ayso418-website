@@ -93,3 +93,5 @@ Pipfile.lock
 node_modules/
 /static/*
 !/website/static/
+
+.vscode
