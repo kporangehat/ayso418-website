@@ -24,11 +24,8 @@
                     </a>
                 </div>
 
-                {# Spacer to account for absolute positioned logo #}
-                <div class="w-32 flex-shrink-0"></div>
-
-                {# Navigation Links - Left aligned with space from logo #}
-                <div class="hidden md:flex items-center space-x-8">
+                {# Navigation Links - Positioned right next to the logo #}
+                <div class="hidden md:flex items-center space-x-8 absolute left-50 top-1/2 -translate-y-1/2 z-10">
                     <a href="/" class="text-white hover:text-gray-300 transition-colors">Home</a>
                     <a href="/news/" class="text-white hover:text-gray-300 transition-colors">News</a>
                     <a href="/programs/" class="text-white hover:text-gray-300 transition-colors">Programs</a>
