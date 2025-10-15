@@ -30,11 +30,11 @@ Delete the line below if you're just getting started and want to remove the welc
     -c100 sets the cropping percentage
     {% endcomment %}
 
-    {% if page.image %}
-        {% image_url page.image "original" as hero_img %}
+    {% comment %} {% if page.image %} {% endcomment %}
+        {% comment %} {% image_url page.image "original" as hero_img %} {% endcomment %}
         {% comment %} <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 min-w-screen" style="background-image: url({{ hero_img }})"> {% endcomment %}
         {% comment %} <div class="mx-auto py-6 sm:px-6 lg:px-8 min-w-screen" style="background-image: url({{ hero_img }})"> {% endcomment %}
-        <div class="bg-cover bg-center " style="background-image: url({{ hero_img }});">
+        {% comment %} <div class="bg-cover bg-center " style="background-image: url({{ hero_img }});">
             <div class="px-4 py-6 sm:px-0 backdrop-brightness-50 bg-black/30">
                 <div class="border-1 border-dashed border-gray-200 rounded-lg h-96 flex items-center justify-center">
                     <div>
@@ -43,8 +43,8 @@ Delete the line below if you're just getting started and want to remove the welc
                     </div>
                 </div>
             </div>
-        </div>
-    {% endif %}
+        </div> {% endcomment %}
+    {% comment %} {% endif %} {% endcomment %}
 
     {% comment %}
     DOCUMENTS

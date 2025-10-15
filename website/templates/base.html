@@ -1,84 +1,128 @@
-
-{% load static wagtailcore_tags wagtailuserbar %}
+{% load static wagtailcore_tags %}
 
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>
-            {% block title %}
-            {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
-            {% endblock %}
-            {% block title_suffix %}
-            {% wagtail_site as current_site %}
-            {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
-            {% endblock %}
-        </title>
-        {% if page.search_description %}
-        <meta name="description" content="{{ page.search_description }}" />
-        {% endif %}
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AYSO Chicago Lakefront{% endblock %}</title>
 
-        {# Force all links in the live preview panel to be opened in a new tab #}
-        {% if request.in_preview_panel %}
-        <base target="_blank">
-        {% endif %}
+    {# Load compiled CSS from Vite #}
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
 
-        {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/main.min.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="h-full flex flex-col">
+    {# Navigation Bar #}
+    <nav class="bg-[#1a2332] text-white relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                {# Logo - Positioned to overlap hero section #}
+                <div class="absolute left-4 top-0 z-20">
+                    <a href="/" class="flex items-center">
+                        <img src="{% static 'images/ayso418_logo.png' %}" alt="AYSO Chicago Lakefront" class="h-44 w-auto">
+                    </a>
+                </div>
 
-        {% block extra_css %}
-        {# Override this in templates to add extra stylesheets #}
-        {% endblock %}
-    </head>
+                {# Spacer to account for absolute positioned logo #}
+                <div class="w-48 flex-shrink-0"></div>
 
-    <body class="{% block body_class %}{% endblock %}">
-        {% wagtailuserbar %}
+                {# Navigation Links #}
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-white hover:text-gray-300 transition-colors">Home</a>
+                    <a href="/news/" class="text-white hover:text-gray-300 transition-colors">News</a>
+                    <a href="/programs/" class="text-white hover:text-gray-300 transition-colors">Programs</a>
+                    <a href="/about/" class="text-white hover:text-gray-300 transition-colors">About</a>
+                    <a href="/contact/" class="text-white hover:text-gray-300 transition-colors">Contact</a>
+                </div>
 
-        {% block content %}{% endblock %}
+                {# Search and Register Button #}
+                <div class="hidden md:flex items-center space-x-4">
+                    <div class="relative">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            class="bg-[#2a3544] text-white placeholder-gray-400 rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <a href="/register/" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
+                        Register Now
+                    </a>
+                </div>
 
-        {% block footer %}
-            <div class="bg-slate-800 text-xs text-center text-white p-10 flex justify-center space-x-4 h-auto">
-
-                {% with instagram_url=settings.site_settings.SocialMediaLinks.instagram %}
-                    {% if instagram_url %}
-                        <a href="{{ instagram_url }}" target="_blank">
-                            <img src="{% static 'images/insta_logo.svg' %}" alt="Instagram" class="h-7 w-auto">
-                        </a>
-                    {% endif %}
-                {% endwith %}
-                {% with facebook_url=settings.site_settings.SocialMediaLinks.facebook %}
-                    {% if facebook_url %}
-                        <a href="{{ facebook_url }}" target="_blank">
-                            <img src="{% static 'images/fb_logo.svg' %}" alt="Facebook" class="h-7 w-auto">
-                        </a>
-                    {% endif %}
-                {% endwith %}
-                {% with twitter_url=settings.site_settings.SocialMediaLinks.twitter %}
-                    {% if twitter_url %}
-                        <a href="{{ twitter_url }}" target="_blank">
-                            <img src="{% static 'images/twitter_logo.svg' %}" alt="Twitter" class="h-7 w-auto">
-                        </a>
-                    {% endif %}
-                {% endwith %}
-
-                {% with privacy_page=settings.site_settings.GenericFooterText.privacy_page %}
-                    {% if privacy_page %}
-                        <a href="{{ privacy_page.url }}" class="my-auto">Privacy Policy</a>
-                    {% endif %}
-                {% endwith %}
-
-                <div class="my-auto">
-                    {{ settings.site_settings.GenericFooterText.text }}
+                {# Mobile menu button #}
+                <div class="md:hidden">
+                    <button type="button" class="text-gray-300 hover:text-white focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
-        {% endblock footer %}
+        </div>
+    </nav>
 
-        {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/main.min.js' %}"></script>
+    {# Hero Section #}
+    <section class="relative bg-cover bg-center h-[600px] flex items-center" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('{% static 'images/soccer_feet.jpg' %}');">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center text-white w-full pt-24">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">
+                Welcome to AYSO Chicago Lakefront
+            </h1>
+            <p class="text-xl md:text-2xl mb-2">
+                Where Everyone Plays and Champions are Made
+            </p>
+            <p class="text-base md:text-lg mb-8 max-w-3xl mx-auto">
+                Join Region 418's inclusive soccer programs for kids ages 6-19. Experience the joy of soccer in a supportive, fun environment along Chicago's beautiful lakefront.
+            </p>
 
-        {% block extra_js %}
-        {# Override this in templates to add extra javascript #}
-        {% endblock %}
-    </body>
+            {# Call to Action Buttons #}
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+                <a href="/register/" class="bg-white text-blue-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors">
+                    Register Today
+                </a>
+                <a href="/about/" class="border-2 border-white text-white font-semibold px-8 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition-colors">
+                    Learn More
+                </a>
+            </div>
+
+            {# Stats Section #}
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold">500+</div>
+                    <div class="text-sm md:text-base uppercase tracking-wider mt-1">Players</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold">6</div>
+                    <div class="text-sm md:text-base uppercase tracking-wider mt-1">Programs</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold">25+</div>
+                    <div class="text-sm md:text-base uppercase tracking-wider mt-1">Years</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# Main Content Area #}
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    {# Footer - to be added later #}
+    <footer class="bg-[#1a2332] text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 AYSO Chicago Lakefront Region 418. All rights reserved.</p>
+        </div>
+    </footer>
+
+    {# Load compiled JavaScript from Vite #}
+    <script src="{% static 'js/main.min.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
 </html>
