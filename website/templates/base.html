@@ -16,7 +16,7 @@
     {# Navigation Bar #}
     <nav class="bg-[#1a2332] text-white relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
+            <div class="flex items-center h-20">
                 {# Logo - Positioned to overlap hero section #}
                 <div class="absolute left-4 top-0 z-20">
                     <a href="/" class="flex items-center">
@@ -25,9 +25,9 @@
                 </div>
 
                 {# Spacer to account for absolute positioned logo #}
-                <div class="w-48 flex-shrink-0"></div>
+                <div class="w-32 flex-shrink-0"></div>
 
-                {# Navigation Links #}
+                {# Navigation Links - Left aligned with space from logo #}
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="/" class="text-white hover:text-gray-300 transition-colors">Home</a>
                     <a href="/news/" class="text-white hover:text-gray-300 transition-colors">News</a>
@@ -35,6 +35,9 @@
                     <a href="/about/" class="text-white hover:text-gray-300 transition-colors">About</a>
                     <a href="/contact/" class="text-white hover:text-gray-300 transition-colors">Contact</a>
                 </div>
+
+                {# Flex spacer to push search and register to the right #}
+                <div class="flex-grow"></div>
 
                 {# Search and Register Button #}
                 <div class="hidden md:flex items-center space-x-4">
