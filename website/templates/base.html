@@ -5,108 +5,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}AYSO Chicago Lakefront{% endblock %}</title>
+    <title>{% block title %}AYSO Chicago Lakefront Soccer - Region 418{% endblock %}</title>
 
     {# Load compiled CSS from Vite #}
     <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    {% block extra_css %}{% endblock %}
+    {% block extra_css %}
+    {% endblock %}
 </head>
-<body class="h-full flex flex-col">
-    {# Navigation Bar #}
-    <nav class="bg-[#1a2332] text-white relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center h-16">
-                {# Logo - Positioned to overlap hero section #}
-                <div class="absolute left-4 top-0 z-20">
-                    <a href="/" class="flex items-center">
-                        <img src="{% static 'images/ayso418_logo.png' %}" alt="AYSO Chicago Lakefront" class="h-36 w-auto drop-shadow-md">
-                    </a>
-                </div>
 
-                {# Navigation Links - Positioned right next to the logo #}
-                <div class="hidden md:flex items-center space-x-2 absolute left-44 top-1/2 -translate-y-1/2 z-10">
-                    <a href="/" class="text-white hover:text-blue-200 hover:bg-blue-900/30 hover:shadow-md hover:-translate-y-0.5 px-3 py-2 rounded-md transition-all duration-200 transform">Home</a>
-                    <a href="/news/" class="text-white hover:text-blue-200 hover:bg-blue-900/30 hover:shadow-md hover:-translate-y-0.5 px-3 py-2 rounded-md transition-all duration-200 transform">News</a>
-                    <a href="/programs/" class="text-white hover:text-blue-200 hover:bg-blue-900/30 hover:shadow-md hover:-translate-y-0.5 px-3 py-2 rounded-md transition-all duration-200 transform">Programs</a>
-                    <a href="/about/" class="text-white hover:text-blue-200 hover:bg-blue-900/30 hover:shadow-md hover:-translate-y-0.5 px-3 py-2 rounded-md transition-all duration-200 transform">About</a>
-                    <a href="/contact/" class="text-white hover:text-blue-200 hover:bg-blue-900/30 hover:shadow-md hover:-translate-y-0.5 px-3 py-2 rounded-md transition-all duration-200 transform">Contact</a>
-                </div>
+<body class="overflow-x-hidden">
+    <!-- Fixed Navbar using DaisyUI -->
+    <div class="navbar navbar-gradient fixed top-0 z-50 shadow-2xl transition-transform transition-duration-300 px-4" id="header">
+        <div class="navbar-start">
+            <div class="dropdown">
+                <label tabindex="0" class="btn btn-ghost lg:hidden text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </label>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow navbar-gradient rounded-box w-52 gap-2">
+                    <li><a href="#home" class="nav-link text-white hover:text-blue-300">Home</a></li>
+                    <li><a href="#news" class="nav-link text-white hover:text-blue-300">News</a></li>
+                    <li><a href="#programs" class="nav-link text-white hover:text-blue-300">Programs</a></li>
+                    <li><a href="#benefits" class="nav-link text-white hover:text-blue-300">Benefits</a></li>
+                    <li><a href="#contact" class="nav-link text-white hover:text-blue-300">Contact</a></li>
+                    <li>
+                        <input type="search" placeholder="Search..." class="input input-sm input-search rounded-full w-full" />
+                    </li>
+                    <li>
+                        <a href="#register" class="btn btn-sm btn-register text-white rounded-full">Register Now</a>
+                    </li>
+                </ul>
+            </div>
+            <a class="btn btn-ghost normal-case text-xl font-extrabold text-white hover:bg-transparent flex items-center gap-2">
+                <img src="{% static 'images/ayso418_logo.png' %}" alt="AYSO Logo" class="h-12 w-auto">
+                <span class="hidden sm:inline">AYSO Chicago Lakefront</span>
+            </a>
+        </div>
 
-                {# Search and Register Button - Positioned to the right #}
-                <div class="hidden md:flex items-center space-x-4 absolute right-4 top-1/2 -translate-y-1/2 z-10">
-                    <div class="relative">
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            class="bg-[#2a3544] text-white placeholder-gray-400 rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <a href="/register/" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
-                        Register Now
-                    </a>
-                </div>
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1 gap-6 items-center text-base">
+                <li><a href="#home" class="nav-link text-white hover:text-blue-300 font-medium text-base">Home</a></li>
+                <li><a href="#news" class="nav-link text-white hover:text-blue-300 font-medium text-base">News</a></li>
+                <li><a href="#programs" class="nav-link text-white hover:text-blue-300 font-medium text-base">Programs</a></li>
+                <li><a href="#benefits" class="nav-link text-white hover:text-blue-300 font-medium text-base">Benefits</a></li>
+                <li><a href="#contact" class="nav-link text-white hover:text-blue-300 font-medium text-base">Contact</a></li>
+            </ul>
+        </div>
 
-                {# Mobile menu button #}
-                <div class="md:hidden">
-                    <button type="button" class="text-gray-300 hover:text-white focus:outline-none">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
+        <div class="navbar-end hidden lg:flex gap-3">
+            <input type="search" placeholder="Search..." class="input input-sm input-search rounded-full w-32 xl:w-40" />
+            <a href="#register" class="btn btn-register text-white rounded-full font-bold hover:-translate-y-0.5 transition-transform flex items-center whitespace-nowrap min-h-10 h-10">
+                Register Now
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Section using DaisyUI hero -->
+    <section id="home" class="hero gradient-purple relative overflow-hidden" style="margin-top: 80px; min-height: 50vh;">
+        <div class="hero-pattern absolute inset-0"></div>
+        <div class="hero-content text-center text-white relative z-10 hero-animated">
+            <div class="max-w-4xl">
+                <h1 class="text-5xl md:text-6xl font-black mb-4" style="text-shadow: 0 4px 20px rgba(0,0,0,0.2)">
+                    Welcome to AYSO Region 418
+                </h1>
+                <p class="text-xl md:text-2xl mb-6 opacity-95">
+                    Chicago Lakefront Soccer - Where Everyone Plays!
+                </p>
+                <a href="#programs" class="btn btn-lg bg-white text-blue-600 border-none rounded-full font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                    Explore Our Programs
+                </a>
             </div>
         </div>
-    </nav>
+    </section>
 
-    {# Hero Section #}
-    <section class="relative bg-cover bg-center h-[600px] flex items-center" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('{% static 'images/soccer_feet.jpg' %}');">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center text-white w-full pt-24">
-            <h1 class="text-5xl md:text-6xl font-bold mb-4">
-                Welcome to AYSO Chicago Lakefront
-            </h1>
-            <p class="text-xl md:text-2xl mb-2">
-                Where Everyone Plays and Champions are Made
-            </p>
-            <p class="text-base md:text-lg mb-8 max-w-3xl mx-auto">
-                Join Region 418's inclusive soccer programs for kids ages 6-19. Experience the joy of soccer in a supportive, fun environment along Chicago's beautiful lakefront.
-            </p>
-
-            {# Call to Action Buttons #}
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-                <a href="/register/" class="bg-white text-blue-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors">
-                    Register Today
-                </a>
-                <a href="/about/" class="border-2 border-white text-white font-semibold px-8 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition-colors">
-                    Learn More
-                </a>
-            </div>
-
-            {# Stats Section #}
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-bold">500+</div>
-                    <div class="text-sm md:text-base uppercase tracking-wider mt-1">Players</div>
+    <!-- Latest News Section using DaisyUI cards -->
+    <section id="news" class="gradient-light py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-12 text-gray-900 fade-in">
+                Latest News
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- News Card 1 -->
+                <!-- TODO: fade-in is causing hover transition to be janky -->
+                <div class="card card-news bg-base-100 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer fade-in">
+                    <figure class="gradient-purple h-48">
+                        <div class="text-7xl">⚽</div>
+                    </figure>
+                    <div class="card-body">
+                        <div class="badge badge-primary badge-outline">October 15, 2025</div>
+                        <h3 class="card-title text-2xl">Fall Season Registration Open</h3>
+                        <p class="text-gray-600">Registration for our Fall 2025 season is now open! Sign up today and join hundreds of families in the best youth soccer program in Chicago.</p>
+                    </div>
                 </div>
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-bold">6</div>
-                    <div class="text-sm md:text-base uppercase tracking-wider mt-1">Programs</div>
+
+                <!-- News Card 2 -->
+                <div class="card card-news bg-base-100 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer fade-in">
+                    <figure class="gradient-purple h-48">
+                        <div class="text-7xl">🏆</div>
+                    </figure>
+                    <div class="card-body">
+                        <div class="badge badge-primary badge-outline">October 10, 2025</div>
+                        <h3 class="card-title text-2xl">Championship Weekend Success</h3>
+                        <p class="text-gray-600">Congratulations to all our teams who competed in the championship tournaments this past weekend. Amazing sportsmanship and teamwork on display!</p>
+                    </div>
                 </div>
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-bold">25+</div>
-                    <div class="text-sm md:text-base uppercase tracking-wider mt-1">Years</div>
+
+                <!-- News Card 3 -->
+                <div class="card card-news bg-base-100 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer fade-in">
+                    <figure class="gradient-purple h-48">
+                        <div class="text-7xl">🎉</div>
+                    </figure>
+                    <div class="card-body">
+                        <div class="badge badge-primary badge-outline">October 5, 2025</div>
+                        <h3 class="card-title text-2xl">New EPIC Program Launch</h3>
+                        <p class="text-gray-600">We're excited to announce the expansion of our EPIC program for children with special needs. Creating inclusive opportunities for all players.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Programs Section using DaisyUI cards -->
+    <section id="programs" class="gradient-purple py-16 px-4 text-white">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-12">
+                Our Programs
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Program 1 -->
+                <div class="card card-program transition-all transform hover:-translate-y-2 fade-in">
+                    <div class="card-body">
+                        <div class="text-6xl mb-4">⚽</div>
+                        <h3 class="card-title text-2xl">Core Program</h3>
+                        <p class="opacity-90"><strong>Ages 6-19</strong><br>Everyone plays! Our foundational program focuses on skill development, teamwork, and having fun while learning the beautiful game.</p>
+                    </div>
+                </div>
+
+                <!-- Program 2 -->
+                <div class="card card-program transition-all transform hover:-translate-y-2 fade-in">
+                    <div class="card-body">
+                        <div class="text-6xl mb-4">🚀</div>
+                        <h3 class="card-title text-2xl">Extra Program</h3>
+                        <p class="opacity-90">Inter-regional travel program for players seeking enhanced soccer experience and progressive development beyond the core program.</p>
+                    </div>
+                </div>
+
+                <!-- Program 3 -->
+                <div class="card card-program transition-all transform hover:-translate-y-2 fade-in">
+                    <div class="card-body">
+                        <div class="text-6xl mb-4">⭐</div>
+                        <h3 class="card-title text-2xl">Northwind SC</h3>
+                        <p class="opacity-90">Club soccer providing competitive travel experience at the highest level for players with advanced abilities and dedication.</p>
+                    </div>
+                </div>
+
+                <!-- Program 4 -->
+                <div class="card card-program transition-all transform hover:-translate-y-2 fade-in">
+                    <div class="card-body">
+                        <div class="text-6xl mb-4">💙</div>
+                        <h3 class="card-title text-2xl">EPIC Program</h3>
+                        <p class="opacity-90">Inclusive soccer for children with special needs. Creating a welcoming environment where every child can participate and thrive.</p>
+                    </div>
+                </div>
+
+                <!-- Program 5 -->
+                <div class="card card-program transition-all transform hover:-translate-y-2 fade-in">
+                    <div class="card-body">
+                        <div class="text-6xl mb-4">🏃</div>
+                        <h3 class="card-title text-2xl">Camps & Clinics</h3>
+                        <p class="opacity-90">Extra fun and skill development during school breaks. Perfect for players looking to improve during the off-season.</p>
+                    </div>
+                </div>
+
+                <!-- Program 6 -->
+                <div class="card card-program transition-all transform hover:-translate-y-2 fade-in">
+                    <div class="card-body">
+                        <div class="text-6xl mb-4">❄️</div>
+                        <h3 class="card-title text-2xl">Winter Indoor</h3>
+                        <p class="opacity-90">Co-ed winter indoor program featuring fast-paced, exciting games that build skills and keep players active year-round.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section using DaisyUI cards -->
+    <section id="benefits" class="gradient-dark py-16 px-4 text-white">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-12" style="color: #e8eaf5;">
+                AYSO Six Philosophies
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Philosophy 1 -->
+                <div class="card card-philosophy transition-all transform hover:scale-105 fade-in">
+                    <div class="card-body items-center text-center">
+                        <div class="text-6xl mb-4">👥</div>
+                        <h3 class="card-title text-2xl">Everyone Plays</h3>
+                        <p class="text-gray-300">Every child gets equal playing time regardless of skill level</p>
+                    </div>
+                </div>
+
+                <!-- Philosophy 2 -->
+                <div class="card card-philosophy transition-all transform hover:scale-105 fade-in">
+                    <div class="card-body items-center text-center">
+                        <div class="text-6xl mb-4">⚖️</div>
+                        <h3 class="card-title text-2xl">Balanced Teams</h3>
+                        <p class="text-gray-300">Teams are balanced to ensure fair and competitive games</p>
+                    </div>
+                </div>
+
+                <!-- Philosophy 3 -->
+                <div class="card card-philosophy transition-all transform hover:scale-105 fade-in">
+                    <div class="card-body items-center text-center">
+                        <div class="text-6xl mb-4">📝</div>
+                        <h3 class="card-title text-2xl">Open Registration</h3>
+                        <p class="text-gray-300">Welcoming to all children and families in our community</p>
+                    </div>
+                </div>
+
+                <!-- Philosophy 4 -->
+                <div class="card card-philosophy transition-all transform hover:scale-105 fade-in">
+                    <div class="card-body items-center text-center">
+                        <div class="text-6xl mb-4">📚</div>
+                        <h3 class="card-title text-2xl">Positive Coaching</h3>
+                        <p class="text-gray-300">Trained volunteer coaches focused on development and encouragement</p>
+                    </div>
+                </div>
+
+                <!-- Philosophy 5 -->
+                <div class="card card-philosophy transition-all transform hover:scale-105 fade-in">
+                    <div class="card-body items-center text-center">
+                        <div class="text-6xl mb-4">🤝</div>
+                        <h3 class="card-title text-2xl">Good Sportsmanship</h3>
+                        <p class="text-gray-300">Building character and respect through sports</p>
+                    </div>
+                </div>
+
+                <!-- Philosophy 6 -->
+                <div class="card card-philosophy transition-all transform hover:scale-105 fade-in">
+                    <div class="card-body items-center text-center">
+                        <div class="text-6xl mb-4">📈</div>
+                        <h3 class="card-title text-2xl">Player Development</h3>
+                        <p class="text-gray-300">Age-appropriate skill building at every stage</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="gradient-pink py-16 px-4 text-white text-center">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-6">
+                Get In Touch
+            </h2>
+            <p class="text-xl mb-12 max-w-2xl mx-auto">
+                Have questions? We're here to help! Reach out to learn more about our programs.
+            </p>
+
+            <div class="flex flex-col md:flex-row justify-center gap-12 mb-8">
+                <div class="flex flex-col items-center">
+                    <div class="text-5xl mb-2">📧</div>
+                    <div class="font-medium">info@aysochicago.org</div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="text-5xl mb-2">📱</div>
+                    <div class="font-medium">(312) 555-AYSO</div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="text-5xl mb-2">📍</div>
+                    <div class="font-medium">Chicago Lakefront<br>Region 418</div>
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-6 text-5xl">
+                <a href="#" class="btn btn-circle btn-ghost text-white hover:scale-125 transition-transform" aria-label="Facebook">📘</a>
+                <a href="#" class="btn btn-circle btn-ghost text-white hover:scale-125 transition-transform" aria-label="Instagram">📷</a>
+                <a href="#" class="btn btn-circle btn-ghost text-white hover:scale-125 transition-transform" aria-label="Twitter">🐦</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer using DaisyUI footer -->
+    <footer class="footer footer-center p-8 bg-gray-900 text-white">
+        <div>
+            <p>&copy; 2025 AYSO Chicago Lakefront. All rights reserved.</p>
+        </div>
+    </footer>
+
+
     {# Main Content Area #}
-    <main class="flex-grow">
+    {% comment %} <main class="flex-grow">
         {% block content %}{% endblock %}
     </main>
 
@@ -115,7 +309,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p>&copy; 2025 AYSO Chicago Lakefront Region 418. All rights reserved.</p>
         </div>
-    </footer>
+    </footer> {% endcomment %}
 
     {# Load compiled JavaScript from Vite #}
     <script src="{% static 'js/main.min.js' %}"></script>
