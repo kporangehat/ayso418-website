@@ -189,6 +189,34 @@ class CallToActionBlock(blocks.StructBlock):
         icon = "expand-right"
 
 
+class HeroBlock(blocks.StructBlock):
+    """
+    A block that displays a hero section.
+    """
+    headline = blocks.CharBlock(
+        max_length=200,
+        required=True,
+    )
+    text = blocks.RichTextBlock(
+        features=['bold', 'italic'],
+        required=True,
+    )
+    page = blocks.PageChooserBlock()
+    button_text = blocks.CharBlock(
+        max_length=100,
+        required=False,
+    )
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        context['button_label'] = value.get('button_text') or value.get('page').title
+        return context
+
+    class Meta:
+        template = "blocks/hero_text.html"
+        icon = "expand-right"
+
+
 class ImageBlock(ImageChooserBlock):
     """
     A block that displays an image.
@@ -211,6 +239,73 @@ class ImageBlock(ImageChooserBlock):
     class Meta:
         template = "blocks/image_block.html"
         icon = "image"
+        group = "Standalone Blocks"
+
+
+class RecentNewsBlock(blocks.StructBlock):
+    """
+    A block that displays recent news items with optional tag filtering.
+    """
+    title = blocks.CharBlock(
+        max_length=100,
+        required=True,
+        help_text="Main heading for this news section"
+    )
+    subtitle = blocks.TextBlock(
+        max_length=200,
+        required=False,
+        help_text="Optional description text"
+    )
+    num_items = blocks.IntegerBlock(
+        default=3,
+        min_value=1,
+        max_value=10,
+        required=True,
+        help_text="Number of recent news items to display"
+    )
+    filter_by_tag = blocks.CharBlock(
+        max_length=50,
+        required=False,
+        help_text="Optional: filter news items by tag (leave blank to show all)"
+    )
+
+    def get_context(self, value, parent_context=None):
+        from news.models import NewsItem
+        from wagtail.models import Locale
+
+        context = super().get_context(value, parent_context=parent_context)
+
+        # Get the current locale if in a request context
+        try:
+            current_locale = Locale.get_active()
+        except (AttributeError, RuntimeError):
+            current_locale = None
+
+        # Start with base queryset
+        news_items = NewsItem.objects.live().public()
+
+        # Filter by locale if available
+        if current_locale:
+            news_items = news_items.filter(locale=current_locale)
+
+        # Filter by tag if specified
+        tag = value.get('filter_by_tag', '').strip()
+        if tag:
+            news_items = news_items.filter(tags__name=tag)
+
+        # Order by most recent and limit to requested number
+        num_items = value.get('num_items', 3)
+        news_items = news_items.order_by('-first_published_at')[:num_items]
+
+        context['news_items'] = news_items
+        context['tag'] = tag
+
+        return context
+
+    class Meta:
+        template = "blocks/recent_news_block.html"
+        icon = "doc-full-inverse"
+        label = "Recent News"
         group = "Standalone Blocks"
 
 

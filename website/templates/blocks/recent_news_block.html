@@ -1,0 +1,44 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<section class="gradient-light py-16 px-4">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-4 text-gray-900 fade-in">
+            {{ self.title }}
+        </h2>
+
+        {% if self.subtitle %}
+        <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+            {{ self.subtitle }}
+        </p>
+        {% endif %}
+
+        {% if news_items %}
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for article in news_items %}
+                <div class="card card-news bg-base-100 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer fade-in">
+                    <figure class="gradient-purple h-48">
+                        {% if article.image %}
+                            {% image article.image width-400 %}
+                        {% else %}
+                            <div class="text-7xl">⚽</div>
+                        {% endif %}
+                    </figure>
+                    <div class="card-body">
+                        <div class="badge badge-primary badge-outline">{{ article.first_published_at|date:"d M Y" }}</div>
+                        <h3 class="card-title text-2xl"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+                        <p class="text-gray-600">{{ article.intro|richtext }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center text-gray-500">
+            {% if tag %}
+                No news items found with tag "{{ tag }}".
+            {% else %}
+                No news items available.
+            {% endif %}
+        </p>
+        {% endif %}
+    </div>
+</section>

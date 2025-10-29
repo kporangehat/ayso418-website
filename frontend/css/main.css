@@ -53,6 +53,10 @@ body {
     transform: translateY(0);
 }
 
+.gradient-blue {
+    background: linear-gradient(135deg, #0066CC 0%, #42c3fe 100%);
+}
+
 .gradient-purple {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }

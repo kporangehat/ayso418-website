@@ -3,14 +3,20 @@ from django.core.exceptions import ValidationError
 
 from wagtail.models import Page, Orderable
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel, PageChooserPanel, FieldRowPanel, HelpPanel, MultipleChooserPanel, TitleFieldPanel
-from wagtail.fields import RichTextField
+from wagtail.fields import RichTextField, BlockField, StreamField
 from wagtail.images import get_image_model
 from wagtail.documents import get_document_model
 from wagtail.models import Locale
+# snippet-related imports
+from wagtail.models import DraftStateMixin, RevisionMixin, LockableMixin, PreviewableMixin, TranslatableMixin
+from wagtail.search import index
+from django.contrib.contenttypes.fields import GenericRelation
+from wagtail.admin.panels import PublishingPanel
 
 from news.models import NewsItem
 
 from modelcluster.fields import ParentalKey
+from blocks import blocks as custom_blocks
 
 
 class HomePageGalleryImage(Orderable):
@@ -34,129 +40,40 @@ class HomePage(Page):
 
     max_count = 1  # only allow one home page.
 
-    subtitle = models.CharField(max_length=255, blank=True, null=True)
-    body = RichTextField(blank=True)
-
-    image = models.ForeignKey(
-        get_image_model(),  # will determine this is 'wagtailimages.CustomImage'
+    CTA = models.ForeignKey(
+        'home.CTA',
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+',  # + means no reverse relation required
+        on_delete=models.PROTECT,
+        related_name='homepage_cta',
     )
 
-    custom_document = models.ForeignKey(
-        get_document_model(),  # will determine this is soemthing like 'wagtaildocs.CustomDocument'
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+',
-    )
-
-    cta_url = models.ForeignKey(
-        'wagtailcore.Page',  # can limit this to specific page types
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+',
-    )
-
-    cta_external_url = models.URLField(
+    body = StreamField(
+        [
+            ('hero', custom_blocks.HeroBlock()),
+            ("faq", custom_blocks.FaqListBlock()),
+            ("text", custom_blocks.TextBlock()),
+            ("carousel", custom_blocks.CarouselBlock()),
+            ("image", custom_blocks.ImageBlock()),
+            ("page", custom_blocks.CustomPageChooserBlock(
+                required=False,
+                page_type=['news.NewsItem'],
+                group="Standalone Blocks"
+            )),
+            ("recent_news", custom_blocks.RecentNewsBlock()),
+        ],
+        block_counts={
+            "hero": {"max_num": 1},
+        },
         blank=True,
         null=True,
     )
 
     # admin panels for the fields
     content_panels = Page.content_panels + [
-        FieldPanel(
-            "subtitle",
-            help_text="Subtitle for the home page",
-        ),
-        FieldPanel('image'),
-
-        PageChooserPanel(
-            'cta_url',
-            page_type=['news.NewsItem'],  # can limit this to specific page types
-            help_text="Select a news itemm for the call to action button",
-            heading="Call to Action - News Item",
-        ),
-
-        # CAN'T HAVE BOTH InlinePanel and MultipleChooserPanel named gallery_images
-        # so we comment one out before deploying
-        # InlinePanel(
-        #     'gallery_images',
-        #     label="Gallery Images",
-        #     min_num=2,
-        #     max_num=5,
-        # ),
-
-        MultipleChooserPanel(
-            'gallery_images',
-            label="Gallery Images",
-            min_num=2,
-            max_num=5,
-            chooser_field_name='image',
-            icon="image",
-        ),
-
-        # MultiFieldPanel(
-        #     [
-        #         HelpPanel(
-        #             content="<strong>Help Panel</strong><p>Help text goes here",
-        #             heading="Note:"
-        #         ),
-        #         FieldRowPanel(
-        #             [
-        #                 PageChooserPanel(
-        #                     'cta_url',
-        #                     page_type=['news.NewsItem'],  # can limit this to specific page types
-        #                     help_text="Select a news item for the call to action button",
-        #                     heading="News Item Selection",
-        #                     classname="col6",
-        #                 ),
-        #                 FieldPanel(
-        #                     'cta_external_url',
-        #                     help_text="Enter an external URL for the call to action button",
-        #                     heading="External URL",
-        #                     classname="col6",
-        #                 ),
-        #             ],
-        #             help_text="Select a news item or enter an external URL",
-        #             heading="Call to Action URLs",
-        #         ),
-        #     ],
-        #     heading="MultiField Panel",
-        #     help_text="Random help text",
-        #     classname="collapsed",
-        # ),
-
+        FieldPanel('CTA'),
         FieldPanel('body'),
     ]
-
-    @property
-    def get_cta_url(self):
-        """
-        Returns the URL for the call to action button.
-        If both internal and external URLs are set, it will return the internal URL.
-        """
-        if self.cta_url:
-            return self.cta_url.url
-        elif self.cta_external_url:
-            return self.cta_external_url
-        return None
-
-    def clean(self):
-        super().clean()
-
-        errors = {}
-
-        # can set any field errors and conditions in here
-        if self.cta_url and self.cta_external_url:
-            errors["cta_url"] = "You cannot set both internal and an external URL."
-            errors["cta_external_url"] = "You cannot set both internal and an external URL."
-
-        if errors:
-            raise ValidationError(errors)
 
     def get_context(self, request):
         """
@@ -166,3 +83,51 @@ class HomePage(Page):
         current_locale = Locale.get_active()
         context['news_articles'] = NewsItem.objects.live().public().filter(locale=current_locale).order_by("-first_published_at")[:6]
         return context
+
+
+class CTA(
+    TranslatableMixin,
+    PreviewableMixin,
+    LockableMixin,
+    DraftStateMixin,
+    RevisionMixin,
+    index.Indexed,
+    models.Model
+):
+    """
+    A model to represent a call-to-action.
+    """
+    title = models.CharField(max_length=255)
+    text = RichTextField()
+    button_text = models.CharField(max_length=100)
+    button_url = models.URLField()
+    revisions = GenericRelation('wagtailcore.Revision', related_query_name="cta")
+
+
+    def __str__(self):
+        return self.title
+
+    def get_preview_template(self, request, mode_name):
+        templates = {
+            "": "includes/cta_preview.html",
+        }
+
+        return templates.get(mode_name, "")
+
+    @property
+    def preview_modes(self):
+        return PreviewableMixin.DEFAULT_PREVIEW_MODES + [
+            ("dark_mode", "Dark Mode"),
+        ]
+
+    def get_preview_context(self, request, mode_name):
+        context = super().get_preview_context(request, mode_name)
+        if mode_name == "dark_mode":
+            context["warning"] = "This is a preview in dark mode"
+
+        return context
+
+    # class Meta(TranslatableMixin.Meta):
+    #     permissions = [
+    #         ("can_edit_author_name", "Can edit author name"),
+    #     ]

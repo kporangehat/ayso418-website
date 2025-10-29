@@ -3,7 +3,7 @@
 
 {% block content %}
 
-
+{% comment %}
 
 <!-- Blog Article -->
 <div class="max-w-3xl px-4 pt-6 lg:pt-10 pb-12 sm:px-6 lg:px-8 mx-auto">
@@ -241,26 +241,26 @@
   </div>
 </div>
 <!-- End Sticky Share Group -->
-
+ {% endcomment %}
 
 
 
 
 
     {% comment %}page-specific cache that is also preview-aware{% endcomment %}
-    {% wagtailpagecache 500 "page-title-cache" %}
+    {% comment %} {% wagtailpagecache 500 "page-title-cache" %} {% endcomment %}
         <h1>{{ page.title }}</h1>
-    {% endwagtailpagecache %}
+    {% comment %} {% endwagtailpagecache %} {% endcomment %}
 
     <h3>{{ page.subtitle }}</h3>
 
-    {% wagtailpagecache 500 "streamfields" %}
+    {% comment %} {% wagtailpagecache 500 "streamfields" %} {% endcomment %}
         {% for block in page.body %}
             {% include_block block %}
         {% endfor %}
-    {% endwagtailpagecache %}
+    {% comment %} {% endwagtailpagecache %} {% endcomment %}
 
-    {% include "includes/author_dark_mode.html" with object=self.author %}
+    {% comment %} {% include "includes/author_dark_mode.html" with object=self.author %}
 
     <h3>Tags</h3>
     <ul>
@@ -268,6 +268,6 @@
             {# slug link is not implemented but we could do so #}
             <li>{{ tag.name }} (<a href="/news/?tag={{ tag.slug }}">{{ tag.slug }}</a>)</li>
         {% endfor %}
-    </ul>
+    </ul> {% endcomment %}
 
 {% endblock %}

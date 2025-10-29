@@ -3,12 +3,39 @@
 
 {% block content %}
 
-    {% comment %} {# gets the routable with the name="all" #}
-    {% routablepageurl page "all" %}
-    {# gets the routable with the name="tag" and passes "refs" as the arg #}
-    <a href="{% routablepageurl page 'tag' tag='refs' %}">Ref News</a> {% endcomment %}
+    <!-- Latest News Section using DaisyUI cards -->
+    <section id="news" class="gradient-light py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-12 text-gray-900 fade-in">
+                {{ page.title }}
+            </h2>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for article in news_items %}
+                    <!-- News Card 1 -->
+                    <!-- TODO: fade-in is causing hover transition to be janky -->
+                    <div class="card card-news bg-base-100 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer fade-in">
+                        <figure class="gradient-purple h-48">
+                            {% if article.image %}
+                                {% image article.image width-400 %}
+                            {% else %}
+                                <div class="text-7xl">⚽</div>
+                            {% endif %}
+                        </figure>
+                        <div class="card-body">
+                            <div class="badge badge-primary badge-outline">{{ article.first_published_at|date:"d M Y" }}</div>
+                            <h3 class="card-title text-2xl"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+                            <p class="text-gray-600">{{ article.intro|richtext }}</p>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 
 
+    <!---
 
     <div class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-slate-100 py-6 sm:py-12">
 
@@ -23,6 +50,7 @@
             <div class="flex justify-center items-center">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {% for article in news_items %}
+
                         <div class="shadow-md rounded-lg border border-gray-900">
                             {% if article.image %}
                                 <div class="relative h-56 mb-2.5 overflow-hidden text-white rounded-md">
@@ -42,10 +70,13 @@
                                 </div>
                             </div>
                         </div>
+                        End of Article Card
+
                     {% endfor %}
                 </div>
             </div>
         </div>
-
     </div>
+    --->
+
 {% endblock %}

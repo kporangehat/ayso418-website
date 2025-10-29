@@ -5,134 +5,14 @@
 {% block body_class %}template-homepage{% endblock %}
 
 {% block extra_css %}
-
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-{% comment %} <link rel="stylesheet" href="{% static 'css/welcome_page.css' %}"> {% endcomment %}
-
 {% endblock extra_css %}
 
 {% block content %}
-
-{% comment %}
-<div class="p-20 bg-gradient-to-tr to-blue-500 from-blue-900">
-    <h1 class="text-6xl font-thin from-neutral-200 text-white">{{ page.title }}</h1>
-    <h3 class="text-lg font-normal mb-5 text-purple-200">{{ page.subtitle }}</h3>
-</div>
-{% endcomment %}
-
-<section class="">
-
-
-    {% comment %}
-    IMAGES
-    -c100 sets the cropping percentage
-    {% endcomment %}
-
-    {% comment %} {% if page.image %} {% endcomment %}
-        {% comment %} {% image_url page.image "original" as hero_img %} {% endcomment %}
-        {% comment %} <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 min-w-screen" style="background-image: url({{ hero_img }})"> {% endcomment %}
-        {% comment %} <div class="mx-auto py-6 sm:px-6 lg:px-8 min-w-screen" style="background-image: url({{ hero_img }})"> {% endcomment %}
-        {% comment %} <div class="bg-cover bg-center " style="background-image: url({{ hero_img }});">
-            <div class="px-4 py-6 sm:px-0 backdrop-brightness-50 bg-black/30">
-                <div class="border-1 border-dashed border-gray-200 rounded-lg h-96 flex items-center justify-center">
-                    <div>
-                        <h1 class="block text-9xl font-extrabold text-white">PL<span class="text-red-500">AYSO</span>CCER</h1>
-                        <h3 class="text-lg font-normal mb-5 text-slate-100">{{ page.subtitle }}</h3>
-                    </div>
-                </div>
-            </div>
-        </div> {% endcomment %}
-    {% comment %} {% endif %} {% endcomment %}
-
-    {% comment %}
-    DOCUMENTS
-    {% endcomment %}
-    {% if page.custom_document %}
-        {% comment %} Document: <a href="{{ page.custom_document.url }}" download>{{ page.custom_document.title }}</a> {% endcomment %}
+    {% if page.CTA %}
+        {% include "includes/cta.html" with cta=page.CTA %}
     {% endif %}
 
-    {% comment %}
-    CTA_URL
-
-    - kind of messy because we want the title for this when external
-    {% endcomment %}
-    {% if page.get_cta_url %}
-        {% comment %} <p>
-            CTA:
-        <a href="{{ page.get_cta_url }}" class="btn btn-primary">
-            {% if page.cta_url %}
-                {{ page.cta_url.title }}
-            {% else %}
-                {{ page.get_cta_url }}
-            {% endif %}
-            </a>
-        </p> {% endcomment %}
-    {% endif %}
-
-    <div class="bg-gradient-to-tr to-blue-100 from-white">
-
-        <div class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for article in news_articles %}
-
-            <figure class="md:flex bg-slate-100 rounded-xl p-8 md:p-0 border ">
-                {% comment %} {% if article.image %}
-                    {% image_url article.image "original" as article_img %}
-                    <img class="w-24 h-24 md:w-48 md:h-auto md:rounded-none rounded-full mx-auto" src="{{ article_img }}" alt="" width="384" height="512">
-                {% endif %} {% endcomment %}
-                <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-                    <p class="line-clamp-3">
-                        {{ article.intro|richtext|truncatewords:50 }}
-                    </p>
-                <figcaption class="font-medium">
-                    <div class="text-sky-500 dark:text-sky-400">
-                    {{ article.title }}
-                    </div>
-                    <div class="text-slate-700 dark:text-slate-500">
-                    {{ article.first_published_at|date:"d M Y" }}
-                    </div>
-                </figcaption>
-                </div>
-            </figure>
-
-        {% endfor %}
-        </div>
-        </div>
-    </div>
-
-    {% comment %}
-    {% if page.custom_text %}
-        <p>{{ page.custom_text|richtext }}</p>
-    {% endif %}
-    {% endcomment %}
-
-    {% comment %}
-    {% if page.custom_text %}
-        <p>{{ page.custom_text|richtext }}</p>
-    {% endif %}
-    {% endcomment %}
-
-    {% comment %}
-    {% if page.custom_text %}
-        <p>{{ page.custom_text }}</p>
-    {% endif %}
-    {% endcomment %}
-
-    {% comment %}
-    {% if page.custom_text %}
-        <p>{{ page.custom_text|richtext }}</p>
-    {% endif %}
-    {% endcomment %}
-
-    {% comment %} {% if page.body %}
-        <p>{{ page.body|richtext }}</p>
-    {% endif %} {% endcomment %}
-
-    {% comment %}
-    Delete the line below if you're just getting started and want to remove the welcome screen!
-    {% include 'home/welcome_page.html' %}
-    {% endcomment %}
-</section>
+    {% for block in page.body %}
+        {% include_block block %}
+    {% endfor %}
 {% endblock content %}

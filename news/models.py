@@ -236,10 +236,10 @@ class NewsItem(Page):
                 group="Standalone Blocks"
             )),
             ("author", SnippetChooserBlock('news.Author')),
-            ("call_to_action_1", custom_blocks.CallToActionBlock()),
+            ("hero", custom_blocks.HeroBlock()),
         ],
         block_counts={
-            # "text": {"min_num": 1, "max_num": 3},
+            "hero": {"max_num": 1},
             # "image": {"min_num": 0, "max_num": 2},
         },
         # use_json_field=True,  # not needed in Wagtail 6+

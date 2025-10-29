@@ -3,13 +3,16 @@ This project is a Wagtail CMS site using Django as its backend and a modern fron
 
 # Technology Stack
 - **Backend**: Django, Wagtail CMS
-- **Frontend**: Tailwind CSS 4+, Vite, JavaScript (ES6+)
+- **Frontend**: Tailwind CSS 4+, DaisyUI, Vite, JavaScript (ES6+)
 - **Templating**: Django Templates, with Wagtail-specific template tags.
 
 # Project Structure
 - Django and Wagtail files are organized in the standard Django layout.
-<!-- - All frontend assets (JavaScript, CSS) are located in the `frontend/` directory. -->
+- All frontend assets (JavaScript, CSS) are located in the `frontend/` directory.
 - Compiled static assets are served from the `static/` directory.
+
+# Color Palette
+- **Primary Blue**: #0066CC (AYSO brand color) for primary highlights
 
 # Coding Guidelines
 
@@ -19,12 +22,13 @@ This project is a Wagtail CMS site using Django as its backend and a modern fron
 - Create custom template tags and filters when template logic becomes complex.
 - Use the `wagtail start` template as a base for standard directory layout.
 
-## Tailwind CSS
+## Tailwind CSS and DaisyUI
 - **Utility-first approach**: Prefer Tailwind's utility classes over writing custom CSS where possible.
 - **No unnecessary prefixes**: Tailwind 4+ does not require `postcss` or `autoprefixer`.
 - **Content path**: Ensure `tailwind.config.js` is configured to find template files (`.html`) in all relevant Django/Wagtail app directories to correctly generate CSS.
 - **Tailwind Plugins**: Use the `@tailwindcss/typography` plugin for styling rich text content within Wagtail's rich text editor, as standard Tailwind resets heading and list styles.
 - **Consistent styling**: Adhere to the established styling conventions found in existing components and templates.
+- **DaisyUI**: Utilize DaisyUI components for common UI elements, customizing them via Tailwind configuration as needed.
 
 ## Templates
 - **Frontend Assets**: Load compiled static assets (e.g., `main.min.css`, `main.min.js`) using the `{% static %}` template tag in the `base.html` file.
