@@ -3,6 +3,24 @@
 
 {% block content %}
 
+
+<section id="home" class="hero bg-slate-900 relative overflow-hidden" style="margin-top: 68px; min-height: 30vh;">
+        <div class="hero-pattern absolute inset-0"></div>
+        <div class="hero-content text-center text-white relative z-10 hero-animated">
+            <div class="max-w-4xl">
+                <h1 class="text-5xl md:text-6xl font-black mb-4" style="text-shadow: 0 4px 20px rgba(0,0,0,0.2)">
+                    The latest news from AYSO Chicago Lakefront Soccer
+                </h1>
+                <p class="text-xl md:text-2xl mb-6 opacity-95">
+                    Region 418 News
+                </p>
+                <a href="#programs" class="btn btn-lg bg-inherit text-2xl border-none rounded-full font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                    📰
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Latest News Section using DaisyUI cards -->
     <section id="news" class="gradient-light py-16 px-4">
         <div class="max-w-7xl mx-auto">
@@ -17,7 +35,18 @@
                     <div class="card card-news bg-base-100 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer fade-in">
                         <figure class="gradient-purple h-48">
                             {% if article.image %}
-                                {% image article.image width-400 %}
+
+                                {% image article.image fill-700x500 as news_image %}
+                                <img
+                                    src="{{ news_image.url }}"
+                                    alt="{{ news_image.title }}"
+                                    {% if news_image.focal_point %}
+                                        data-focus-x="{{ news_image.focal_point.centroid.x }}"
+                                        data-focus-y="{{ news_image.focal_point.centroid.y }}"
+                                        data-focus-width="{{ news_image.focal_point.width }}"
+                                        data-focus-height="{{ news_image.focal_point.height }}"
+                                    {% endif %}
+                                />
                             {% else %}
                                 <div class="text-7xl">⚽</div>
                             {% endif %}

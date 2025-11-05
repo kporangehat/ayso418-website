@@ -19,10 +19,27 @@ class ProgramIndex(Page):
     subpage_types = ['programs.Program']  # restrict child pages to Programs
 
     subtitle = models.CharField(max_length=100, blank=True)
-    body = RichTextField(blank=True)
+    description = RichTextField(blank=True)  # optional description field
+
+    body = StreamField(
+        [
+            ("six", custom_blocks.SixPhilosophiesBlock()),
+            ("text", custom_blocks.TextBlock()),
+            ("richtext", custom_blocks.RichTextBlock()),
+            ("image", custom_blocks.ImageBlock()),
+            ("call_to_action_1", custom_blocks.CallToActionBlock()),
+            ("faq", custom_blocks.FaqListBlock()),
+        ],
+        block_counts={
+            # "text": {"min_num": 1},
+        },
+        blank=True,
+        null=True,
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('subtitle'),
+        FieldPanel('description'),
         FieldPanel('body'),
     ]
 
@@ -50,6 +67,7 @@ class Program(Page):
     # password_required_template = "news/news_item_password_required.html"
 
     subtitle = models.CharField(max_length=200, blank=True)
+    description = RichTextField(blank=False)
     ages = models.CharField(max_length=200, blank=True)
     tryouts = RichTextField(blank=True)
     equipment = RichTextField(blank=True)
@@ -96,6 +114,7 @@ class Program(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('subtitle'),
+        FieldPanel('description'),
         FieldPanel('image'),
         FieldPanel('logo'),
         FieldPanel('ages'),

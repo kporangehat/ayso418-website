@@ -4,16 +4,16 @@
 {% block content %}
 
     <!-- Programs Section using DaisyUI cards -->
-    <section id="programs" class="gradient-purple py-16 px-4 text-white">
+    <section id="programs" class="gradient-purple py-16 px-4 text-white pb-24">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-6">
                 {{ page.title }}
             </h2>
-            <h3 class="text-2xl md:text-3xl font-semibold text-center">
+            <h3 class="text-2xl md:text-3xl font-semibold text-center mb-6">
                 {{ page.subtitle }}
             </h3>
-            <div class="text-center mb-12 w-full md:w-3/4 lg:w-1/2 mx-auto">
-                {{ page.body | richtext }}
+            <div class="px-12 pb-12 text-center text-lg text-gray-200">
+                {{ page.description | richtext }}
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {% for program in program_list %}
@@ -42,9 +42,11 @@
                   </a>
 
                 {% endfor %}
-            </div>
+          </div>
         </div>
     </section>
 
-
+    <div>
+      {{ page.body }}
+    </div>
 {% endblock %}

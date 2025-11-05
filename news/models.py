@@ -222,7 +222,7 @@ class NewsItem(Page):
         [
             ("info", custom_blocks.InfoBlock()),
             ("faq", custom_blocks.FaqListBlock()),
-            ("text", custom_blocks.TextBlock()),
+            ("text", custom_blocks.RichTextBlock()),
             ("carousel", custom_blocks.CarouselBlock()),
             ("image", custom_blocks.ImageBlock()),
             ("doc", DocumentChooserBlock(

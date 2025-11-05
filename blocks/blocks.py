@@ -309,6 +309,52 @@ class RecentNewsBlock(blocks.StructBlock):
         group = "Standalone Blocks"
 
 
+class ProgramsBlock(blocks.StructBlock):
+    """
+    A block that displays all available programs.
+    """
+    title = blocks.CharBlock(
+        max_length=100,
+        required=True,
+        default="Our Programs",
+        help_text="Main heading for this programs section"
+    )
+    subtitle = blocks.TextBlock(
+        max_length=200,
+        required=False,
+        help_text="Optional description text"
+    )
+
+    def get_context(self, value, parent_context=None):
+        from programs.models import Program
+        from wagtail.models import Locale
+
+        context = super().get_context(value, parent_context=parent_context)
+
+        # Get the current locale if in a request context
+        try:
+            current_locale = Locale.get_active()
+        except (AttributeError, RuntimeError):
+            current_locale = None
+
+        # Get all live, published programs
+        programs = Program.objects.live().public()
+
+        # Filter by locale if available
+        if current_locale:
+            programs = programs.filter(locale=current_locale)
+
+        context['programs'] = programs
+
+        return context
+
+    class Meta:
+        template = "blocks/programs_block.html"
+        icon = "list-ul"
+        label = "Programs List"
+        group = "Standalone Blocks"
+
+
 class CustomPageChooserBlock(blocks.PageChooserBlock):
     """
     A block that displays a page chooser.

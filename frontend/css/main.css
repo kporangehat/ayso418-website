@@ -1,5 +1,8 @@
 /* frontend/css/main.css */
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+
 @plugin "daisyui";
 
 @plugin "daisyui" {
@@ -148,4 +151,155 @@ body {
 .navbar a.nav-link:focus {
     color: white !important;
     background: rgba(255, 255, 255, 0.2);
+}
+
+/* Background Patterns - Overlays that blend with existing backgrounds */
+/* These use ::before pseudo-elements to layer patterns without overriding bg colors/gradients */
+
+.bg-pattern-dots {
+    position: relative;
+}
+
+.bg-pattern-dots::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+}
+
+.bg-pattern-dots-white {
+    position: relative;
+}
+
+.bg-pattern-dots-white::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+}
+
+.bg-pattern-grid {
+    position: relative;
+}
+
+.bg-pattern-grid::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+}
+
+.bg-pattern-grid-white {
+    position: relative;
+}
+
+.bg-pattern-grid-white::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+}
+
+.bg-pattern-diagonal {
+    position: relative;
+}
+
+.bg-pattern-diagonal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(0, 0, 0, 0.03) 10px,
+        rgba(0, 0, 0, 0.03) 20px
+    );
+    pointer-events: none;
+}
+
+.bg-pattern-diagonal-white {
+    position: relative;
+}
+
+.bg-pattern-diagonal-white::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.05) 10px,
+        rgba(255, 255, 255, 0.05) 20px
+    );
+    pointer-events: none;
+}
+
+.bg-pattern-circles {
+    position: relative;
+}
+
+.bg-pattern-circles::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.bg-pattern-subtle {
+    position: relative;
+}
+
+.bg-pattern-subtle::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle 300px at 20% 50%, rgba(0, 0, 0, 0.03) 0%, transparent 50%),
+        radial-gradient(circle 400px at 80% 80%, rgba(0, 0, 0, 0.02) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.bg-pattern-soccer {
+    position: relative;
+}
+
+.bg-pattern-soccer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('data:image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="2" fill="black" opacity="0.05"/></svg>');
+    background-size: 60px 60px;
+    pointer-events: none;
+}
+
+.bg-pattern-waves {
+    position: relative;
+}
+
+.bg-pattern-waves::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('data:image/svg+xml,<svg width="100" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M0 10 Q 25 0, 50 10 T 100 10" stroke="rgba(0,0,0,0.05)" fill="none" stroke-width="2"/></svg>');
+    background-size: 100px 20px;
+    background-repeat: repeat;
+    pointer-events: none;
 }
