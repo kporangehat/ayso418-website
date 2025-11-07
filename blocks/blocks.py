@@ -303,7 +303,8 @@ class RecentNewsBlock(blocks.StructBlock):
         return context
 
     class Meta:
-        template = "blocks/recent_news_block.html"
+        # template = "blocks/recent_news_block.html"
+        template = "blocks/recent_news_carousel.html"
         icon = "doc-full-inverse"
         label = "Recent News"
         group = "Standalone Blocks"

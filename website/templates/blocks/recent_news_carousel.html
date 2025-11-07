@@ -1,0 +1,113 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<section class="gradient-light py-16 px-4">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-4 text-gray-900 fade-in">
+            {{ self.title }}
+        </h2>
+
+        {% if self.subtitle %}
+        <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+            {{ self.subtitle }}
+        </p>
+        {% endif %}
+
+        {% if news_items %}
+        <div class="relative">
+            <!-- Carousel -->
+            <div id="newsCarousel" class="carousel w-full border border-base-300">
+                {% for article in news_items %}
+                <div id="slide{{ forloop.counter }}" class="carousel-item w-full md:w-1/2 lg:w-1/3 border-r border-base-300 last:border-r-0">
+                    <div class="w-full bg-base-100 hover:bg-base-200 transition-colors cursor-pointer h-full flex flex-col">
+                        <figure class="h-48 flex-shrink-0 overflow-hidden flex items-center justify-center {% if article.image %}bg-transparent{% else %}gradient-purple{% endif %}">
+                            {% if article.image %}
+                                {% image article.image fill-600x192 class="w-full h-full object-cover" %}
+                            {% else %}
+                                <div class="text-7xl">⚽</div>
+                            {% endif %}
+                        </figure>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="badge badge-primary badge-outline mb-3">{{ article.first_published_at|date:"F j, Y" }}</div>
+                            <h3 class="text-2xl font-bold mb-3">
+                                <a href="{{ article.url }}" class="hover:text-primary transition-colors">{{ article.title }}</a>
+                            </h3>
+                            <p class="text-gray-600 flex-grow">{{ article.intro|richtext }}</p>
+                            <div class="mt-4">
+                                <a href="{{ article.url }}" class="btn btn-primary btn-sm">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-center gap-4 mt-8">
+                <button id="prevBtn" class="btn btn-circle btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+                <button id="nextBtn" class="btn btn-circle btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <script>
+            (function() {
+                const carousel = document.getElementById('newsCarousel');
+                const totalSlides = {{ news_items|length }};
+                const slidesPerView = {
+                    mobile: 1,
+                    tablet: 2,
+                    desktop: 3
+                };
+
+                let currentIndex = 0;
+
+                function getCurrentSlidesPerView() {
+                    if (window.innerWidth >= 1024) {
+                        return slidesPerView.desktop;
+                    } else if (window.innerWidth >= 768) {
+                        return slidesPerView.tablet;
+                    } else {
+                        return slidesPerView.mobile;
+                    }
+                }
+
+                function scrollToIndex(index) {
+                    const slideElement = document.getElementById('slide' + (index + 1));
+                    if (slideElement) {
+                        slideElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                        currentIndex = index;
+                    }
+                }
+
+                document.getElementById('nextBtn').addEventListener('click', function() {
+                    const perView = getCurrentSlidesPerView();
+                    currentIndex = (currentIndex + perView) >= totalSlides ? 0 : currentIndex + perView;
+                    scrollToIndex(currentIndex);
+                });
+
+                document.getElementById('prevBtn').addEventListener('click', function() {
+                    const perView = getCurrentSlidesPerView();
+                    currentIndex = (currentIndex - perView) < 0 ? Math.max(0, totalSlides - perView) : currentIndex - perView;
+                    scrollToIndex(currentIndex);
+                });
+            })();
+        </script>
+
+        {% else %}
+        <p class="text-center text-gray-500">
+            {% if tag %}
+                No news items found with tag "{{ tag }}".
+            {% else %}
+                No news items available.
+            {% endif %}
+        </p>
+        {% endif %}
+    </div>
+</section>
