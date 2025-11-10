@@ -1,14 +1,17 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags wagtail_cache %}
+{% load wagtailcore_tags wagtailimages_tags wagtail_cache static %}
 
 {% block content %}
 
 {% if page.image %}
   {% image_url page.image "original" as hero_img %}
-
 {% endif %}
 
-{% image_url page.logo "original" as logo %}
+{% if page.logo %}
+    {% image_url page.logo "original" as logo %}
+{% else %}
+    {% static 'images/ayso418_logo.png' as logo %}
+{% endif %}
 <div
   class="hero min-h-[30vh]"
   style="background-image: url({{ hero_img }});"
@@ -18,7 +21,7 @@
     <div class="max-w-md">
       <div class="avatar placeholder mb-6">
           <div class="bg-base-100 text-primary rounded-full w-32 ring ring-primary ring-offset-base-100 ring-offset-4">
-              <img class="rounded-full" src="{{ logo }}" alt="{{ page.logo.title }}">
+              <img class="rounded-full" src="{{ logo }}" alt="{% if page.logo %}{{ page.logo.title }}{% else %}AYSO 418 Logo{% endif %}">
           </div>
       </div>
       <h1 class="mb-5 text-5xl font-bold">{{ page.title }}</h1>
