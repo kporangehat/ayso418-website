@@ -1,8 +1,17 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.contenttypes.fields import GenericRelation
+
+from modelcluster.fields import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.models import ClusterableModel
+from taggit.models import TaggedItemBase
 
 from wagtail.contrib.settings.models import register_setting, BaseGenericSetting, BaseSiteSetting
 from wagtail.admin.panels import FieldPanel
+from wagtail.fields import RichTextField
+from wagtail.models import DraftStateMixin, RevisionMixin, LockableMixin, PreviewableMixin
+from wagtail.search import index
 
 
 @register_setting
@@ -62,3 +71,67 @@ class SocialMediaLinks(BaseSiteSetting):
 
     class Meta:
         verbose_name = "Social Media Links"
+
+
+class FAQTags(TaggedItemBase):
+    """
+    A model to manage tags for FAQ items.
+    """
+    content_object = ParentalKey(
+        'site_settings.FAQ',
+        related_name='tagged_items',
+        on_delete=models.CASCADE
+    )
+
+
+class FAQ(
+    PreviewableMixin,
+    LockableMixin,
+    DraftStateMixin,
+    RevisionMixin,
+    index.Indexed,
+    ClusterableModel
+):
+    """
+    A snippet model for Frequently Asked Questions.
+    """
+    question = models.CharField(max_length=255, help_text="The FAQ question")
+    answer = RichTextField(help_text="The answer to the question")
+    category = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="Optional category for grouping FAQs (e.g., 'Registration', 'Programs', 'General')"
+    )
+    tags = ClusterTaggableManager(through=FAQTags, blank=True)
+    revisions = GenericRelation('wagtailcore.Revision', related_query_name="faq")
+
+    # Order FAQs by category and question
+    order = models.IntegerField(
+        default=0,
+        help_text="Order of display within category (lower numbers appear first)"
+    )
+
+    panels = [
+        FieldPanel('question'),
+        FieldPanel('answer'),
+        FieldPanel('category'),
+        FieldPanel('tags'),
+        FieldPanel('order'),
+    ]
+
+    search_fields = [
+        index.SearchField('question', boost=10),
+        index.SearchField('answer'),
+        index.FilterField('category'),
+    ]
+
+    def __str__(self):
+        return self.question
+
+    def get_preview_template(self, request, mode_name):
+        return "includes/faq_preview.html"
+
+    class Meta:
+        verbose_name = "FAQ"
+        verbose_name_plural = "FAQs"
+        ordering = ['category', 'order', 'question']
