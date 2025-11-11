@@ -3,22 +3,24 @@
 
 {% block content %}
 
-{% if page.image %}
-  {% image_url page.image "original" as hero_img %}
-{% endif %}
 
 {% if page.logo %}
     {% image_url page.logo "original" as logo %}
 {% else %}
     {% static 'images/ayso418_logo.png' as logo %}
 {% endif %}
-<div
-  class="hero min-h-[30vh]"
-  style="background-image: url({{ hero_img }});"
->
-  <div class="hero-overlay"></div>
+
+{% if page.image %}
+    {% image_url page.image "original" as hero_img %}
+    <div class="hero min-h-[30vh]" style="background-image: url({{ hero_img }});">
+    <div class="hero-overlay"></div>
+{% else %}
+    <div class="hero min-h-[30vh] bg-linear-to-r from-[#80caff] to-[#4f46e5]">
+{% endif %}
+
+
   <div class="hero-content text-neutral-content text-center">
-    <div class="max-w-md">
+    <div class="max-w-xl">
       <div class="avatar placeholder mb-6">
           <div class="bg-base-100 text-primary rounded-full w-32 ring ring-primary ring-offset-base-100 ring-offset-4">
               <img class="rounded-full" src="{{ logo }}" alt="{% if page.logo %}{{ page.logo.title }}{% else %}AYSO 418 Logo{% endif %}">
@@ -38,6 +40,32 @@
     <!-- Main Content -->
     <div class="container mx-auto px-4 py-12 max-w-7xl">
         <div class="space-y-6">
+
+            <!-- Program Navigation -->
+            {% if all_programs %}
+            <div class="card text-white bg-linear-to-r from-[#132e41] to-[#22427e] shadow-xl">
+                <div class="flex justify-center">
+                    <ul class="menu menu-vertical lg:menu-horizontal rounded-box">
+                        {% for program in all_programs %}
+                            {% if program.id == page.id %}
+                                <!-- Current program - highlighted and not clickable -->
+                                <li class="menu-active rounded-box px-1">
+                                    <a role="link" aria-disabled="true">{{ program.title }}</a>
+                                </li>
+                            {% else %}
+                                <!-- Other programs - clickable -->
+                                <li class="rounded-box pr-1">
+                                    <a href="{% pageurl program %}" class="flex items-center gap-3">
+                                        {{ program.title }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
             <!-- About the Program -->
             <div class="card bg-base-100 shadow-xl">
                 <div class="card-body prose max-w-none">
@@ -125,6 +153,7 @@
                     </button>
                 </div>
             </div>
+
 
             <!-- Stats Card -->
             <div class="stats stats-vertical sm:stats-horizontal shadow bg-base-100 w-full">

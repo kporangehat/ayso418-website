@@ -127,6 +127,15 @@ class Program(Page):
         FieldPanel('body'),
     ]
 
+    def get_context(self, request):
+        """
+        Add all programs to the context for navigation.
+        """
+        context = super().get_context(request)
+        current_locale = Locale.get_active()
+        context['all_programs'] = Program.objects.live().public().filter(locale=current_locale)
+        return context
+
     def clean(self):
         super().clean()
         errors = {}
