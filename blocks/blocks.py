@@ -367,3 +367,81 @@ class CustomPageChooserBlock(blocks.PageChooserBlock):
             "subtitle": value.specific.subtitle,
             "url": value.url,
         }
+
+
+class FAQBlock(blocks.StructBlock):
+    """
+    A block that displays FAQ items with optional tag filtering.
+    """
+    title = blocks.CharBlock(
+        max_length=100,
+        required=True,
+        default="Frequently Asked Questions",
+        help_text="Main heading for this FAQ section"
+    )
+    subtitle = blocks.TextBlock(
+        max_length=200,
+        required=False,
+        help_text="Optional description text"
+    )
+    filter_by_tag = blocks.CharBlock(
+        max_length=50,
+        required=False,
+        help_text="Optional: filter FAQs by tag (leave blank to show all)"
+    )
+    filter_by_category = blocks.CharBlock(
+        max_length=100,
+        required=False,
+        help_text="Optional: filter FAQs by category (leave blank to show all)"
+    )
+    num_items = blocks.IntegerBlock(
+        default=0,
+        min_value=0,
+        max_value=50,
+        required=True,
+        help_text="Number of FAQs to display (0 = show all matching items)"
+    )
+    show_categories = blocks.BooleanBlock(
+        required=False,
+        default=True,
+        help_text="Display category labels for each FAQ"
+    )
+
+    def get_context(self, value, parent_context=None):
+        from site_settings.models import FAQ
+
+        context = super().get_context(value, parent_context=parent_context)
+
+        # Start with base queryset - only published FAQs
+        faqs = FAQ.objects.filter(live=True)
+
+        # Filter by tag if specified
+        tag = value.get('filter_by_tag', '').strip()
+        if tag:
+            faqs = faqs.filter(tags__name=tag)
+
+        # Filter by category if specified
+        category = value.get('filter_by_category', '').strip()
+        if category:
+            faqs = faqs.filter(category__iexact=category)
+
+        # Order by category and order field
+        faqs = faqs.order_by('category', 'order', 'question')
+
+        # Limit to requested number (0 means all)
+        num_items = value.get('num_items', 0)
+        if num_items > 0:
+            faqs = faqs[:num_items]
+
+        context['faqs'] = faqs
+        context['tag'] = tag
+        context['category'] = category
+        context['show_categories'] = value.get('show_categories', True)
+
+        return context
+
+    class Meta:
+        template = "blocks/faq_block.html"
+        icon = "help"
+        label = "FAQ List"
+        group = "Standalone Blocks"

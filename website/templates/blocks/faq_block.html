@@ -1,0 +1,70 @@
+{% load wagtailcore_tags %}
+
+<section class="py-16 px-4 bg-base-100">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-4 text-gray-900">
+            {{ self.title }}
+        </h2>
+
+        {% if self.subtitle %}
+        <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+            {{ self.subtitle }}
+        </p>
+        {% endif %}
+
+        {% if faqs %}
+        <div class="space-y-4">
+            {% regroup faqs by category as category_list %}
+            {% for category_group in category_list %}
+                {% if show_categories and category_group.grouper %}
+                <div class="mt-8 first:mt-0">
+                    <h3 class="text-2xl font-bold text-primary mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+                        </svg>
+                        {{ category_group.grouper }}
+                    </h3>
+                </div>
+                {% endif %}
+
+                {% for faq in category_group.list %}
+                <div class="collapse collapse-plus bg-base-200 shadow-md">
+                    <input type="radio" name="faq-accordion-{{ forloop.parentloop.counter }}" {% if forloop.first and forloop.parentloop.first %}checked{% endif %} />
+                    <div class="collapse-title text-xl font-medium">
+                        {{ faq.question }}
+                    </div>
+                    <div class="collapse-content">
+                        <div class="prose max-w-none">
+                            {{ faq.answer|richtext }}
+                        </div>
+                        {% if faq.tags.all %}
+                        <div class="flex gap-2 mt-4 flex-wrap">
+                            {% for tag in faq.tags.all %}
+                            <span class="badge badge-outline badge-sm">{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto text-gray-400 mb-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+            </svg>
+            <p class="text-gray-500 text-lg">
+                {% if tag %}
+                    No FAQs found with tag "{{ tag }}".
+                {% elif category %}
+                    No FAQs found in category "{{ category }}".
+                {% else %}
+                    No FAQs available at this time.
+                {% endif %}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</section>
