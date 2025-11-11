@@ -35,133 +35,116 @@
 
 
 <div class="gradient-blue bg-pattern-waves">
-        <!-- Main Content -->
-        <div class="container mx-auto px-4 py-12 max-w-7xl">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Description Section -->
-                <div class="lg:col-span-2 space-y-6">
-                    <div class="card bg-base-100 shadow-xl">
-                        <div class="card-body prose max-w-none">
-                            <h2 class="card-title text-3xl text-primary mb-4">
-                                <i data-lucide="info" class="w-8 h-8"></i>
-                                About the Program
-                            </h2>
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-12 max-w-7xl">
+        <div class="space-y-6">
+            <!-- About the Program -->
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body prose max-w-none">
+                    <h2 class="card-title text-3xl text-primary mb-4 justify-center">
+                        About the Program
+                    </h2>
 
-                            <div class="prose max-w-3xl mx-auto">
-
-                              {{ page.description | richtext }}
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!-- Program Info Sidebar -->
-                <div class="lg:col-span-1">
-                    <div class="sticky top-6 space-y-4">
-                        <!-- Main Info Card -->
-                        <div class="card bg-base-100 shadow-xl border-t-4 border-primary">
-                            <div class="card-body">
-                                <h2 class="card-title text-2xl justify-center text-primary mb-4">
-                                    Program Details
-                                </h2>
-
-                                <div class="divider my-2"></div>
-
-                                <!-- Ages -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="badge badge-soft badge-primary badge-lg p-4">
-                                      <div class="text-sm font-extralight uppercase">Ages</div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="prose text-sm">{{ page.ages | richtext }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="divider my-2"></div>
-
-                                <!-- Tryouts -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="badge badge-soft badge-secondary badge-lg p-4">
-                                      <div class="text-sm font-extralight uppercase">Tryouts</div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="prose text-sm">{{ page.tryouts | richtext }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="divider my-2"></div>
-
-                                <!-- Equipment -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="badge badge-soft badge-accent badge-lg p-4">
-                                      <div class="text-sm font-extralight uppercase">Equipment</div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="prose text-sm">{{ page.equipment | richtext }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="divider my-2"></div>
-
-                                <!-- Location -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="badge badge-soft badge-info badge-lg p-4">
-                                      <div class="text-sm font-extralight uppercase">Location</div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="prose text-sm">{{ page.location | richtext }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="divider my-2"></div>
-
-                                <!-- Schedule -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="badge badge-soft badge-warning badge-lg p-4">
-                                      <div class="text-sm font-extralight uppercase">Schedule</div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="prose text-sm">{{ page.schedule | richtext }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="divider my-2"></div>
-
-                                <!-- Register Button -->
-                                <button @click="handleRegister" class="btn btn-primary btn-lg w-full gap-2 shadow-lg hover:shadow-xl transition-all">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-[1.2em]"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-                                    Register Now
-                                </button>
-
-
-                            </div>
-                        </div>
-
-                        <!-- Stats Card -->
-                        <div class="stats stats-vertical lg:stats-horizontal shadow bg-base-100 w-full">
-                            <div class="stat place-items-center">
-                                <div class="stat-title">Success Rate</div>
-                                <div class="stat-value text-primary">95%</div>
-                                <div class="stat-desc">Player retention</div>
-                            </div>
-
-                            <div class="stat place-items-center">
-                                <div class="stat-title">Scholarships</div>
-                                <div class="stat-value text-secondary">50+</div>
-                                <div class="stat-desc">Since 2015</div>
-                            </div>
-                        </div>
+                    <div class="prose max-w-6xl mx-auto">
+                        {{ page.description | richtext }}
                     </div>
                 </div>
             </div>
+
+            <!-- Program Details Card -->
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title text-3xl text-primary mb-6 justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                        </svg>
+                        Program Details
+                    </h2>
+
+                    <!-- Details Grid -->
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <!-- Ages -->
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-soft badge-primary badge-lg p-4">
+                                <div class="text-sm font-extralight uppercase">Ages</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="prose text-sm">{{ page.ages | richtext }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Tryouts -->
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-soft badge-secondary badge-lg p-4">
+                                <div class="text-sm font-extralight uppercase">Tryouts</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="prose text-sm">{{ page.tryouts | richtext }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Equipment -->
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-soft badge-accent badge-lg p-4">
+                                <div class="text-sm font-extralight uppercase">Equipment</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="prose text-sm">{{ page.equipment | richtext }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="flex items-start gap-3">
+                            <div class="badge badge-soft badge-info badge-lg p-4">
+                                <div class="text-sm font-extralight uppercase">Location</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="prose text-sm">{{ page.location | richtext }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Schedule -->
+                        <div class="flex items-start gap-3 md:col-span-2">
+                            <div class="badge badge-soft badge-warning badge-lg p-4">
+                                <div class="text-sm font-extralight uppercase">Schedule</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="prose text-sm">{{ page.schedule | richtext }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Register Button -->
+                    <button @click="handleRegister" class="btn btn-primary btn-lg w-full gap-2 shadow-lg hover:shadow-xl transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-[1.2em]">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                        </svg>
+                        Register Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="stats stats-vertical sm:stats-horizontal shadow bg-base-100 w-full">
+                <div class="stat place-items-center">
+                    <div class="stat-title">Success Rate</div>
+                    <div class="stat-value text-primary">95%</div>
+                    <div class="stat-desc">Player retention</div>
+                </div>
+
+                <div class="stat place-items-center">
+                    <div class="stat-title">Scholarships</div>
+                    <div class="stat-value text-secondary">50+</div>
+                    <div class="stat-desc">Since 2015</div>
+                </div>
+            </div>
+
+            <!-- Additional Content -->
+            {{ page.body }}
         </div>
     </div>
-
-    {{ page.body }}
-
-  </div>
-<!-- End Blog Article -->
+</div>
 
 {% endblock %}
