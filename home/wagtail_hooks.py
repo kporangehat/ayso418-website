@@ -13,12 +13,17 @@ class CTASnippetViewSet(SnippetViewSet):
     menu_order = 300
     list_display = ["title", "button_text", "button_url"]
     search_fields = ("title", "text", "button_text", "button_url")
+    template = "home/cta2.html"
 
     panels = [
         FieldPanel("title"),
         FieldPanel("text"),
         FieldPanel("button_text"),
         FieldPanel("button_url"),
+        FieldPanel("target_url"),
+        FieldPanel("image"),
+        FieldPanel("image_layout"),
+        FieldPanel("image_style"),
         PublishingPanel(),
     ]
 

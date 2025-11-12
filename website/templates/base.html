@@ -11,17 +11,36 @@
     <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
 
     {% block extra_css %}
     {% endblock %}
 </head>
 
 <body >
+
+<div class="relative isolate flex items-center gap-x-6 overflow-hidden bg-blue-800/90 px-6 py-2.5 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 sm:px-3.5 sm:before:flex-1">
+  <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+    <p class="text-sm/6 text-gray-100">
+      <strong class="font-semibold">Winter Indoor Season</strong><svg viewBox="0 0 2 2" aria-hidden="true" class="mx-2 inline size-0.5 fill-current"><circle r="2" cx="2" cy="2" /></svg>Spaces are filling up fast!
+    </p>
+    <a href="#" class="flex-none rounded-full bg-white/10 px-3.5 py-1 text-sm font-semibold text-white shadow-xs inset-ring-white/20 hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Register now <span aria-hidden="true">&rarr;</span></a>
+  </div>
+  <div class="flex flex-1 justify-end">
+    <button type="button" class="-m-3 p-3 focus-visible:-outline-offset-4">
+      <span class="sr-only">Dismiss</span>
+      <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-gray-100">
+        <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+      </svg>
+    </button>
+  </div>
+</div>
+
     {% wagtailuserbar %}
 
+
     <!-- Fixed Navbar using DaisyUI -->
-    <div class="navbar navbar-gradient fixed top-0 z-50 shadow-2xl transition-transform transition-duration-300 px-4" id="header">
+    <div class="navbar navbar-gradient z-50 shadow-2xl transition-transform transition-duration-300 px-4" id="header">
         <div class="navbar-start">
             <div class="dropdown">
                 <label tabindex="0" class="btn btn-ghost lg:hidden text-white">
@@ -33,7 +52,7 @@
                     <li><a href="/" class="nav-link text-white hover:text-blue-300">Home</a></li>
                     <li><a href="/news" class="nav-link text-white hover:text-blue-300">News</a></li>
                     <li><a href="/programs" class="nav-link text-white hover:text-blue-300">Programs</a></li>
-                    <li><a href="/parents" class="nav-link text-white hover:text-blue-300">Benefits</a></li>
+                    <li><a href="/parents" class="nav-link text-white hover:text-blue-300">Resources</a></li>
                     <li><a href="/contact" class="nav-link text-white hover:text-blue-300">Contact</a></li>
                     <li>
                         <input type="search" placeholder="Search..." class="input input-sm input-search rounded-full w-full" />
@@ -54,7 +73,7 @@
                 <li><a href="/" class="nav-link text-white hover:text-blue-300 font-medium text-base">Home</a></li>
                 <li><a href="/news" class="nav-link text-white hover:text-blue-300 font-medium text-base">News</a></li>
                 <li><a href="/programs" class="nav-link text-white hover:text-blue-300 font-medium text-base">Programs</a></li>
-                <li><a href="/parents" class="nav-link text-white hover:text-blue-300 font-medium text-base">Benefits</a></li>
+                <li><a href="/parents" class="nav-link text-white hover:text-blue-300 font-medium text-base">Resources</a></li>
                 <li><a href="/contact" class="nav-link text-white hover:text-blue-300 font-medium text-base">Contact</a></li>
             </ul>
         </div>
@@ -261,7 +280,7 @@
     </section> {% endcomment %}
 
     <!-- Main Content Area -->
-    <main class="flex-grow" style="margin-top: 60px;">
+    <main class="flex-grow">
         {% block content %}{% endblock %}
     </main>
 

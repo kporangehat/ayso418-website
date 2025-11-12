@@ -12,7 +12,14 @@
 
 /* Custom styles */
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+.card-title,
+.text-5xl, .text-4xl, .text-3xl, .text-2xl, .text-xl {
+    font-family: 'Roboto Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-weight: 700;
 }
 @keyframes float {
     from { transform: translate(0, 0); }

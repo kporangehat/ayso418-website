@@ -167,21 +167,58 @@ class CarouselBlock(blocks.StreamBlock):
 
 class CallToActionBlock(blocks.StructBlock):
     """
-    A block that displays a call to action section.
+    A block that displays a call to action section with optional image.
     """
     text = blocks.RichTextBlock(
         features=['bold', 'italic'],
         required=True,
+        help_text="The main CTA text content"
     )
-    page = blocks.PageChooserBlock()
+    page = blocks.PageChooserBlock(
+        required=False,
+        help_text="Page for the button to link to"
+    )
     button_text = blocks.CharBlock(
         max_length=100,
         required=False,
+        help_text="Button text (defaults to page title if empty)"
+    )
+    target_url = blocks.PageChooserBlock(
+        required=False,
+        help_text="Optional: Make the entire CTA clickable by selecting a target page"
+    )
+    image = ImageChooserBlock(
+        required=False,
+        help_text="Optional image for the CTA"
+    )
+    image_layout = blocks.ChoiceBlock(
+        choices=[
+            ('background', 'Background - Image fills entire CTA as background'),
+            ('left', 'Left - Image on left, text on right'),
+            ('right', 'Right - Image on right, text on left'),
+        ],
+        default='background',
+        required=False,
+        help_text="How to display the image"
+    )
+    image_style = blocks.ChoiceBlock(
+        choices=[
+            ('fill', 'Fill - Image fills entire section'),
+            ('framed', 'Framed - Image with rounded edges and padding'),
+        ],
+        default='fill',
+        required=False,
+        help_text="Style for left/right images (not used for background)"
     )
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
-        context['button_label'] = value.get('button_text') or value.get('page').title
+        context['button_label'] = value.get('button_text') or (value.get('page').title if value.get('page') else 'Learn More')
+        context['has_target_url'] = bool(value.get('target_url'))
+        context['is_background'] = value.get('image_layout') == 'background'
+        context['is_left'] = value.get('image_layout') == 'left'
+        context['is_right'] = value.get('image_layout') == 'right'
+        context['is_framed'] = value.get('image_style') == 'framed'
         return context
 
     class Meta:

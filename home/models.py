@@ -97,14 +97,61 @@ class CTA(
     models.Model
 ):
     """
-    A model to represent a call-to-action.
+    A model to represent a call-to-action with optional image and flexible layouts.
     """
-    title = models.CharField(max_length=255)
-    text = RichTextField()
-    button_text = models.CharField(max_length=100)
-    button_url = models.URLField()
-    revisions = GenericRelation('wagtailcore.Revision', related_query_name="cta")
+    title = models.CharField(max_length=255, help_text="The CTA title")
+    text = RichTextField(help_text="The main CTA text content")
+    button_text = models.CharField(
+        max_length=100,
+        help_text="Button text",
+        null=True,
+        blank=True
+    )
+    button_url = models.URLField(
+        null=True,
+        blank=True,
+        help_text="Button URL"
+    )
 
+    # New fields for enhanced functionality
+    target_url = models.ForeignKey(
+        'wagtailcore.Page',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Optional: Make the entire CTA clickable by selecting a target page"
+    )
+    image = models.ForeignKey(
+        get_image_model(),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Optional image for the CTA"
+    )
+    image_layout = models.CharField(
+        max_length=20,
+        choices=[
+            ('background', 'Background - Image fills entire CTA as background'),
+            ('left', 'Left - Image on left, text on right'),
+            ('right', 'Right - Image on right, text on left'),
+        ],
+        default='background',
+        help_text="How to display the image"
+    )
+    image_style = models.CharField(
+        max_length=20,
+        choices=[
+            ('fill', 'Fill - Image fills entire section'),
+            ('framed', 'Framed - Image with rounded edges and padding'),
+        ],
+        default='fill',
+        help_text="Style for left/right images (not used for background)"
+    )
+
+    revisions = GenericRelation('wagtailcore.Revision', related_query_name="cta")
+    template = "home/cta2.html"
 
     def __str__(self):
         return self.title
@@ -126,6 +173,13 @@ class CTA(
         context = super().get_preview_context(request, mode_name)
         if mode_name == "dark_mode":
             context["warning"] = "This is a preview in dark mode"
+
+        # Add layout context flags
+        context['has_target_url'] = bool(self.target_url)
+        context['is_background'] = self.image_layout == 'background'
+        context['is_left'] = self.image_layout == 'left'
+        context['is_right'] = self.image_layout == 'right'
+        context['is_framed'] = self.image_style == 'framed'
 
         return context
 

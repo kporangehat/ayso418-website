@@ -1,16 +1,133 @@
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
-<div class="hero gradient-blue relative overflow-hidden min-h-[30vh]">
-  <div class="hero-pattern absolute inset-0"></div>
-  <div class="hero-content text-center text-white relative z-10 hero-animated">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">{{ cta.title }}</h1>
-        <div class="py-6">
-          {{ cta.text | richtext }}
-        </div>
-        <button class="btn btn-primary">{{ cta.button_text }}</button>
-      </div>
+{% if cta.image %}
+    {% image cta.image original as cta_image %}
+{% endif %}
+
+<!-- Wrapper that makes entire CTA clickable if target_url is provided -->
+{% if cta.target_url %}
+<a href="{% pageurl cta.target_url %}" class="block no-underline hover:opacity-95 transition-opacity">
+{% endif %}
+
+<div class="relative overflow-hidden bg-white dark:bg-slate-800 shadow-xl
+    {% if cta.image_layout == 'background' and cta.image %}
+        min-h-[400px] flex items-center justify-center
+    {% elif cta.image_layout == 'left' or cta.image_layout == 'right' %}
+        lg:grid lg:grid-cols-2 lg:gap-0
+    {% else %}
+        py-16 px-8
+    {% endif %}">
+
+    <div aria-hidden="true" class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+      <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)" class="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-288.75"></div>
     </div>
-  </div>
+    <!-- Background Image Layout -->
+    {% if cta.image_layout == 'background' and cta.image %}
+        <div class="absolute inset-0 z-0">
+            {% image cta.image fill-1200x400 class="w-full h-full object-cover" %}
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10"></div>
+
+        <div class="relative z-20 text-center text-white px-8 py-16 max-w-3xl mx-auto">
+            <h1 class="text-5xl font-bold mb-6">{{ cta.title }}</h1>
+            <div class="prose prose-invert text-white prose-lg max-w-none mb-6">
+                {{ cta.text|richtext }}
+            </div>
+            <a href="{{ cta.button_url }}" class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all">
+                {{ cta.button_text }}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+            </a>
+        </div>
+
+    <!-- Left/Right Image Layouts -->
+    {% elif cta.image_layout == 'left' or cta.image_layout == 'right' %}
+        {% if cta.image_layout == 'right' %}
+            <!-- Text on Left, Image on Right -->
+            <div class="flex items-center justify-center p-8 lg:p-12 bg-gradient-to-br from-primary/10 to-primary/50">
+                <div class="max-w-xl">
+                    <h1 class="text-4xl lg:text-5xl font-bold mb-6 text-primary">{{ cta.title }}</h1>
+                    <div class="prose prose-lg max-w-none mb-6">
+                        {{ cta.text|richtext }}
+                    </div>
+                    <a href="{{ cta.button_url }}" class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all">
+                        {{ cta.button_text }}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="{% if cta.image_style == 'framed' %}p-8 lg:p-12 bg-base-200 flex items-center justify-center{% else %}relative h-64 lg:h-auto{% endif %}">
+                {% if cta.image %}
+                    {% if cta.image_style == 'framed' %}
+                        {% image cta.image fill-500x500 class="rounded-2xl shadow-2xl max-w-full" %}
+                    {% else %}
+                        {% image cta.image fill-600x600 class="w-full h-full object-cover" %}
+                    {% endif %}
+                {% else %}
+                    <div class="w-full h-full bg-base-300 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-24 h-24 text-base-content/20">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                        </svg>
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <!-- Image on Left, Text on Right -->
+            <div class="{% if cta.image_style == 'framed' %}p-8 lg:p-12 flex items-center justify-center{% else %}relative h-64 lg:h-auto{% endif %}">
+                {% if cta.image %}
+                    {% if cta.image_style == 'framed' %}
+                        {% image cta.image fill-500x500 class="rounded-2xl shadow-2xl max-w-full" %}
+                    {% else %}
+                        {% image cta.image fill-600x600 class="w-full h-full object-cover" %}
+                    {% endif %}
+                {% else %}
+                    <div class="w-full h-full bg-base-300 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-24 h-24 text-base-content/20">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                        </svg>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="flex items-center justify-center p-8 lg:p-12">
+                <div class="max-w-xl">
+                    <h1 class="text-4xl lg:text-5xl font-bold mb-6 text-primary">{{ cta.title }}</h1>
+                    <div class="prose prose-lg max-w-none mb-6">
+                        {{ cta.text|richtext }}
+                    </div>
+                    {% if cta.button_text and cta.button_url %}
+                    <a href="{{ cta.button_url }}" class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all">
+                        {{ cta.button_text }}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+    <!-- No Image Layout (Original Simple Layout) -->
+    {% else %}
+        <div class="text-center max-w-3xl mx-auto bg-gradient-to-br from-primary/10 to-secondary/10 rounded-xl p-12">
+            <h1 class="text-5xl font-bold mb-6 text-primary">{{ cta.title }}</h1>
+            <div class="prose prose-lg max-w-none mb-6 mx-auto">
+                {{ cta.text|richtext }}
+            </div>
+            <a href="{{ cta.button_url }}" class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all">
+                {{ cta.button_text }}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+            </a>
+        </div>
+    {% endif %}
 </div>
+
+{% if cta.target_url %}
+</a>
+{% endif %}

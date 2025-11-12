@@ -1,6 +1,6 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
-<section class="gradient-purple py-16 px-4 text-white">
+<section class="gradient-blue py-16 px-4 text-white">
     <div class="max-w-7xl mx-auto">
         <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-6">
             {{ self.title }}
@@ -13,9 +13,9 @@
         {% endif %}
 
         {% if programs %}
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
             {% for program in programs %}
-                <a href="{{ program.url }}" class="card w-96 shadow-sm card-program transition-all transform hover:-translate-y-1 fade-in cursor-pointer">
+                <a href="{{ program.url }}" class="card w-90 shadow-sm card-program transition-all transform hover:-translate-y-1 fade-in cursor-pointer">
                     <figure class="bg-slate-800 gradient-dark p-5">
                         {% if program.logo %}
                             {% image program.logo height-150 %}
