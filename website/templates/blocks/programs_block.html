@@ -13,9 +13,9 @@
         {% endif %}
 
         {% if programs %}
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for program in programs %}
-                <a href="{{ program.url }}" class="card w-90 shadow-sm card-program transition-all transform hover:-translate-y-1 fade-in cursor-pointer">
+                <a href="{{ program.url }}" class="card w-90 mx-auto shadow-sm card-program transition-all transform hover:-translate-y-1 fade-in cursor-pointer">
                     <figure class="bg-slate-800 gradient-dark p-5">
                         {% if program.logo %}
                             {% image program.logo height-150 %}
