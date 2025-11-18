@@ -482,3 +482,66 @@ class FAQBlock(blocks.StructBlock):
         icon = "help"
         label = "FAQ List"
         group = "Standalone Blocks"
+
+
+class ResourcesNavigationBlock(blocks.StaticBlock):
+    """
+    A block that displays navigation for the Resources section.
+    Shows all categories and pages within the current page's category.
+    """
+
+    def get_context(self, value, parent_context=None):
+        from flexpage.models import FlexPage, ResourcesIndex
+
+        context = super().get_context(value, parent_context=parent_context)
+        print(f"context: {context}")
+        # Get the current page from parent context
+        current_page = parent_context.get('page') if parent_context else None
+        print(f"current_page: {current_page}")
+
+        if current_page:
+            # Find the ResourcesIndex page (parent of all resource pages)
+            resources_index = None
+            if isinstance(current_page, ResourcesIndex):
+                resources_index = current_page
+            else:
+                # Get the parent ResourcesIndex
+                resources_index = current_page.get_ancestors().type(ResourcesIndex).first()
+
+            if resources_index:
+                # Get all child FlexPages
+                all_pages = FlexPage.objects.child_of(resources_index).live().specific()
+
+                # Get unique categories
+                categories = []
+                seen_categories = set()
+                for page in all_pages:
+                    if page.category and page.category not in seen_categories:
+                        categories.append(page.category)
+                        seen_categories.add(page.category)
+
+                # Sort categories alphabetically
+                categories.sort()
+
+                # Get pages in the current page's category
+                current_category = getattr(current_page, 'category', None)
+                category_pages = []
+                if current_category:
+                    category_pages = FlexPage.objects.child_of(resources_index).live().filter(
+                        category=current_category
+                    ).order_by('title')
+
+                context['resources_index'] = resources_index
+                context['all_categories'] = categories
+                context['current_category'] = current_category
+                context['category_pages'] = category_pages
+                context['current_page'] = current_page
+
+        return context
+
+    class Meta:
+        template = "blocks/resources_navigation_block.html"
+        icon = "list-ul"
+        label = "Resources Navigation"
+        admin_text = "Displays Resources section navigation with categories and pages"
+        group = "Standalone Blocks"

@@ -5,6 +5,7 @@ from wagtail.models import Page, Locale
 from wagtail.fields import StreamField, RichTextField
 from wagtail.admin.panels import FieldPanel
 from wagtail.images import get_image_model
+from wagtail.contrib.table_block.blocks import TableBlock
 
 from blocks import blocks as custom_blocks
 
@@ -13,6 +14,7 @@ from blocks import blocks as custom_blocks
 
 class ResourcesIndex(Page):
     """
+    Index page for the Resources section.
     """
     subtitle = models.CharField(max_length=200, blank=True)
     # header image
@@ -31,6 +33,7 @@ class ResourcesIndex(Page):
             ("image", custom_blocks.ImageBlock()),
             ("call_to_action_1", custom_blocks.CallToActionBlock()),
             ("faq", custom_blocks.FaqListBlock()),
+            ("resources_navigation", custom_blocks.ResourcesNavigationBlock()),
         ],
         block_counts={
             # "text": {"min_num": 1},
@@ -97,6 +100,7 @@ class FlexPage(Page):
             ("image", custom_blocks.ImageBlock()),
             ("call_to_action_1", custom_blocks.CallToActionBlock()),
             ("faq", custom_blocks.FaqListBlock()),
+            ("table", TableBlock()),
         ],
         block_counts={
             # "text": {"min_num": 1},
@@ -111,6 +115,42 @@ class FlexPage(Page):
         FieldPanel('image'),
         FieldPanel('body'),
     ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+
+        # Find the ResourcesIndex page (parent of all resource pages)
+        resources_index = self.get_ancestors().type(ResourcesIndex).first()
+
+        if resources_index:
+            # Get all child FlexPages
+            all_pages = FlexPage.objects.child_of(resources_index).live().specific()
+
+            # Get unique categories
+            categories = []
+            seen_categories = set()
+            for page in all_pages:
+                if page.category and page.category not in seen_categories:
+                    categories.append(page.category)
+                    seen_categories.add(page.category)
+
+            # Sort categories alphabetically
+            categories.sort()
+
+            # Get pages in current page's category
+            category_pages = []
+            if self.category:
+                category_pages = FlexPage.objects.child_of(resources_index).live().filter(
+                    category=self.category
+                ).order_by('title')
+
+            context['resources_index'] = resources_index
+            context['all_categories'] = categories
+            context['current_category'] = self.category
+            context['category_pages'] = category_pages
+            context['current_page'] = self
+
+        return context
 
     def clean(self):
         super().clean()
