@@ -73,6 +73,45 @@ class SocialMediaLinks(BaseSiteSetting):
         verbose_name = "Social Media Links"
 
 
+class FAQCategory(models.Model):
+    """
+    A model to manage FAQ categories.
+    """
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text="Category name (e.g., 'Registration', 'Programs', 'General')"
+    )
+    slug = models.SlugField(
+        max_length=100,
+        unique=True,
+        help_text="URL-friendly version of the name"
+    )
+    description = models.TextField(
+        blank=True,
+        help_text="Optional description of this category"
+    )
+    order = models.IntegerField(
+        default=0,
+        help_text="Order of display (lower numbers appear first)"
+    )
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('slug'),
+        FieldPanel('description'),
+        FieldPanel('order'),
+    ]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "FAQ Category"
+        verbose_name_plural = "FAQ Categories"
+        ordering = ['order', 'name']
+
+
 class FAQTags(TaggedItemBase):
     """
     A model to manage tags for FAQ items.
@@ -97,10 +136,13 @@ class FAQ(
     """
     question = models.CharField(max_length=255, help_text="The FAQ question")
     answer = RichTextField(help_text="The answer to the question")
-    category = models.CharField(
-        max_length=100,
+    category = models.ForeignKey(
+        'site_settings.FAQCategory',
+        on_delete=models.SET_NULL,
+        null=True,
         blank=True,
-        help_text="Optional category for grouping FAQs (e.g., 'Registration', 'Programs', 'General')"
+        related_name='faqs',
+        help_text="Optional category for grouping FAQs"
     )
     tags = ClusterTaggableManager(through=FAQTags, blank=True)
     revisions = GenericRelation('wagtailcore.Revision', related_query_name="faq")
@@ -114,7 +156,7 @@ class FAQ(
     panels = [
         FieldPanel('question'),
         FieldPanel('answer'),
-        FieldPanel('category'),
+        FieldPanel('category', widget=None),  # Uses autocomplete widget by default
         FieldPanel('tags'),
         FieldPanel('order'),
     ]

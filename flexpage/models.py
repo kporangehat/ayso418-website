@@ -101,6 +101,8 @@ class FlexPage(Page):
             ("call_to_action_1", custom_blocks.CallToActionBlock()),
             ("faq", custom_blocks.FaqListBlock()),
             ("table", TableBlock()),
+            ("faq_block", custom_blocks.FAQBlock()),
+            ("faq", custom_blocks.FaqListBlock()),
         ],
         block_counts={
             # "text": {"min_num": 1},

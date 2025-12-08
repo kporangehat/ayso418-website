@@ -450,7 +450,7 @@ class FAQBlock(blocks.StructBlock):
         context = super().get_context(value, parent_context=parent_context)
 
         # Start with base queryset - only published FAQs
-        faqs = FAQ.objects.filter(live=True)
+        faqs = FAQ.objects.filter(live=True).select_related('category')
 
         # Filter by tag if specified
         tag = value.get('filter_by_tag', '').strip()
@@ -460,10 +460,11 @@ class FAQBlock(blocks.StructBlock):
         # Filter by category if specified
         category = value.get('filter_by_category', '').strip()
         if category:
-            faqs = faqs.filter(category__iexact=category)
+            # Filter by category name (case-insensitive)
+            faqs = faqs.filter(category__name__iexact=category)
 
         # Order by category and order field
-        faqs = faqs.order_by('category', 'order', 'question')
+        faqs = faqs.order_by('category__order', 'category__name', 'order', 'question')
 
         # Limit to requested number (0 means all)
         num_items = value.get('num_items', 0)

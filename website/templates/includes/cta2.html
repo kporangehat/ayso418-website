@@ -4,7 +4,7 @@
     {% image cta.image original as cta_image %}
 {% endif %}
 
-<div class="relative overflow-hidden bg-white  dark:bg-blue-900 shadow-xl lg:grid lg:grid-cols-2 lg:gap-0">
+<div class="relative overflow-hidden items-center bg-white  dark:bg-blue-900 shadow-xl lg:grid lg:grid-cols-2 lg:gap-0 ">
   <div class="relative isolate px-6 pt-14 lg:px-8">
     <div aria-hidden="true" class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
       <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)" class="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#91e1fa] to-[#1d76fa] opacity-30 sm:left-[calc(50%-30rem)] sm:w-288.75"></div>
@@ -24,11 +24,12 @@
         </div>
         <div class="mt-10 flex items-center justify-center gap-x-6">
             {% if cta.button_text and cta.button_url %}
-            <a href="{{ cta.button_url }}" class="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus-visible:outline-blue-500">
-                {{ cta.button_text }}
-            </a>
+              <a href="{{ cta.button_url }}" class="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus-visible:outline-blue-500">
+                  {{ cta.button_text }}
+              </a>
+            {% else %}
+              <a href="{{ cta.target_url.url }}" class="text-sm/6 font-semibold text-gray-900 dark:text-white rounded-2xl p-2 px-5  hover:ring/20 hover:ring hover:shadow-lg shadow-cyan-600/50">{{ cta.button_text }}<span aria-hidden="true"> →</span></a>
             {% endif %}
-            <a href="{{ cta.target_url.url }}" class="text-sm/6 font-semibold text-gray-900 dark:text-white rounded-2xl p-2 px-5  hover:ring/20 hover:ring hover:shadow-lg shadow-cyan-600/50">Learn more <span aria-hidden="true">→</span></a>
         </div>
 
       </div>
@@ -38,7 +39,7 @@
     </div>
   </div>
 
-  <div class="relative lg:h-auto  p-7">
+  <div class="relative lg:h-auto p-7">
     <img
     src="{{ cta_image.url }}"
     alt="{{ cta_image.title }}"
@@ -49,7 +50,7 @@
         data-focus-height="{{ cta_image.focal_point.height }}"
     {% endif %}
     class="h-full w-full object-cover rounded-xl shadow-lg shadow-cyan-600/50 ring ring-cyan-800"
-/>
+    />
     </div>
 </div>
 
