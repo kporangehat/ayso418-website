@@ -13,25 +13,26 @@
 
 {% image page.image width-1024 as header_image %}
 
-<div class="">
 
+{% comment %}
                 <div
                   class="hero min-h-[10vh] lg:col-span-3 bg-white "
                   style="background-image: url('{{ header_image.url }}'); {{ header_image.background_position_style }};"
                 >
                   <div class="hero-overlay bg-linear-to-r from-[#80caff] to-[#4f46e5]"></div>
                   <div class="hero-content text-neutral-content text-left w-full">
-                    <div class="rounded-2xl py-8 max-w-4xl w-full">
-                      <h1 class="mb-5 text-5xl font-bold">{{ page.category }}</h1>
+                    <div class="container mx-auto px-4 max-w-7xl w-full">
+                      <div class="max-w-3xl">
+                        <h1 class="mb-5 text-5xl font-bold">{{ category_page }}</h1>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-</div>
+{% endcomment %}
 
 
         <!-- Main Content -->
-        <div class="container mx-auto px-4 max-w-7xl">
+        <div class="container mx-auto px-4 max-w-7xl my-8">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
             <!-- News Content Section -->
@@ -45,7 +46,13 @@
                                     <div class="max-w-3xl mx-auto">
 
                                         <!-- Date -->
-                                        <div class="badge badge-soft py-5 mb-10">{{ page.first_published_at|date:"F j, Y" }}</div>
+                                        {% if category_page %}
+                                          <div class="badge badge-soft py-5 mb-10">
+                                            <a href="{{ category_page.url }}">{{ category_page.title }}</a>
+                                          </div>
+                                        {% else %}
+                                          <div class="mb-10"></div>
+                                        {% endif %}
 
                                         <!-- Title -->
                                         <h1 class="mb-5 text-5xl font-bold text-primary prose">
@@ -54,25 +61,6 @@
                                         <h3 class="mb-5 text-2xl font-semibold">{{ page.subtitle }}</h3>
                                         <div class="mb-5">
                                           {{ page.intro|richtext }}
-                                        </div>
-
-                                        <!-- Author -->
-                                        <div class="flex items-center gap-3">
-                                          {% if page.author.name %}
-                                            <div class="avatar">
-                                              <div class="rounded-full w-12">
-                                                <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
-                                              </div>
-                                            </div>
-                                            <p class="text-gray-500 font-extralight prose">{{ page.author }}</p>
-                                          {% else %}
-                                            <div class="avatar">
-                                              <div class="rounded-full w-12">
-                                                <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
-                                              </div>
-                                            </div>
-                                            <p class="text-gray-500 font-extralight prose">{{ page.owner.first_name }} {{ page.owner.last_name }}</p>
-                                          {% endif %}
                                         </div>
 
                                         <div class="divider"></div>

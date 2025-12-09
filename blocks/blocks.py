@@ -500,10 +500,9 @@ class ResourcesNavigationBlock(blocks.StaticBlock):
         from flexpage.models import FlexPage, ResourcesIndex
 
         context = super().get_context(value, parent_context=parent_context)
-        print(f"context: {context}")
+
         # Get the current page from parent context
         current_page = parent_context.get('page') if parent_context else None
-        print(f"current_page: {current_page}")
 
         if current_page:
             # Find the ResourcesIndex page (parent of all resource pages)
@@ -515,32 +514,27 @@ class ResourcesNavigationBlock(blocks.StaticBlock):
                 resources_index = current_page.get_ancestors().type(ResourcesIndex).first()
 
             if resources_index:
-                # Get all child FlexPages
-                all_pages = FlexPage.objects.child_of(resources_index).live().specific()
+                # Get the parent category page (direct child of ResourcesIndex)
+                category_page = None
 
-                # Get unique categories
-                categories = []
-                seen_categories = set()
-                for page in all_pages:
-                    if page.category and page.category not in seen_categories:
-                        categories.append(page.category)
-                        seen_categories.add(page.category)
+                # If current page is a direct child of ResourcesIndex, it's a category page
+                if current_page.get_parent() == resources_index:
+                    category_page = current_page
+                else:
+                    # Otherwise, find the category page (ancestor that's a direct child of ResourcesIndex)
+                    for ancestor in current_page.get_ancestors():
+                        if ancestor.get_parent() == resources_index:
+                            category_page = ancestor.specific
+                            break
 
-                # Sort categories alphabetically
-                categories.sort()
-
-                # Get pages in the current page's category
-                current_category = getattr(current_page, 'category', None)
-                category_pages = []
-                if current_category:
-                    category_pages = FlexPage.objects.child_of(resources_index).live().filter(
-                        category=current_category
-                    ).order_by('title')
+                # Get all sibling pages (children of the same category page)
+                sibling_pages = []
+                if category_page:
+                    sibling_pages = category_page.get_children().live().specific().order_by('title')
 
                 context['resources_index'] = resources_index
-                context['all_categories'] = categories
-                context['current_category'] = current_category
-                context['category_pages'] = category_pages
+                context['category_page'] = category_page
+                context['sibling_pages'] = sibling_pages
                 context['current_page'] = current_page
 
         return context

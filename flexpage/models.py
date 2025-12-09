@@ -55,23 +55,23 @@ class ResourcesIndex(Page):
         if errors:
             raise ValidationError(errors)
 
-    # def get_context(self, request):
-    #     context = super().get_context(request)
-
-    #     child_pages = self.get_children().live().specific().order_by('category')
-
-    #     context['child_pages'] = child_pages
-    #     return context
-
     def get_context(self, request):
         context = super().get_context(request)
 
-        # Get all live child pages as their specific types, then sort by category
-        child_pages = self.get_children().live().specific()
-        # Sort in Python if category is on the specific model
-        child_pages = sorted(child_pages, key=lambda x: getattr(x, 'category', ''))
+        # Get direct children (category pages) of ResourcesIndex
+        category_pages = self.get_children().live().specific()
 
-        context['child_pages'] = child_pages
+        # Build a list of categories with their child pages
+        categories_with_children = []
+        for category_page in category_pages:
+            # Get the children of each category page
+            child_pages = category_page.get_children().live().specific()
+            categories_with_children.append({
+                'category_page': category_page,
+                'child_pages': child_pages
+            })
+
+        context['categories_with_children'] = categories_with_children
         return context
 
 class FlexPage(Page):
@@ -125,31 +125,36 @@ class FlexPage(Page):
         resources_index = self.get_ancestors().type(ResourcesIndex).first()
 
         if resources_index:
-            # Get all child FlexPages
-            all_pages = FlexPage.objects.child_of(resources_index).live().specific()
+            # Get the parent category page (direct child of ResourcesIndex)
+            category_page = None
 
-            # Get unique categories
-            categories = []
-            seen_categories = set()
-            for page in all_pages:
-                if page.category and page.category not in seen_categories:
-                    categories.append(page.category)
-                    seen_categories.add(page.category)
+            # Check the depth relative to ResourcesIndex
+            # If we're 1 level below ResourcesIndex, we ARE a category page
+            # If we're 2+ levels below, we need to find our category page ancestor
 
-            # Sort categories alphabetically
-            categories.sort()
+            parent_id = self.get_parent().id
+            resources_index_id = resources_index.id
 
-            # Get pages in current page's category
-            category_pages = []
-            if self.category:
-                category_pages = FlexPage.objects.child_of(resources_index).live().filter(
-                    category=self.category
-                ).order_by('title')
+            if parent_id == resources_index_id:
+                # Current page is a category page (direct child of ResourcesIndex)
+                category_page = self
+            else:
+                # Current page is a content page, find its category page
+                # Get all ancestors and find the one that's a direct child of ResourcesIndex
+                for ancestor in self.get_ancestors().specific():
+                    ancestor_parent = ancestor.get_parent()
+                    if ancestor_parent and ancestor_parent.id == resources_index_id:
+                        category_page = ancestor
+                        break
+
+            # Get all sibling pages (children of the same category page)
+            sibling_pages = []
+            if category_page:
+                sibling_pages = category_page.get_children().live().specific().order_by('title')
 
             context['resources_index'] = resources_index
-            context['all_categories'] = categories
-            context['current_category'] = self.category
-            context['category_pages'] = category_pages
+            context['category_page'] = category_page
+            context['sibling_pages'] = sibling_pages
             context['current_page'] = self
 
         return context

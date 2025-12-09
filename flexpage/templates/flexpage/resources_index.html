@@ -37,23 +37,22 @@
 
         <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-12">
 
-            {% regroup child_pages by category as category_list %}
-            {% for category_group in category_list %}
+            {% for category in categories_with_children %}
 
               <div class="card bg-base-100 w-96 shadow-sm">
                 <figure>
                   <img
                     src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="Shoes" />
+                    alt="{{ category.category_page.title }}" />
                 </figure>
                 <div class="card-body">
                   <h2 class="card-title">
-                    {{ category_group.grouper }}
+                    {{ category.category_page.title }}
                   </h2>
 
                   <ul class="menu divide-y divide-gray-200 text-sm text-slate-900 font-medium">
-                      {% for page in category_group.list %}
-                          <li class="text-sm leading-relaxed text-left hover:text-amber-700"><a href="{% pageurl page %}">{{ page.title }}</a></li>
+                      {% for child_page in category.child_pages %}
+                          <li class="text-sm leading-relaxed text-left hover:text-amber-700"><a href="{% pageurl child_page %}">{{ child_page.title }}</a></li>
                       {% endfor %}
                   </ul>
                 </div>

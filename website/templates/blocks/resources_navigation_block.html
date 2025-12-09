@@ -6,17 +6,20 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
-            {{ current_category }}
+            {% if category_page %}
+                {{ category_page.title }}
+            {% endif %}
         </h2>
 
         <nav aria-label="Resource navigation">
             <ul class="menu menu-sm p-0">
-                {% for category in all_categories %}
-                    {% if category == current_category and category_pages %}
-                        {% for page in category_pages %}
-                            <li><a href="{{ page.url }}" class="text-base-content/70">{{ page.title }}</a></li>
-                        {% endfor %}
-                    {% endif %}
+                {% for page in sibling_pages %}
+                    <li>
+                        <a href="{{ page.url }}"
+                           class="{% if page.id == current_page.id %}font-semibold text-primary{% else %}text-base-content/70{% endif %}">
+                            {{ page.title }}
+                        </a>
+                    </li>
                 {% endfor %}
             </ul>
         </nav>
