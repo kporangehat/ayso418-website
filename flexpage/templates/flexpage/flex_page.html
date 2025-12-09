@@ -9,61 +9,105 @@
 
 {% block content %}
 
-{% if page.image %}
-    {% image_url page.image "original" as hero_img %}
-    <div class="hero min-h-[30vh]" style="background-image: url({{ hero_img }});">
-    <div class="hero-overlay"></div>
-{% else %}
-    <div class="hero min-h-[30vh] bg-linear-to-r from-[#80caff] to-[#4f46e5]">
-{% endif %}
 
-  <div class="hero-content text-neutral-content text-center">
-    <div class="max-w-xl">
-      <h1 class="mb-5 text-5xl font-bold">{{ page.title }}</h1>
-      <p class="mb-5">
-        {{ page.subtitle }}
-      </p>
-    </div>
-  </div>
+
+{% image page.image width-1024 as header_image %}
+
+<div class="">
+
+                <div
+                  class="hero min-h-[10vh] lg:col-span-3 bg-white "
+                  style="background-image: url('{{ header_image.url }}'); {{ header_image.background_position_style }};"
+                >
+                  <div class="hero-overlay bg-linear-to-r from-[#80caff] to-[#4f46e5]"></div>
+                  <div class="hero-content text-neutral-content text-left w-full">
+                    <div class="rounded-2xl py-8 max-w-4xl w-full">
+                      <h1 class="mb-5 text-5xl font-bold">{{ page.category }}</h1>
+                    </div>
+                  </div>
+                </div>
+
 </div>
 
 
-    <div class="py-8 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <!-- Main Content Grid: Article + Sidebar -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <!-- Main Content -->
+        <div class="container mx-auto px-4 max-w-7xl">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                <!-- Main Article Content (2/3 width on large screens) -->
-                <article class="lg:col-span-2" aria-labelledby="article-title">
+            <!-- News Content Section -->
+
+                <div class="lg:col-span-3 space-y-6">
                     <div class="card bg-base-100 shadow-xl">
-                        <div class="card-body p-8 sm:p-12">
-                            <!-- Article Content -->
-                            <div class="prose prose-lg max-w-none">
-                                {% if page.subtitle %}
-                                <p class="lead text-xl text-base-content/80 mb-6">
-                                    {{ page.subtitle }}
-                                </p>
-                                {% endif %}
+                        <div class="card-body max-w-none">
+                            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                                <!-- Main Content -->
+                                <div class="lg:col-span-3">
+                                    <div class="max-w-3xl mx-auto">
 
-                                {% for block in page.body %}
-                                    {% include_block block with page=page %}
-                                {% endfor %}
+                                        <!-- Date -->
+                                        <div class="badge badge-soft py-5 mb-10">{{ page.first_published_at|date:"F j, Y" }}</div>
+
+                                        <!-- Title -->
+                                        <h1 class="mb-5 text-5xl font-bold text-primary prose">
+                                            {{ page.title}}
+                                        </h1>
+                                        <h3 class="mb-5 text-2xl font-semibold">{{ page.subtitle }}</h3>
+                                        <div class="mb-5">
+                                          {{ page.intro|richtext }}
+                                        </div>
+
+                                        <!-- Author -->
+                                        <div class="flex items-center gap-3">
+                                          {% if page.author.name %}
+                                            <div class="avatar">
+                                              <div class="rounded-full w-12">
+                                                <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
+                                              </div>
+                                            </div>
+                                            <p class="text-gray-500 font-extralight prose">{{ page.author }}</p>
+                                          {% else %}
+                                            <div class="avatar">
+                                              <div class="rounded-full w-12">
+                                                <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
+                                              </div>
+                                            </div>
+                                            <p class="text-gray-500 font-extralight prose">{{ page.owner.first_name }} {{ page.owner.last_name }}</p>
+                                          {% endif %}
+                                        </div>
+
+                                        <div class="divider"></div>
+
+                                        {% if page.image %}
+                                            {% image_url page.image "original" as hero_img %}
+                                            <div class="hero min-h-[30vh]" style="background-image: url({{ hero_img }});">
+                                            <div class="hero-overlay"></div>
+                                        {% comment %} {% else %}
+                                            <div class="hero min-h-[30vh] bg-linear-to-r from-[#80caff] to-[#4f46e5]"></div> {% endcomment %}
+                                        {% endif %}
+
+                                        <div class="prose max-w-3xl">
+
+                                          {{ page.body }}
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sidebar (1/3 width on large screens) -->
+                                <aside class="lg:col-span-1 space-y-6" aria-label="Sidebar content">
+
+                                    <!-- Resources Navigation - Always shown when available -->
+                                    {% if resources_index %}
+                                        {% include "blocks/resources_navigation_block.html" %}
+                                    {% endif %}
+                                </aside>
                             </div>
                         </div>
                     </div>
-                </article>
+                </div>
 
-                <!-- Sidebar (1/3 width on large screens) -->
-                <aside class="lg:col-span-1 space-y-6" aria-label="Sidebar content">
-
-                    <!-- Resources Navigation - Always shown when available -->
-                    {% if resources_index %}
-                        {% include "blocks/resources_navigation_block.html" %}
-                    {% endif %}
-
-                </aside>
             </div>
         </div>
-    </div>
+</div>
 
 {% endblock content %}
