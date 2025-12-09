@@ -325,6 +325,11 @@ class RecentNewsBlock(blocks.StructBlock):
         if current_locale:
             news_items = news_items.filter(locale=current_locale)
 
+        # Exclude current page if specified in parent context
+        current_page_id = parent_context.get('current_page_id') if parent_context else None
+        if current_page_id:
+            news_items = news_items.exclude(id=current_page_id)
+
         # Filter by tag if specified
         tag = value.get('filter_by_tag', '').strip()
         if tag:

@@ -71,7 +71,7 @@ class NewsIndex(RoutablePageMixin, Page):
         A route to display all news articles.
         """
         current_locale = Locale.get_active()
-        news_items = NewsItem.objects.live().public().filter(locale=current_locale)
+        news_items = NewsItem.objects.live().public().filter(locale=current_locale).order_by('-first_published_at')
         # news_items = NewsItem.objects.live().public()
 
         return self.render(
@@ -128,7 +128,7 @@ class NewsIndex(RoutablePageMixin, Page):
         """
         context = super().get_context(request)
         current_locale = Locale.get_active()
-        context['news_items'] = NewsItem.objects.live().public().filter(locale=current_locale)
+        context['news_items'] = NewsItem.objects.live().public().filter(locale=current_locale).order_by('-first_published_at')
         return context
 
 
@@ -237,6 +237,8 @@ class NewsItem(Page):
             )),
             ("author", SnippetChooserBlock('news.Author')),
             ("hero", custom_blocks.HeroBlock()),
+            ("recent_news", custom_blocks.RecentNewsBlock()),
+
         ],
         block_counts={
             "hero": {"max_num": 1},
@@ -285,6 +287,36 @@ class NewsItem(Page):
 
         if errors:
             raise ValidationError(errors)
+
+    def get_context(self, request):
+        """
+        Add recent news block data to the context.
+        """
+        context = super().get_context(request)
+
+        # Create a RecentNewsBlock instance with desired config
+        from blocks.blocks import RecentNewsBlock
+
+        recent_news_block = RecentNewsBlock()
+
+        # Prepare block value (field data)
+        block_value = {
+            'title': 'Other Recent News',
+            'subtitle': '',
+            'num_items': 5,
+            'filter_by_tag': '',
+        }
+
+        # Render the block with current page ID for exclusion
+        context['current_page_id'] = self.id
+        rendered_block = recent_news_block.render(
+            recent_news_block.to_python(block_value),
+            context=context
+        )
+
+        context['recent_news_html'] = rendered_block
+
+        return context
 
 
 class Author(

@@ -3,20 +3,15 @@
 
 {% block content %}
 
+    <section id="news" class="hero bg-slate-900" style="min-height: 20vh;">
 
-<section id="home" class="hero bg-slate-900 relative overflow-hidden" style="margin-top: 68px; min-height: 30vh;">
+    {% comment %} <section id="home" class="hero bg-slate-900 relative overflow-hidden" style="margin-top: 68px; min-height: 30vh;"> {% endcomment %}
         <div class="hero-pattern absolute inset-0"></div>
         <div class="hero-content text-center text-white relative z-10 hero-animated">
             <div class="max-w-4xl">
                 <h1 class="text-5xl md:text-6xl font-black mb-4" style="text-shadow: 0 4px 20px rgba(0,0,0,0.2)">
-                    The latest news from AYSO Chicago Lakefront Soccer
+                    {{ page.title }}
                 </h1>
-                <p class="text-xl md:text-2xl mb-6 opacity-95">
-                    Region 418 News
-                </p>
-                <a href="#programs" class="btn btn-lg bg-inherit text-2xl border-none rounded-full font-bold hover:shadow-2xl transition-all transform hover:-translate-y-1">
-                    📰
-                </a>
             </div>
         </div>
     </section>
@@ -25,7 +20,7 @@
     <section id="news" class="gradient-light py-16 px-4">
         <div class="max-w-7xl mx-auto">
             <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-12 text-gray-900 fade-in">
-                {{ page.title }}
+                {{ page.subtitle }}
             </h2>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

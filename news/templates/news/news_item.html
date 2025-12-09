@@ -8,25 +8,23 @@
 
 
 <div class="">
-        <!-- Main Content -->
-        <div class="container mx-auto px-4 py-12 max-w-7xl">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- News Content Section -->
+
                 <div
-                  class="hero min-h-[30vh] lg:col-span-3 bg-white rounded-t-2xl"
+                  class="hero min-h-[10vh] lg:col-span-3 bg-white "
                   style="background-image: url('{{ header_image.url }}'); {{ header_image.background_position_style }};"
                 >
-                  <div class="hero-overlay rounded-t-2xl"></div>
+                  <div class="hero-overlay"></div>
                   <div class="hero-content text-neutral-content text-left w-full">
                     <div class="rounded-2xl py-8 max-w-4xl w-full">
-                      <h1 class="mb-5 text-5xl font-bold">{{ page.title }}</h1>
-                      <h3 class="mb-5 text-2xl font-semibold">{{ page.subtitle }}</h3>
-                      <p class="mb-5">
-                        {{ page.intro|richtext }}
-                      </p>
+                      <h1 class="mb-5 text-5xl font-bold">AYSO Chicago Lakefront News</h1>
                     </div>
                   </div>
                 </div>
+
+        <!-- Main Content -->
+        <div class="container mx-auto px-4 max-w-7xl">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- News Content Section -->
 
                 <div class="lg:col-span-3 space-y-6">
                     <div class="card bg-base-100 shadow-xl">
@@ -37,9 +35,13 @@
                                 <div class="badge badge-soft py-5 mb-10">{{ page.first_published_at|date:"F j, Y" }}</div>
 
                                 <!-- Title -->
-                                <h2 class="card-title text-3xl text-primary mb-4 prose">
+                                <h1 class="mb-5 text-5xl font-bold text-primary prose">
                                     {{ page.title}}
-                                </h2>
+                                </h1>
+                                <h3 class="mb-5 text-2xl font-semibold">{{ page.subtitle }}</h3>
+                                <div class="mb-5">
+                                  {{ page.intro|richtext }}
+                                </div>
 
                                 <!-- Author -->
                                 <div class="flex items-center gap-3">
@@ -71,34 +73,16 @@
                     </div>
                 </div>
 
-                <!-- Program Info Sidebar -->
-                <div class="lg:col-span-1">
-                    <div class="sticky top-6 space-y-4">
-                        <!-- Main Info Card -->
-                        <div class="card bg-base-100 shadow-xl border-t-4 border-primary">
-                            <div class="card-body">
-                                <h2 class="card-title text-2xl justify-center text-primary mb-4">
-                                    Other News Stuff
-                                </h2>
-                              </div>
-                        </div>
-                    </div>
+                <!-- Recent News Section -->
+                {% if recent_news_html %}
+                <div class="lg:col-span-3 mt-8">
+                    {{ recent_news_html|safe }}
                 </div>
+                {% endif %}
+
             </div>
         </div>
 </div>
 
-
-
-
-
-{% comment %} <div class="">
-{{ page.body }}
-</div> {% endcomment %}
-{% comment %} <div class="container mx-auto px-4 py-12 max-w-7xl">
-        {% for block in page.body %}
-            {% include_block block %}
-        {% endfor %}
-</div> {% endcomment %}
 
 {% endblock %}
