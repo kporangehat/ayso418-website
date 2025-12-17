@@ -1,6 +1,7 @@
 from django.db import models
 
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
+from django.forms import Textarea, Select, EmailInput, TextInput, URLInput, NumberInput
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, FieldRowPanel, InlinePanel
 from modelcluster.fields import ParentalKey
@@ -41,3 +42,20 @@ class ContactPage(AbstractEmailForm):
             FieldPanel("subject"),
         ]),
     ]
+
+    def get_form_class(self):
+        form_class = super().get_form_class()
+
+        for field in form_class.base_fields.values():
+            widget = field.widget
+
+            if isinstance(widget, Textarea):
+                widget.attrs['class'] = 'textarea textarea-bordered w-full h-32'
+            elif isinstance(widget, Select):
+                widget.attrs['class'] = 'select select-bordered w-full'
+            elif isinstance(widget, EmailInput):
+                widget.attrs['class'] = 'input input-bordered w-full'
+            elif isinstance(widget, (TextInput, URLInput, NumberInput)):
+                widget.attrs['class'] = 'input input-bordered w-full'
+
+        return form_class

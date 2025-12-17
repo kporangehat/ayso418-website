@@ -6,9 +6,10 @@ name = "pypi"
 [packages]
 cr = "*"
 django = "<5.3,>=5.2"
-wagtail = "<7.3,>=7.2"
 wagtail-localize = "==1.11.3"
 sentry-sdk = {extras = ["django"], version = "==2.27.0"}
+django-widget-tweaks = "*"
+wagtail = "<7.3,>=7.2"
 
 [dev-packages]
 

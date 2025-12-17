@@ -1,18 +1,30 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags widget_tweaks %}
 
 {% block content %}
 
-<section class="">
-    <h2 class="text-2xl font-extrabold">{{ page.title }}</h2>
-    <p class="text-lg font-normal">
-        {{ page.body|richtext }}
-    </p>
+<div class="container mx-auto px-4 max-w-7xl my-8">
+    <div class="bg-base-100 shadow-xl">
+        <div class="card-body max-w-none">
 
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Contact Us</button>
-    </form>
+            <h2 class="text-2xl font-extrabold">{{ page.title }}</h2>
+            <p class="text-lg font-normal">
+                {{ page.body|richtext }}
+            </p>
 
+            <form action="" method="POST" class="w-full max-w-2xl mx-auto">
+                {% csrf_token %}
+                <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-4 md:p-6 space-y-4">
+                    <legend class="fieldset-legend">Send us an email</legend>
+
+                    {% comment %} css is applied at the model level {% endcomment %}
+                    {{ form.as_p }}
+
+                    <button type="submit" class="btn btn-primary w-full sm:w-auto">Send it!</button>
+
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock content %}
