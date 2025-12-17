@@ -24,13 +24,13 @@
                       {% if program.logo %}
                           {% image program.logo height-150 %}
                       {% else %}
-                          <div class="text-7xl">⚽</div>
+                          <div class="text-7xl h-[150px] flex items-center justify-center">⚽</div>
                       {% endif %}
                     </figure>
                     <div class="card-body">
                       <h2 class="card-title">
                         {{ program.title }}
-                        <div class="badge badge-soft">NEW</div>
+                        {% comment %} <div class="badge badge-soft">NEW</div> {% endcomment %}
                       </h2>
                       <p>{{ program.subtitle }}</p>
                       <div class="card-actions justify-end">
