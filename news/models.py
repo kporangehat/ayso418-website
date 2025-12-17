@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -124,11 +125,26 @@ class NewsIndex(RoutablePageMixin, Page):
 
     def get_context(self, request):
         """
-        Add the list of news articles to the context.
+        Add the list of news articles to the context with pagination.
         """
         context = super().get_context(request)
         current_locale = Locale.get_active()
-        context['news_items'] = NewsItem.objects.live().public().filter(locale=current_locale).order_by('-first_published_at')
+        all_news = NewsItem.objects.live().public().filter(locale=current_locale).order_by('-first_published_at')
+
+        # Paginate with 20 items per page
+        paginator = Paginator(all_news, 7)
+        page_number = request.GET.get('page', 1)
+
+        try:
+            news_page = paginator.page(page_number)
+        except PageNotAnInteger:
+            news_page = paginator.page(1)
+        except EmptyPage:
+            news_page = paginator.page(paginator.num_pages)
+
+        context['news_items'] = news_page
+        context['paginator'] = paginator
+
         return context
 
 

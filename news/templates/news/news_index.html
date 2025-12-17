@@ -23,38 +23,161 @@
                 {{ page.subtitle }}
             </h2>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {% for article in news_items %}
-                    <!-- News Card 1 -->
-                    <!-- TODO: fade-in is causing hover transition to be janky -->
-                    <div class="card card-news bg-base-100 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer fade-in">
-                        <figure class="gradient-purple h-48">
-                            {% if article.image %}
+            {% if news_items.number == 1 %}
+                <!-- First 6 items as cards (3 per row) - only on page 1 -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                    {% for article in news_items %}
+                        {% if forloop.counter <= 6 %}
+                            <!-- News Card -->
+                            <!-- TODO: fade-in is causing hover transition to be janky -->
+                            <div class="card card-news bg-base-100 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer fade-in">
+                                <figure class="gradient-purple h-48">
+                                    {% if article.image %}
 
-                                {% image article.image fill-700x500 as news_image %}
-                                <img
-                                    src="{{ news_image.url }}"
-                                    alt="{{ news_image.title }}"
-                                    {% if news_image.focal_point %}
-                                        data-focus-x="{{ news_image.focal_point.centroid.x }}"
-                                        data-focus-y="{{ news_image.focal_point.centroid.y }}"
-                                        data-focus-width="{{ news_image.focal_point.width }}"
-                                        data-focus-height="{{ news_image.focal_point.height }}"
+                                        {% image article.image fill-700x500 as news_image %}
+                                        <img
+                                            src="{{ news_image.url }}"
+                                            alt="{{ news_image.title }}"
+                                            {% if news_image.focal_point %}
+                                                data-focus-x="{{ news_image.focal_point.centroid.x }}"
+                                                data-focus-y="{{ news_image.focal_point.centroid.y }}"
+                                                data-focus-width="{{ news_image.focal_point.width }}"
+                                                data-focus-height="{{ news_image.focal_point.height }}"
+                                            {% endif %}
+                                        />
+                                    {% else %}
+                                        <div class="text-7xl">⚽</div>
                                     {% endif %}
-                                />
-                            {% else %}
-                                <div class="text-7xl">⚽</div>
-                            {% endif %}
-                        </figure>
-                        <div class="card-body">
-                            <div class="badge badge-primary badge-outline">{{ article.first_published_at|date:"d M Y" }}</div>
-                            <h3 class="card-title text-2xl"><a href="{{ article.url }}">{{ article.title }}</a></h3>
-                            <p class="text-gray-600">{{ article.intro|richtext }}</p>
-                        </div>
-                    </div>
+                                </figure>
+                                <div class="card-body">
+                                    <div class="badge badge-primary badge-outline">{{ article.first_published_at|date:"d M Y" }}</div>
+                                    <h3 class="card-title text-2xl"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+                                    <p class="text-gray-600">{{ article.intro|richtext }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-                {% endfor %}
-            </div>
+            <!-- Remaining items as a stylized list -->
+            {% if news_items.number == 1 and news_items|length > 6 %}
+                <!-- Items 7-20 on page 1 -->
+                <div class="mt-16">
+                    <h3 class="text-3xl font-bold text-gray-900 mb-8">More News</h3>
+                    <div class="space-y-4">
+                        {% for article in news_items %}
+                            {% if forloop.counter > 6 %}
+                                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border-l-4 border-primary">
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                        <div class="flex-1">
+                                            <div class="flex items-center gap-3 mb-2">
+                                                <span class="badge badge-primary badge-sm">{{ article.first_published_at|date:"d M Y" }}</span>
+                                                {% if article.tags.all %}
+                                                    {% for tag in article.tags.all %}
+                                                        <span class="badge badge-ghost badge-sm">{{ tag.name }}</span>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <h4 class="text-xl font-bold text-gray-900 mb-2">
+                                                <a href="{{ article.url }}" class="hover:text-primary transition-colors">{{ article.title }}</a>
+                                            </h4>
+                                            {% if article.intro %}
+                                                <p class="text-gray-600 line-clamp-2">{{ article.intro|striptags }}</p>
+                                            {% endif %}
+                                        </div>
+                                        {% if article.image %}
+                                            <div class="md:w-32 md:h-32 w-full h-48 flex-shrink-0">
+                                                {% image article.image fill-200x200 as list_image %}
+                                                <img
+                                                    src="{{ list_image.url }}"
+                                                    alt="{{ list_image.title }}"
+                                                    class="w-full h-full object-cover rounded-lg"
+                                                />
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% elif news_items.number > 1 %}
+                <!-- All items as list on pages 2+ -->
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-8">News Archive - Page {{ news_items.number }}</h3>
+                    <div class="space-y-4">
+                        {% for article in news_items %}
+                            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border-l-4 border-primary">
+                                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <span class="badge badge-primary badge-sm">{{ article.first_published_at|date:"d M Y" }}</span>
+                                            {% if article.tags.all %}
+                                                {% for tag in article.tags.all %}
+                                                    <span class="badge badge-ghost badge-sm">{{ tag.name }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <h4 class="text-xl font-bold text-gray-900 mb-2">
+                                            <a href="{{ article.url }}" class="hover:text-primary transition-colors">{{ article.title }}</a>
+                                        </h4>
+                                        {% if article.intro %}
+                                            <p class="text-gray-600 line-clamp-2">{{ article.intro|striptags }}</p>
+                                        {% endif %}
+                                    </div>
+                                    {% if article.image %}
+                                        <div class="md:w-32 md:h-32 w-full h-48 flex-shrink-0">
+                                            {% image article.image fill-200x200 as list_image %}
+                                            <img
+                                                src="{{ list_image.url }}"
+                                                alt="{{ list_image.title }}"
+                                                class="w-full h-full object-cover rounded-lg"
+                                            />
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Pagination Controls -->
+            {% if paginator.num_pages > 1 %}
+                <div class="mt-12 flex justify-center">
+                    <div class="join">
+                        {% if news_items.has_previous %}
+                            <a href="?page=1" class="join-item btn btn-outline">«</a>
+                            <a href="?page={{ news_items.previous_page_number }}" class="join-item btn btn-outline">‹</a>
+                        {% else %}
+                            <button class="join-item btn btn-outline btn-disabled">«</button>
+                            <button class="join-item btn btn-outline btn-disabled">‹</button>
+                        {% endif %}
+
+                        {% for num in paginator.page_range %}
+                            {% if num == news_items.number %}
+                                <button class="join-item btn btn-primary">{{ num }}</button>
+                            {% elif num > news_items.number|add:'-3' and num < news_items.number|add:'3' %}
+                                <a href="?page={{ num }}" class="join-item btn btn-outline">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if news_items.has_next %}
+                            <a href="?page={{ news_items.next_page_number }}" class="join-item btn btn-outline">›</a>
+                            <a href="?page={{ paginator.num_pages }}" class="join-item btn btn-outline">»</a>
+                        {% else %}
+                            <button class="join-item btn btn-outline btn-disabled">›</button>
+                            <button class="join-item btn btn-outline btn-disabled">»</button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Page info -->
+                <div class="text-center mt-4 text-gray-600">
+                    Page {{ news_items.number }} of {{ paginator.num_pages }}
+                </div>
+            {% endif %}
         </div>
     </section>
 
