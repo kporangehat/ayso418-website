@@ -3,10 +3,10 @@
 
 {% block content %}
 
-    <section id="news" class="hero bg-slate-900" style="min-height: 20vh;">
+    <section id="news-hero" class="hero bg-slate-900 relative" style="min-height: 20vh;">
 
     {% comment %} <section id="home" class="hero bg-slate-900 relative overflow-hidden" style="margin-top: 68px; min-height: 30vh;"> {% endcomment %}
-        <div class="hero-pattern absolute inset-0"></div>
+        <div class="hero-pattern absolute inset-0" style="z-index: 0;"></div>
         <div class="hero-content text-center text-white relative z-10 hero-animated">
             <div class="max-w-4xl">
                 <h1 class="text-5xl md:text-6xl font-black mb-4" style="text-shadow: 0 4px 20px rgba(0,0,0,0.2)">
@@ -30,7 +30,7 @@
                         {% if forloop.counter <= 6 %}
                             <!-- News Card -->
                             <!-- TODO: fade-in is causing hover transition to be janky -->
-                            <div class="card card-news bg-base-100 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer fade-in">
+                            <a href="{{ article.url }}" class="card card-news bg-base-100 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 fade-in block">
                                 <figure class="gradient-purple h-48">
                                     {% if article.image %}
 
@@ -51,10 +51,10 @@
                                 </figure>
                                 <div class="card-body">
                                     <div class="badge badge-primary badge-outline">{{ article.first_published_at|date:"d M Y" }}</div>
-                                    <h3 class="card-title text-2xl"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+                                    <h3 class="card-title text-2xl">{{ article.title }}</h3>
                                     <p class="text-gray-600">{{ article.intro|richtext }}</p>
                                 </div>
-                            </div>
+                            </a>
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -68,7 +68,7 @@
                     <div class="space-y-4">
                         {% for article in news_items %}
                             {% if forloop.counter > 6 %}
-                                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border-l-4 border-primary">
+                                <a href="{{ article.url }}" class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border-l-4 border-primary block">
                                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                         <div class="flex-1">
                                             <div class="flex items-center gap-3 mb-2">
@@ -80,7 +80,7 @@
                                                 {% endif %}
                                             </div>
                                             <h4 class="text-xl font-bold text-gray-900 mb-2">
-                                                <a href="{{ article.url }}" class="hover:text-primary transition-colors">{{ article.title }}</a>
+                                                {{ article.title }}
                                             </h4>
                                             {% if article.intro %}
                                                 <p class="text-gray-600 line-clamp-2">{{ article.intro|striptags }}</p>
@@ -97,7 +97,7 @@
                                             </div>
                                         {% endif %}
                                     </div>
-                                </div>
+                                </a>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -108,7 +108,7 @@
                     <h3 class="text-3xl font-bold text-gray-900 mb-8">News Archive - Page {{ news_items.number }}</h3>
                     <div class="space-y-4">
                         {% for article in news_items %}
-                            <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border-l-4 border-primary">
+                            <a href="{{ article.url }}" class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border-l-4 border-primary block">
                                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                     <div class="flex-1">
                                         <div class="flex items-center gap-3 mb-2">
@@ -120,7 +120,7 @@
                                             {% endif %}
                                         </div>
                                         <h4 class="text-xl font-bold text-gray-900 mb-2">
-                                            <a href="{{ article.url }}" class="hover:text-primary transition-colors">{{ article.title }}</a>
+                                            {{ article.title }}
                                         </h4>
                                         {% if article.intro %}
                                             <p class="text-gray-600 line-clamp-2">{{ article.intro|striptags }}</p>
@@ -137,7 +137,7 @@
                                         </div>
                                     {% endif %}
                                 </div>
-                            </div>
+                            </a>
                         {% endfor %}
                     </div>
                 </div>
