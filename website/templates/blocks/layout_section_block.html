@@ -1,0 +1,37 @@
+{% load wagtailcore_tags %}
+
+{% if value.layout == 'full_width' %}
+    <!-- Full Width Layout -->
+    <div class="prose max-w-none">
+        {% for block in value.content %}
+            {% include_block block %}
+        {% endfor %}
+    </div>
+
+{% elif value.layout == 'sidebar' %}
+    <!-- Content with Right Sidebar Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Main Content (75% on large screens) -->
+        <div class="lg:col-span-3">
+            <div class="prose max-w-3xl">
+                {% for block in value.content %}
+                    {% include_block block %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Sidebar (25% on large screens) -->
+        <aside class="lg:col-span-1 space-y-6" aria-label="Sidebar content">
+            <!-- Resources Navigation - Show if enabled and resources_index exists -->
+            {% if value.show_resources_nav and resources_index %}
+                {% include "blocks/resources_navigation_block.html" %}
+            {% endif %}
+
+            <!-- Custom Sidebar Blocks -->
+            {% for block in value.sidebar %}
+                {% include_block block %}
+            {% endfor %}
+        </aside>
+    </div>
+
+{% endif %}

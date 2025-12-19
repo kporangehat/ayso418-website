@@ -5,7 +5,6 @@ from wagtail.models import Page, Locale
 from wagtail.fields import StreamField, RichTextField
 from wagtail.admin.panels import FieldPanel
 from wagtail.images import get_image_model
-from wagtail.contrib.table_block.blocks import TableBlock
 
 from blocks import blocks as custom_blocks
 
@@ -94,21 +93,27 @@ class FlexPage(Page):
     )
     body = StreamField(
         [
-            ("six", custom_blocks.SixPhilosophiesBlock()),
-            ("text", custom_blocks.TextBlock()),
-            ("richtext", custom_blocks.RichTextBlock()),
-            ("image", custom_blocks.ImageBlock()),
-            ("call_to_action_1", custom_blocks.CallToActionBlock()),
-            ("faq", custom_blocks.FaqListBlock()),
-            ("table", TableBlock()),
-            ("faq_block", custom_blocks.FAQBlock()),
-            ("faq", custom_blocks.FaqListBlock()),
+            ("layout_section", custom_blocks.LayoutSectionBlock()),
         ],
         block_counts={
-            # "text": {"min_num": 1},
+            # "layout_section": {"min_num": 1},
         },
         blank=True,
         null=True,
+    )
+
+    callouts = StreamField(
+        [
+            ("call_to_action", custom_blocks.CallToActionBlock()),
+            ("recent_news", custom_blocks.RecentNewsBlock()),
+            ("programs", custom_blocks.ProgramsBlock()),
+            ("faq", custom_blocks.FAQBlock()),
+            ("six_philosophies", custom_blocks.SixPhilosophiesBlock()),
+        ],
+        block_counts={},
+        blank=True,
+        null=True,
+        help_text="Full-width callout blocks that appear below the main page content"
     )
 
     content_panels = Page.content_panels + [
@@ -116,6 +121,7 @@ class FlexPage(Page):
         FieldPanel('category'),
         FieldPanel('image'),
         FieldPanel('body'),
+        FieldPanel('callouts'),
     ]
 
     def get_context(self, request):

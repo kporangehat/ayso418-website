@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 
 from wagtail import blocks
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.contrib.table_block.blocks import TableBlock
 
 
 class TextBlock(blocks.TextBlock):
@@ -545,3 +546,64 @@ class ResourcesNavigationBlock(blocks.StaticBlock):
         label = "Resources Navigation"
         admin_text = "Displays Resources section navigation with categories and pages"
         group = "Standalone Blocks"
+
+
+class LayoutSectionBlock(blocks.StructBlock):
+    """
+    A flexible layout block that allows choosing between full-width or content-with-sidebar layouts.
+    Supports multiple sections per page with different layouts.
+    """
+    layout = blocks.ChoiceBlock(
+        choices=[
+            ('full_width', 'Full Width'),
+            ('sidebar', 'Content with Right Sidebar'),
+        ],
+        default='full_width',
+        required=True,
+        help_text="Choose the layout for this section"
+    )
+
+    content = blocks.StreamBlock(
+        [
+            ('six', SixPhilosophiesBlock()),
+            ('text', TextBlock()),
+            ('richtext', RichTextBlock()),
+            ('image', ImageBlock()),
+            ('call_to_action_1', CallToActionBlock()),
+            ('faq', FAQBlock()),
+            ('table', TableBlock(
+                # template="includes/table.html",
+                help_text="Right click on table to access more options",
+            )),
+            ('faq_block', FaqListBlock()),
+            ('recent_news', RecentNewsBlock()),
+            ('programs', ProgramsBlock()),
+        ],
+        required=False,
+        help_text="Main content for this section"
+    )
+
+    sidebar = blocks.StreamBlock(
+        [
+            ('text', TextBlock()),
+            ('richtext', RichTextBlock()),
+            ('image', ImageBlock()),
+            ('call_to_action_1', CallToActionBlock()),
+            ('faq_block', FaqListBlock()),
+            ('recent_news', RecentNewsBlock()),
+        ],
+        required=False,
+        help_text="Sidebar content (only shown when layout is 'Content with Right Sidebar')"
+    )
+
+    show_resources_nav = blocks.BooleanBlock(
+        required=False,
+        default=False,
+        help_text="Show Resources Navigation in the sidebar (only applies when layout is 'Content with Right Sidebar')"
+    )
+
+    class Meta:
+        template = "blocks/layout_section_block.html"
+        icon = "desktop"
+        label = "Layout Section"
+        group = "Layout"
