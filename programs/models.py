@@ -28,7 +28,6 @@ class ProgramIndex(Page):
             ("richtext", custom_blocks.RichTextBlock()),
             ("image", custom_blocks.ImageBlock()),
             ("call_to_action_1", custom_blocks.CallToActionBlock()),
-            ("faq", custom_blocks.FaqListBlock()),
         ],
         block_counts={
             # "text": {"min_num": 1},
@@ -97,7 +96,6 @@ class Program(Page):
             ("richtext", custom_blocks.RichTextBlock()),
             ("image", custom_blocks.ImageBlock()),
             ("call_to_action_1", custom_blocks.CallToActionBlock()),
-            ("faq", custom_blocks.FaqListBlock()),
             ("faq_block", custom_blocks.FAQBlock()),
         ],
         block_counts={

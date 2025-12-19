@@ -53,7 +53,6 @@ class HomePage(Page):
             ('hero', custom_blocks.HeroBlock()),
             ("six_philosophies", custom_blocks.SixPhilosophiesBlock()),
             ("programs", custom_blocks.ProgramsBlock()),
-            ("faq", custom_blocks.FaqListBlock()),
             ("text", custom_blocks.TextBlock()),
             ("carousel", custom_blocks.CarouselBlock()),
             ("image", custom_blocks.ImageBlock()),

@@ -236,8 +236,6 @@ class NewsItem(Page):
 
     body = StreamField(
         [
-            ("info", custom_blocks.InfoBlock()),
-            ("faq", custom_blocks.FaqListBlock()),
             ("text", custom_blocks.RichTextBlock()),
             ("carousel", custom_blocks.CarouselBlock()),
             ("image", custom_blocks.ImageBlock()),

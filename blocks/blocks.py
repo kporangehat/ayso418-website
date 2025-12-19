@@ -69,69 +69,6 @@ class SixPhilosophiesBlock(blocks.StaticBlock):
         group = "Standalone Blocks"
 
 
-class InfoBlock(blocks.StaticBlock):
-    class Meta:
-        template = "blocks/info_block.html"
-        icon = "info-circle"
-        admin_text = "This is from InfoBlock"
-        label = "General Information"
-        group = "Standalone Blocks"
-
-
-class FaqBlock(blocks.StructBlock):
-    """
-    A block that displays a FAQ section.
-    """
-    question = blocks.CharBlock()
-    answer = blocks.RichTextBlock(
-        features=['bold', 'italic']
-    )
-
-    def clean(self, value):
-        """
-        Custom validation to ensure the question is not empty.
-        """
-        cleaned_data = super().clean(value)
-        if "fire" in str(cleaned_data['answer']).lower():
-            raise blocks.StructBlockValidationError(
-                block_errors={
-                    "answer": ValidationError("The word 'fire' is not allowed in the FAQ.")
-                }
-            )
-        return cleaned_data
-
-
-class FaqListBlock(blocks.ListBlock):
-    """
-    A block that displays a list of FAQ sections.
-    """
-    def __init__(self, **kwargs):
-        super().__init__(FaqBlock(), **kwargs)
-
-    def clean(self, value):
-        """
-        Custom validation to ensure the list of FAQs is not empty.
-        """
-        cleaned_data = super().clean(value)
-        errors = {}
-
-        for index, obj in enumerate(cleaned_data):
-            if "fire" in str(obj["answer"]).lower():
-                errors[index] = ValidationError("The word 'fire' is not allowed in the FAQ.")
-
-        if errors:
-            raise blocks.ListBlockValidationError(block_errors=errors)
-        return cleaned_data
-
-    class Meta:
-        template = "blocks/faq_list_block.html"
-        icon = "help"
-        min_num = 1
-        max_num = 5
-        label = "FAQs"
-        group = "Iterables"
-
-
 class CarouselBlock(blocks.StreamBlock):
     """
     A block that displays a carousel of images.
@@ -415,6 +352,8 @@ class CustomPageChooserBlock(blocks.PageChooserBlock):
 class FAQBlock(blocks.StructBlock):
     """
     A block that displays FAQ items with optional tag filtering.
+
+    This works with FAQ snippets defined in site_settings/models.py.
     """
     title = blocks.CharBlock(
         max_length=100,
@@ -575,7 +514,6 @@ class LayoutSectionBlock(blocks.StructBlock):
                 # template="includes/table.html",
                 help_text="Right click on table to access more options",
             )),
-            ('faq_block', FaqListBlock()),
             ('recent_news', RecentNewsBlock()),
             ('programs', ProgramsBlock()),
         ],
@@ -589,7 +527,6 @@ class LayoutSectionBlock(blocks.StructBlock):
             ('richtext', RichTextBlock()),
             ('image', ImageBlock()),
             ('call_to_action_1', CallToActionBlock()),
-            ('faq_block', FaqListBlock()),
             ('recent_news', RecentNewsBlock()),
         ],
         required=False,
