@@ -237,7 +237,6 @@ class NewsItem(Page):
     body = StreamField(
         [
             ("text", custom_blocks.RichTextBlock()),
-            ("carousel", custom_blocks.CarouselBlock()),
             ("image", custom_blocks.ImageBlock()),
             ("doc", DocumentChooserBlock(
                 # can set your own template here if you want

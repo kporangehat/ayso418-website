@@ -54,7 +54,6 @@ class HomePage(Page):
             ("six_philosophies", custom_blocks.SixPhilosophiesBlock()),
             ("programs", custom_blocks.ProgramsBlock()),
             ("text", custom_blocks.TextBlock()),
-            ("carousel", custom_blocks.CarouselBlock()),
             ("image", custom_blocks.ImageBlock()),
             ("page", custom_blocks.CustomPageChooserBlock(
                 required=False,

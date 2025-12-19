@@ -2,11 +2,3 @@
 
 
 {% image self fill-300x200 %}
-
-<ul>
-{% for newsitem in news_items %}
-    <li>
-        <a href="{{ newsitem.url }}">{{ newsitem.title }}</a>
-    </li>
-{% endfor %}
-</ul>

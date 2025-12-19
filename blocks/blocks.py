@@ -59,7 +59,7 @@ class RichTextBlock(blocks.RichTextBlock):
 
 class SixPhilosophiesBlock(blocks.StaticBlock):
     """
-    A block that displays a static divider.
+    A block that displays a static block showing the six philosophies.
     """
     class Meta:
         template = "blocks/six_philosophies_block.html"
@@ -67,40 +67,6 @@ class SixPhilosophiesBlock(blocks.StaticBlock):
         admin_text = "AYSO six philosophies"
         label = "AYSO 6 philosophies"
         group = "Standalone Blocks"
-
-
-class CarouselBlock(blocks.StreamBlock):
-    """
-    A block that displays a carousel of images.
-    """
-    image = ImageChooserBlock()
-    quotation = blocks.StructBlock(
-        [
-            ("text", blocks.TextBlock()),
-            ("author", blocks.TextBlock()),
-        ]
-    )
-
-    def clean(self, value):
-        """
-        Custom validation to ensure the carousel has at least one image.
-        """
-        value = super().clean(value)
-        images = [item for item in value if item.block_type == "image"]
-        quotations = [item for item in value if item.block_type == "quotation"]
-
-        if not images or not quotations:
-            raise ValidationError("At least one image and one quotation are required.")
-
-        if len(images) != len(quotations):
-            raise ValidationError("The number of images and quotations must match.")
-
-        return value
-
-    class Meta:
-        template = "blocks/carousel_block.html"
-        icon = "rotate"
-        group = "Iterables"
 
 
 class CallToActionBlock(blocks.StructBlock):
