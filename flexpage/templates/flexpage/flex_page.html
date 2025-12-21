@@ -9,26 +9,7 @@
 
 {% block content %}
 
-
-
 {% image page.image width-1024 as header_image %}
-
-
-{% comment %}
-                <div
-                  class="hero min-h-[10vh] lg:col-span-3 bg-white "
-                  style="background-image: url('{{ header_image.url }}'); {{ header_image.background_position_style }};"
-                >
-                  <div class="hero-overlay bg-linear-to-r from-[#80caff] to-[#4f46e5]"></div>
-                  <div class="hero-content text-neutral-content text-left w-full">
-                    <div class="container mx-auto px-4 max-w-7xl w-full">
-                      <div class="max-w-3xl">
-                        <h1 class="mb-5 text-5xl font-bold">{{ category_page }}</h1>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-{% endcomment %}
 
         <!-- Main Content -->
         <div class="container mx-auto px-4 max-w-7xl my-8">
@@ -63,11 +44,11 @@
                             {% endif %}
                         </div>
 
+                        <!-- Body Content: Loop through layout sections -->
+                        {% for section in page.body %}
+                            {% include_block section %}
+                        {% endfor %}
 
-                <!-- Body Content: Loop through layout sections -->
-                {% for section in page.body %}
-                    {% include_block section %}
-                {% endfor %}
                     </div>
                 </div>
             </div>

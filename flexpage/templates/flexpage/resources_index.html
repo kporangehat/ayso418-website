@@ -9,61 +9,58 @@
 
 {% block content %}
 
-{% if page.image %}
-    {% image_url page.image "original" as hero_img %}
-    <div class="hero min-h-[30vh]" style="background-image: url({{ hero_img }});">
-    <div class="hero-overlay"></div>
-{% else %}
-    <div class="hero min-h-[30vh] bg-linear-to-r from-[#80caff] to-[#4f46e5]">
-{% endif %}
-
-  <div class="hero-content text-neutral-content text-center">
-    <div class="max-w-xl">
-      <h1 class="mb-5 text-5xl font-bold">{{ page.title }}</h1>
-      <p class="mb-5">
-        {{ page.subtitle }}
-      </p>
-    </div>
-  </div>
-</div>
-
-
- <div class="p-4">
-      <div class="max-w-6xl mx-auto">
-        <div class="max-w-3xl mx-auto mb-16 text-center">
-          <h2 class="text-slate-900 text-3xl lg:text-4xl font-bold text-center mb-4 leading-relaxed">AYSO Chicago Lakefront Resources</h2>
-          <p class="text-slate-600 text-sm leading-relaxed">Details and logistics about our programs and operations.</p>
-        </div>
-
-        <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-12">
-
-            {% for category in categories_with_children %}
-
-              <div class="card bg-base-100 w-96 shadow-sm">
-                <figure>
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="{{ category.category_page.title }}" />
-                </figure>
-                <div class="card-body">
-                  <h2 class="card-title">
-                    {{ category.category_page.title }}
-                  </h2>
-
-                  <ul class="menu divide-y divide-gray-200 text-sm text-slate-900 font-medium">
-                      {% for child_page in category.child_pages %}
-                          <li class="text-sm leading-relaxed text-left hover:text-amber-700"><a href="{% pageurl child_page %}">{{ child_page.title }}</a></li>
-                      {% endfor %}
-                  </ul>
-                </div>
-              </div>
-
-            {% endfor %}
-
+  {% if page.image %}
+      {% image_url page.image "original" as hero_img %}
+      <div class="hero min-h-[30vh]" style="background-image: url({{ hero_img }});">
+        <div class="hero-overlay"></div>
+  {% else %}
+      <div class="hero min-h-[30vh] bg-linear-to-r from-[#80caff] to-[#4f46e5]">
+  {% endif %}
+        <div class="hero-content text-neutral-content text-center">
+          <div class="max-w-xl">
+            <h1 class="mb-5 text-5xl font-bold">{{ page.title }}</h1>
+            <p class="mb-5">
+              {{ page.subtitle }}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
 
+      <div class="p-4">
+        <div class="max-w-6xl mx-auto">
+          <div class="max-w-3xl mx-auto mb-16 text-center">
+            <h2 class="text-slate-900 text-3xl lg:text-4xl font-bold text-center mb-4 leading-relaxed">AYSO Chicago Lakefront Resources</h2>
+            <p class="text-slate-600 text-sm leading-relaxed">Details and logistics about our programs and operations.</p>
+          </div>
+
+          <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-12">
+
+              {% for category in categories_with_children %}
+
+                <div class="card bg-base-100 w-96 shadow-sm">
+                  <figure>
+                    <img
+                      src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                      alt="{{ category.category_page.title }}" />
+                  </figure>
+                  <div class="card-body">
+                    <h2 class="card-title">
+                      {{ category.category_page.title }}
+                    </h2>
+
+                    <ul class="menu divide-y divide-gray-200 text-sm text-slate-900 font-medium">
+                        {% for child_page in category.child_pages %}
+                            <li class="text-sm leading-relaxed text-left hover:text-amber-700"><a href="{% pageurl child_page %}">{{ child_page.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+
+              {% endfor %}
+
+          </div>
+        </div>
+      </div>
 
 {% endblock content %}

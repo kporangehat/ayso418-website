@@ -8,11 +8,13 @@
 {% endblock extra_css %}
 
 {% block content %}
+
     {% if page.CTA %}
-        {% include "includes/cta2.html" with cta=page.CTA %}
+        {% include "includes/cta_home.html" with cta=page.CTA %}
     {% endif %}
 
     {% for block in page.body %}
         {% include_block block %}
     {% endfor %}
+
 {% endblock content %}

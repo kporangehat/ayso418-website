@@ -2,8 +2,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 from wagtail.models import Page, Orderable
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel, PageChooserPanel, FieldRowPanel, HelpPanel, MultipleChooserPanel, TitleFieldPanel
-from wagtail.fields import RichTextField, BlockField, StreamField
+from wagtail.admin.panels import FieldPanel
+from wagtail.fields import RichTextField, StreamField
 from wagtail.images import get_image_model
 from wagtail.documents import get_document_model
 from wagtail.models import Locale
@@ -18,20 +18,6 @@ from news.models import NewsItem
 from modelcluster.fields import ParentalKey
 from blocks import blocks as custom_blocks
 
-
-class HomePageGalleryImage(Orderable):
-    page = ParentalKey(
-        'home.HomePage',
-        related_name='gallery_images',
-        on_delete=models.CASCADE,
-    )
-    image = models.ForeignKey(
-        get_image_model(),
-        null=False,
-        blank=False,
-        on_delete=models.CASCADE,
-        related_name='+',  # + means no reverse relation required
-    )
 
 
 class HomePage(Page):
@@ -54,6 +40,7 @@ class HomePage(Page):
             ("six_philosophies", custom_blocks.SixPhilosophiesBlock()),
             ("programs", custom_blocks.ProgramsBlock()),
             ("text", custom_blocks.TextBlock()),
+            ("rich_text", custom_blocks.RichTextBlock()),
             ("image", custom_blocks.ImageBlock()),
             ("page", custom_blocks.CustomPageChooserBlock(
                 required=False,
@@ -64,6 +51,9 @@ class HomePage(Page):
         ],
         block_counts={
             "hero": {"max_num": 1},
+            "six_philosophies": {"max_num": 1},
+            "programs": {"max_num": 1},
+            "recent_news": {"max_num": 1},
         },
         blank=True,
         null=True,
@@ -96,6 +86,8 @@ class CTA(
 ):
     """
     A model to represent a call-to-action with optional image and flexible layouts.
+
+    This is a snippet model that can be reused across different pages.
     """
     title = models.CharField(max_length=255, help_text="The CTA title")
     text = RichTextField(help_text="The main CTA text content")
@@ -110,7 +102,6 @@ class CTA(
         blank=True,
         help_text="Button URL"
     )
-
     # New fields for enhanced functionality
     target_url = models.ForeignKey(
         'wagtailcore.Page',
@@ -149,7 +140,7 @@ class CTA(
     )
 
     revisions = GenericRelation('wagtailcore.Revision', related_query_name="cta")
-    template = "home/cta2.html"
+    # template = "home/cta_home.html"
 
     def __str__(self):
         return self.title
@@ -161,16 +152,9 @@ class CTA(
 
         return templates.get(mode_name, "")
 
-    @property
-    def preview_modes(self):
-        return PreviewableMixin.DEFAULT_PREVIEW_MODES + [
-            ("dark_mode", "Dark Mode"),
-        ]
 
     def get_preview_context(self, request, mode_name):
         context = super().get_preview_context(request, mode_name)
-        if mode_name == "dark_mode":
-            context["warning"] = "This is a preview in dark mode"
 
         # Add layout context flags
         context['has_target_url'] = bool(self.target_url)
