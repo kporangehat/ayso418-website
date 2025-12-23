@@ -1,7 +1,8 @@
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.template.response import TemplateResponse
 
-from wagtail.models import Page
+from wagtail.models import Locale, Page
+from wagtail.search.utils import parse_query_string
 
 # To enable logging of search queries for use with the "Promoted search results" module
 # <https://docs.wagtail.org/en/stable/reference/contrib/searchpromotions.html>
@@ -17,13 +18,28 @@ def search(request):
 
     # Search
     if search_query:
-        search_results = Page.objects.live().search(search_query)
+        # parse query
+        filters, query_str = parse_query_string(search_query)
 
+        current_locale = Locale.get_active()
+
+        # start with all live pages
+        pages = Page.objects.live().filter(locale=current_locale)
+
+        # if adding filter support, do it here
+        # # Published filter
+        # # An example filter that accepts either `published:yes` or `published:no` and filters the pages accordingly
+        # published_filter = filters.get('published')
+        # published_filter = published_filter and published_filter.lower()
+        # if published_filter in ['yes', 'true']:
+        #     pages = pages.filter(live=True)
+        # elif published_filter in ['no', 'false']:
+        #     pages = pages.filter(live=False)
+
+        search_results = pages.search(query_str, operator="or")
         # To log this query for use with the "Promoted search results" module:
-
         query = Query.get(search_query)
         query.add_hit()
-
     else:
         search_results = Page.objects.none()
 

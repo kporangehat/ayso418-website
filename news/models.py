@@ -177,15 +177,6 @@ class NewsItemTags(TaggedItemBase):
 # Serializers for API fields
 # -------
 
-class AuthorSerializer(Field):
-    def to_representation(self, value):
-        return {
-            "id": value.id,
-            "name": value.name,
-            "bio": value.bio,
-        }
-
-
 class ImageSerializer(Field):
     def to_representation(self, value):
         return {
@@ -238,13 +229,6 @@ class NewsItem(Page):
 
     subtitle = models.CharField(max_length=100, blank=True)
     tags = ClusterTaggableManager(through=NewsItemTags, blank=True)
-    author = models.ForeignKey(
-        'news.Author',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+',
-    )
     image = models.ForeignKey(
         get_image_model(),
         null=True,
@@ -269,7 +253,6 @@ class NewsItem(Page):
                 page_type=['news.NewsItem'],
                 group="Standalone Blocks"
             )),
-            ("author", SnippetChooserBlock('news.Author')),
             ("hero", custom_blocks.HeroBlock()),
             ("recent_news", custom_blocks.RecentNewsBlock()),
 
@@ -282,10 +265,6 @@ class NewsItem(Page):
     )
 
     content_panels = Page.content_panels + [
-        MultiFieldPanel([
-            FieldPanel('author'),
-            FieldPanel('tags'),
-        ], heading="News Item information", permission="news.add_author"),
         FieldPanel('subtitle'),
         FieldPanel('image'),
         FieldPanel('intro'),
@@ -296,7 +275,6 @@ class NewsItem(Page):
         APIField("subtitle"),
         APIField("body"),
         APIField("tags"),
-        APIField("author", serializer=AuthorSerializer()),
         APIField("image", serializer=ImageSerializer()),
         APIField("intro", serializer=RichTextSerializer()),
         APIField("custom_content"),
@@ -354,62 +332,3 @@ class NewsItem(Page):
 
         context['recent_news_html'] = rendered_block
         return context
-
-
-class Author(
-    TranslatableMixin,
-    PreviewableMixin,
-    LockableMixin,
-    DraftStateMixin,
-    RevisionMixin,
-    index.Indexed,
-    models.Model
-):
-    """
-    A model to represent an author.
-    """
-    name = models.CharField(max_length=100)
-    bio = models.TextField()
-    revisions = GenericRelation('wagtailcore.Revision', related_query_name="author")
-
-    panels = [
-        FieldPanel("name", permission="news.can_edit_author_name"),
-        FieldPanel("bio"),
-        PublishingPanel(),
-    ]
-
-    search_fields = [
-        index.FilterField("name"),
-        index.SearchField("name", boost=10),
-        index.SearchField("bio"),
-        index.AutocompleteField("name"),
-    ]
-
-    def __str__(self):
-        return self.name
-
-    def get_preview_template(self, request, mode_name):
-        templates = {
-            "": "includes/author.html",
-            "dark_mode": "includes/author_dark_mode.html",
-        }
-
-        return templates.get(mode_name, "")
-
-    @property
-    def preview_modes(self):
-        return PreviewableMixin.DEFAULT_PREVIEW_MODES + [
-            ("dark_mode", "Dark Mode"),
-        ]
-
-    def get_preview_context(self, request, mode_name):
-        context = super().get_preview_context(request, mode_name)
-        if mode_name == "dark_mode":
-            context["warning"] = "This is a preview in dark mode"
-
-        return context
-
-    class Meta(TranslatableMixin.Meta):
-        permissions = [
-            ("can_edit_author_name", "Can edit author name"),
-        ]

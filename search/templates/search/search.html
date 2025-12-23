@@ -1,58 +1,132 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags wagtailsearchpromotions_tags %}
+{% load static wagtailcore_tags wagtailsearchpromotions_tags wagtailimages_tags %}
 
 {% block body_class %}template-searchresults{% endblock %}
 
 {% block title %}Search{% endblock %}
 
 {% block content %}
-<h1>Search</h1>
 
-<form action="{% url 'search' %}" method="get">
-    <input type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
-    <input type="submit" value="Search" class="button">
-</form>
+        <!-- Main Content -->
+        <div class="container mx-auto px-4 max-w-7xl my-8">
+            <div class="space-y-6">
+                <!-- Header Card -->
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body max-w-none">
+                        <div class="max-w-7xl">
+                            <!-- Category Badge -->
+                            {% if category_page %}
+                              <div class="badge badge-soft py-5 mb-10">
+                                <a href="{{ category_page.url }}">{{ category_page.title }}</a>
+                              </div>
+                            {% else %}
+                              <div class="mb-10"></div>
+                            {% endif %}
 
-{% get_search_promotions search_query as search_promotions %}
-{% if search_promotions %}
-    <h1>Promoted Results</h1>
-    <ul>
-        {% for search_promotion in search_promotions %}
-        <li>
-            {% if search_promotion.page %}
-                <h4><a href="{% pageurl search_promotion.page %}">{{ search_promotion.page.title }}</a></h4>
-            {% else %}
-                <h4><a href="{{ search_promotion.external_link_url }}">{{ search_promotion.external_link_text }}</a></h4>
-            {% endif %}
-            {% if search_promotion.description %}
-                <p>{{ search_promotion.description }}</p>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-{% endif %}
+                            <!-- Title -->
+                            <h1 class="mb-5 text-5xl font-bold text-primary prose">
+                                Search
+                            </h1>
 
-{% if search_results %}
-<h1>Results</h1>
-<ul>
-    {% for result in search_results %}
-    <li>
-        <h4><a href="{% pageurl result %}">{{ result }}</a></h4>
-        {% if result.search_description %}
-        {{ result.search_description }}
-        {% endif %}
-    </li>
-    {% endfor %}
-</ul>
+                            <div class="mx-auto">
+                                <form action="{% url 'search' %}" method="get">
+                                    <label class="input">
+                                        <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <g
+                                            stroke-linejoin="round"
+                                            stroke-linecap="round"
+                                            stroke-width="2.5"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            >
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <path d="m21 21-4.3-4.3"></path>
+                                            </g>
+                                        </svg>
+                                        <input name="query" type="search" required placeholder="Search" {% if search_query %} value="{{ search_query }}"{% endif %}/>
+                                    </label>
+                                    {% comment %} <input type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}> {% endcomment %}
+                                    <input class="btn btn-soft btn-primary" type="submit" value="Search">
+                                </form>
+                            </div>
 
-{% if search_results.has_previous %}
-<a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
-{% endif %}
+                            <div class="divider"></div>
 
-{% if search_results.has_next %}
-<a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
-{% endif %}
-{% elif search_query %}
-No results found
-{% endif %}
+                        </div>
+
+                        <!-- Promoted Results -->
+                        {% get_search_promotions search_query as search_promotions %}
+                        {% if search_promotions %}
+                            <h1>Promoted Results</h1>
+                            <ul>
+                                {% for search_promotion in search_promotions %}
+                                <li>
+                                    {% if search_promotion.page %}
+                                        <h4><a href="{% pageurl search_promotion.page %}">{{ search_promotion.page.title }}</a></h4>
+                                    {% else %}
+                                        <h4><a href="{{ search_promotion.external_link_url }}">{{ search_promotion.external_link_text }}</a></h4>
+                                    {% endif %}
+                                    {% if search_promotion.description %}
+                                        <p>{{ search_promotion.description }}</p>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                         <!-- Standard Results -->
+                       {% if search_results %}
+                            <h1 class="text-secondary text-2xl">Results</h1>
+                            <ul class="list bg-base-100 rounded-box shadow-md">
+                                <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Relevant results for your query</li>
+
+                                {% for result in search_results %}
+                                    <a class="list-row cursor-pointer hover:bg-base-200" href="{% pageurl result %}">
+                                        <div>
+                                            {% if result.specific.image %}
+                                                {% image result.specific.image fill-80x80 as result_image %}
+                                                <img class="size-10 rounded-box" src="{{ result_image.url }}"/>
+                                            {% else %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><path d="M13 8h-8v-1h8v1zm0 2h-8v-1h8v1zm-3 2h-5v-1h5v1zm11.172 12l-7.387-7.387c-1.388.874-3.024 1.387-4.785 1.387-4.971 0-9-4.029-9-9s4.029-9 9-9 9 4.029 9 9c0 1.761-.514 3.398-1.387 4.785l7.387 7.387-2.828 2.828zm-12.172-8c3.859 0 7-3.14 7-7s-3.141-7-7-7-7 3.14-7 7 3.141 7 7 7z"/></svg>
+                                                {% comment %} <img class="size-10 rounded-box" src="https://img.daisyui.com/images/profile/demo/1@94.webp"/> {% endcomment %}
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <div class="text-lg font-light">{{ result }}</div>
+                                            <div class="text-xs uppercase font-semibold opacity-60">{{ result.specific.content_type }}</div>
+                                        </div>
+                                        <p class="list-col-wrap text-xs text-base-content">
+                                            {% if result.search_description %}
+                                                {{ result.search_description|safe }}
+                                            {% elif result.specific.intro %}
+                                                {{ result.specific.intro|striptags|truncatewords:50 }}
+                                            {% else %}
+                                                {{ result.specific.body|striptags|truncatewords:50 }}
+                                            {% endif %}
+                                        </p>
+                                        <div class="text-base-content/50">
+                                            {{ result.specific.last_published_at|date:"F j, Y" }}
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </ul>
+
+                            <!-- Pagination -->
+                            {% if search_results.has_previous %}
+                                <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
+                            {% endif %}
+
+                            {% if search_results.has_next %}
+                                <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
+                            {% endif %}
+
+                        {% elif search_query %}
+                            No results found
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
 {% endblock %}

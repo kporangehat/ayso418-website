@@ -10,6 +10,7 @@ wagtail-localize = "==1.11.3"
 sentry-sdk = {extras = ["django"], version = "==2.27.0"}
 django-widget-tweaks = "*"
 wagtail = "<7.3,>=7.2"
+django-debug-toolbar = "*"
 
 [dev-packages]
 

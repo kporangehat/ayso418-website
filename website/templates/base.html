@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Open+Sans:wght@100;200;300;400&display=swap" rel="stylesheet">
 
     {% block extra_css %}
     {% endblock %}
@@ -38,7 +38,6 @@
 
     {% wagtailuserbar %}
 
-
     <!-- Fixed Navbar using DaisyUI -->
     <div class="navbar navbar-gradient z-50 shadow-2xl transition-transform transition-duration-300 px-4" id="header">
         <div class="navbar-start">
@@ -55,7 +54,7 @@
                     <li><a href="/resources" class="nav-link text-white hover:text-blue-300">Resources</a></li>
                     <li><a href="/about-us" class="nav-link text-white hover:text-blue-300">About</a></li>
                     <li>
-                        <input type="search" placeholder="Search..." class="input input-sm input-search rounded-full w-full" />
+                        <form action="{% url 'search' %}" method="get"><input type="search" name="query" placeholder="Search..." class="input input-sm input-search rounded-full w-full" /></form>
                     </li>
                     <li>
                         <a href="https://ayso418.inleague.org/app/" class="btn btn-sm btn-register text-white rounded-full">Register Now</a>
@@ -79,7 +78,7 @@
         </div>
 
         <div class="navbar-end hidden lg:flex gap-3">
-            <input type="search" placeholder="Search..." class="input input-sm input-search rounded-full w-32 xl:w-40" />
+            <form action="{% url 'search' %}" method="get"><input type="search" name="query" placeholder="Search..." class="input input-sm input-search rounded-full w-32 xl:w-40" /></form>
             <a href="https://ayso418.inleague.org/app/" class="btn btn-register text-white rounded-full font-bold hover:-translate-y-0.5 transition-transform flex items-center whitespace-nowrap min-h-10 h-10">
                 Register Now
             </a>

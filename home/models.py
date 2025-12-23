@@ -164,8 +164,3 @@ class CTA(
         context['is_framed'] = self.image_style == 'framed'
 
         return context
-
-    # class Meta(TranslatableMixin.Meta):
-    #     permissions = [
-    #         ("can_edit_author_name", "Can edit author name"),
-    #     ]

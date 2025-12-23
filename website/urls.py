@@ -2,6 +2,7 @@ from django.conf import settings
 from django.urls import include, path, re_path
 from django.contrib import admin
 from django.conf.urls.i18n import i18n_patterns
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
@@ -26,7 +27,7 @@ urlpatterns = [
     path("api/v2/", api_router.urls),
     path("sitemap.xml", sitemap),
     path('sentry-debug/', trigger_error),
-]
+] + debug_toolbar_urls()
 
 
 if settings.DEBUG:
