@@ -43,7 +43,7 @@ class GenericFooterText(BaseGenericSetting):
 class SocialMediaLinks(BaseSiteSetting):
     """Social media links model.
 
-    Base site setting for EVERY website we have.
+    Base site setting for each SITE (not global).
     """
 
     facebook = models.URLField("Facebook", blank=True)

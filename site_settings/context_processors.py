@@ -5,9 +5,11 @@ def navbar(request):
     """Context processor to add the navbar pages to the context.
     This will show all pages if the user is authenticated, otherwise
     it will show only the public pages.
+
+    This function is called in the settings in the
+    TEMPLATES['OPTIONS']['context_processors'] list.
     """
-    # This function is called in the settings.py file in the TEMPLATES
-    # context_processors list.
+    # this is currently UNUSED but left here for future use
     if request.user.is_authenticated:
         # If the user is authenticated, show all pages
         return {
