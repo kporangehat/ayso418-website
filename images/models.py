@@ -1,10 +1,14 @@
 from django.db import models
 from wagtail.images.models import Image, AbstractImage, AbstractRendition
 
+"""
+Enables customization options for image handling.
+CustomImage is set as the default image model (WAGTAILIMAGES_IMAGE_MODEL) in base.py
+"""
+
 
 class CustomImage(AbstractImage):
     caption = models.CharField(max_length=255, blank=True)
-
     admin_form_fields = Image.admin_form_fields + ('caption',)
 
 

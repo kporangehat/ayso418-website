@@ -1,15 +1,104 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailroutablepage_tags wagtailimages_tags %}
 
 {% block content %}
 
-    <h2>News tagged with: {{ tag }}</h2>
+    {% comment %} <h2>News tagged with: {{ tag }}</h2>
     <hr>
     {% for news_item in news_items %}
         <p>
             <a href="{{ news_item.url }}">{{ news_item.title }}</a><br />
             {{ news_item.subtitle}}
         </p>
-    {% endfor %}
+    {% endfor %} {% endcomment %}
 
+    <section id="news-hero" class="hero bg-slate-900 relative" style="min-height: 20vh;">
+        <div class="hero-pattern absolute inset-0" style="z-index: 0;"></div>
+        <div class="hero-content text-center text-white relative z-10 hero-animated">
+            <div class="max-w-4xl">
+                <h1 class="text-5xl md:text-6xl font-black mb-4" style="text-shadow: 0 4px 20px rgba(0,0,0,0.2)">
+                    {{ page.title }}
+                </h1>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest News Section using DaisyUI cards -->
+    <section id="news" class="gradient-light py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+
+            <!-- All items as list on pages 2+ -->
+            <div>
+                <h3 class="text-3xl font-bold text-gray-900 mb-8">News tagged with: {{ tag }} ({{paginator.count}})</h3>
+                <div class="space-y-4">
+                    {% for article in news_items %}
+                        <a href="{{ article.url }}" class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border-l-4 border-primary block">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="badge badge-primary badge-sm">{{ article.first_published_at|date:"d M Y" }}</span>
+                                        {% if article.tags.all %}
+                                            {% for tag in article.tags.all %}
+                                                <span class="badge badge-ghost badge-sm">{{ tag.name }}</span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <h4 class="text-xl font-bold text-gray-900 mb-2">
+                                        {{ article.title }}
+                                    </h4>
+                                    {% if article.intro %}
+                                        <p class="text-gray-600 line-clamp-2">{{ article.intro|striptags }}</p>
+                                    {% endif %}
+                                </div>
+                                {% if article.image %}
+                                    <div class="md:w-32 md:h-32 w-full h-48 flex-shrink-0">
+                                        {% image article.image fill-200x200 as list_image %}
+                                        <img
+                                            src="{{ list_image.url }}"
+                                            alt="{{ list_image.title }}"
+                                            class="w-full h-full object-cover rounded-lg"
+                                        />
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Pagination Controls -->
+            {% if paginator.num_pages > 1 %}
+                <div class="mt-12 flex justify-center">
+                    <div class="join">
+                        {% if news_items.has_previous %}
+                            <a href="?page=1" class="join-item btn btn-outline">«</a>
+                            <a href="?page={{ news_items.previous_page_number }}" class="join-item btn btn-outline">‹</a>
+                        {% else %}
+                            <button class="join-item btn btn-outline btn-disabled">«</button>
+                            <button class="join-item btn btn-outline btn-disabled">‹</button>
+                        {% endif %}
+
+                        {% for num in paginator.page_range %}
+                            {% if num == news_items.number %}
+                                <button class="join-item btn btn-primary">{{ num }}</button>
+                            {% elif num > news_items.number|add:'-3' and num < news_items.number|add:'3' %}
+                                <a href="?page={{ num }}" class="join-item btn btn-outline">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if news_items.has_next %}
+                            <a href="?page={{ news_items.next_page_number }}" class="join-item btn btn-outline">›</a>
+                            <a href="?page={{ paginator.num_pages }}" class="join-item btn btn-outline">»</a>
+                        {% else %}
+                            <button class="join-item btn btn-outline btn-disabled">›</button>
+                            <button class="join-item btn btn-outline btn-disabled">»</button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Page info -->
+                <div class="text-center mt-4 text-gray-600">
+                    Page {{ news_items.number }} of {{ paginator.num_pages }}
+                </div>
+            {% endif %}
 {% endblock %}

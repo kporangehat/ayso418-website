@@ -46,8 +46,18 @@ class NewsIndex(RoutablePageMixin, Page):
     ]
 
     def get_sitemap_urls(self, request=None):
-        # we need to add sitemap entries for routable pages.
-        # manually append the important ones to the sitemap
+        """
+        We need to manually add sitemap entries for routable pages.
+        So here we append the important ones to the sitemap
+        https://learnwagtail.com/courses/the-ultimate-wagtail-developers-course/sitemaps/
+
+        Args:
+            request (_type_, optional): _description_. Defaults to None.
+
+        Returns:
+            _type_: _description_
+        """
+        # get the existing sitemap
         sitemap = super().get_sitemap_urls(request)
         last_mod = NewsItem.objects.live().public().order_by('-last_published_at').first()
         sitemap.append({
@@ -59,43 +69,32 @@ class NewsIndex(RoutablePageMixin, Page):
         sitemap.append({
             'location': self.get_full_url(request) + self.reverse_subpage('tag', args=['refs']),
         })
-        sitemap.append({
-            'location': self.get_full_url(request) + self.reverse_subpage('tag', args=['refs']),
-        })
 
         return sitemap
-
-    # /news/all
-    @path("all/", name="all")
-    def all_news_items(self, request):
-        """
-        A route to display all news articles.
-        """
-        current_locale = Locale.get_active()
-        news_items = NewsItem.objects.live().public().filter(locale=current_locale).order_by('-first_published_at')
-        # news_items = NewsItem.objects.live().public()
-
-        return self.render(
-            request,
-            context_overrides={
-                "news_items": news_items,
-            },
-        )
 
     # /news/tag/{tag_name}>
     @path("tag/<str:tag>/", name="tag")
     @path("tags/<str:tag>/", name="tags")
     def news_items_by_tag(self, request, tag=None):
         """
-        A route to display all news articles.
+        A route to display news articles by tag.
         """
-        news_items = NewsItem.objects.live().public().filter(tags__name=tag)
+        # context = super().get_context(request)
+        current_locale = Locale.get_active()
+        tagged_news = NewsItem.objects.live().public().filter(locale=current_locale, tags__name=tag).order_by('-first_published_at')
+
+        paginated_items, paginator = self._get_pagination_context(
+            request,
+            tagged_news,
+            limit=2
+        )
 
         return self.render(
             request,
             context_overrides={
-                "news_items": news_items,
                 "tag": tag,
+                "news_items": paginated_items,
+                "paginator": paginator,
             },
             template="news/news_tag.html",
         )
@@ -104,7 +103,10 @@ class NewsIndex(RoutablePageMixin, Page):
     @re_path(r"^api/(\d+)/$", name="api")
     def api_news_items(self, request, year):
         """
-        A route to display all news articles.
+        A route to display JSON response of news articles for a given year.
+
+        This is not a good practice for building APIs in Wagtail/Django,
+        but is included here for demonstration purposes.
         """
         articles = NewsItem.objects.live().public().filter(
             first_published_at__year=year
@@ -127,12 +129,27 @@ class NewsIndex(RoutablePageMixin, Page):
         """
         Add the list of news articles to the context with pagination.
         """
-        context = super().get_context(request)
         current_locale = Locale.get_active()
         all_news = NewsItem.objects.live().public().filter(locale=current_locale).order_by('-first_published_at')
 
+        paginated_items, paginator = self._get_pagination_context(
+            request,
+            all_news,
+            limit=7
+        )
+
+        context = super().get_context(request)
+        context['news_items'] = paginated_items
+        context['paginator'] = paginator
+
+        return context
+
+    def _get_pagination_context(self, request, news_items, limit=20):
+        """
+        A helper method to get pagination context.
+        """
         # Paginate with 20 items per page
-        paginator = Paginator(all_news, 7)
+        paginator = Paginator(news_items, limit)
         page_number = request.GET.get('page', 1)
 
         try:
@@ -142,10 +159,7 @@ class NewsIndex(RoutablePageMixin, Page):
         except EmptyPage:
             news_page = paginator.page(paginator.num_pages)
 
-        context['news_items'] = news_page
-        context['paginator'] = paginator
-
-        return context
+        return news_page, paginator
 
 
 class NewsItemTags(TaggedItemBase):
@@ -158,6 +172,10 @@ class NewsItemTags(TaggedItemBase):
         on_delete=models.CASCADE
     )
 
+
+# -------
+# Serializers for API fields
+# -------
 
 class AuthorSerializer(Field):
     def to_representation(self, value):
@@ -200,6 +218,9 @@ class ImageSerializer(Field):
 
 
 class RichTextSerializer(Field):
+    """
+    Serializer for RichTextField to convert to HTML for API output.
+    """
     def to_representation(self, value):
         return richtext(value)
 
@@ -255,18 +276,10 @@ class NewsItem(Page):
         ],
         block_counts={
             "hero": {"max_num": 1},
-            # "image": {"min_num": 0, "max_num": 2},
         },
-        # use_json_field=True,  # not needed in Wagtail 6+
         blank=True,
         null=True,
     )
-
-    def custom_content(self):
-        """
-        A custom method to return the body content.
-        """
-        return "custom content here"
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
@@ -289,7 +302,19 @@ class NewsItem(Page):
         APIField("custom_content"),
     ]
 
+    def custom_content(self):
+        """
+        Custom content that can be serialized in the API.
+        """
+        return "custom content here"
+
     def clean(self):
+        """
+        Custom validation for the NewsItem model.
+
+        Raises:
+            ValidationError: If validation fails.
+        """
         super().clean()
 
         errors = {}
@@ -328,7 +353,6 @@ class NewsItem(Page):
         )
 
         context['recent_news_html'] = rendered_block
-
         return context
 
 
