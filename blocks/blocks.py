@@ -130,9 +130,9 @@ class CallToActionBlock(blocks.StructBlock):
         icon = "expand-right"
 
 
-class HeroBlock(blocks.StructBlock):
+class CTATextBlock(blocks.StructBlock):
     """
-    A block that displays a hero section.
+    A block that displays a CTA section.
     """
     headline = blocks.CharBlock(
         max_length=200,
@@ -154,7 +154,7 @@ class HeroBlock(blocks.StructBlock):
         return context
 
     class Meta:
-        template = "blocks/hero_text.html"
+        template = "blocks/cta_text_block.html"
         icon = "expand-right"
 
 

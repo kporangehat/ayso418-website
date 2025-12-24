@@ -36,7 +36,7 @@ class HomePage(Page):
 
     body = StreamField(
         [
-            ('hero', custom_blocks.HeroBlock()),
+            ('cta_text', custom_blocks.CTATextBlock()),
             ("six_philosophies", custom_blocks.SixPhilosophiesBlock()),
             ("programs", custom_blocks.ProgramsBlock()),
             ("text", custom_blocks.TextBlock()),
@@ -50,7 +50,7 @@ class HomePage(Page):
             ("recent_news", custom_blocks.RecentNewsBlock()),
         ],
         block_counts={
-            "hero": {"max_num": 1},
+            "cta_text": {"max_num": 1},
             "six_philosophies": {"max_num": 1},
             "programs": {"max_num": 1},
             "recent_news": {"max_num": 1},
@@ -146,7 +146,7 @@ class Hero(
 
     def get_preview_template(self, request, mode_name):
         templates = {
-            "": "includes/hero_preview.html",
+            "": "includes/hero_home_preview.html",
         }
 
         return templates.get(mode_name, "")

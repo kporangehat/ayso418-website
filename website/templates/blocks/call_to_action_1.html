@@ -1,3 +1,4 @@
+<!-- Still needs layout tweaking -->
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% if self.image %}
@@ -11,7 +12,7 @@
 
 <div class="relative overflow-hidden rounded-xl shadow-xl
     {% if is_background and self.image %}
-        min-h-[400px] flex items-center justify-center
+        min-h-100 flex items-center justify-center
     {% elif is_left or is_right %}
         lg:grid lg:grid-cols-2 lg:gap-0
     {% else %}
@@ -23,7 +24,7 @@
         <div class="absolute inset-0 z-0">
             {% image self.image fill-1200x400 class="w-full h-full object-cover" %}
         </div>
-        <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10"></div>
+        <div class="absolute inset-0 bg-linear-to-r from-black/70 to-black/50 z-10"></div>
 
         <div class="relative z-20 text-center text-white px-8 py-16 max-w-3xl mx-auto">
             <div class="prose prose-lg prose-invert max-w-none mb-6">

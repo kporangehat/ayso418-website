@@ -12,7 +12,9 @@ from wagtail.snippets.views.snippets import SnippetViewSet
 from wagtail import hooks
 from wagtail.admin.ui.components import Component
 from wagtail.admin.site_summary import SummaryItem
-from wagtail.models import Page
+from wagtail.models import Locale, Page
+
+from news.models import NewsItem
 
 from taggit.models import Tag
 
@@ -72,7 +74,8 @@ class NewSummaryItem(SummaryItem):
 
     def get_context_data(self, request):
         context = super().get_context_data(request)
-        context["news_item_count"] = 153
+        num_news_items = NewsItem.objects.all().filter(locale=Locale.get_active(), live=True).count()
+        context["news_item_count"] = num_news_items
         return context
 
 

@@ -253,12 +253,12 @@ class NewsItem(Page):
                 page_type=['news.NewsItem'],
                 group="Standalone Blocks"
             )),
-            ("hero", custom_blocks.HeroBlock()),
+            ("cta_text", custom_blocks.CTATextBlock()),
             ("recent_news", custom_blocks.RecentNewsBlock()),
 
         ],
         block_counts={
-            "hero": {"max_num": 1},
+            "cta_text": {"max_num": 1},
         },
         blank=True,
         null=True,
