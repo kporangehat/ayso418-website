@@ -2,18 +2,17 @@ from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 from wagtail.admin.panels import FieldPanel, PublishingPanel
 
-from home.models import CTA
+from home.models import Hero
 
 
-class CTASnippetViewSet(SnippetViewSet):
-    model = CTA
-    icon = "placeholder"
+class HeroSnippetViewSet(SnippetViewSet):
+    model = Hero
+    icon = "image"
     add_to_admin_menu = True
-    menu_label = "Call to Actions"
+    menu_label = "Heroes"
     menu_order = 300
     list_display = ["title", "button_text", "button_url"]
     search_fields = ("title", "text", "button_text", "button_url")
-    template = "home/cta2.html"
 
     panels = [
         FieldPanel("title"),
@@ -27,4 +26,4 @@ class CTASnippetViewSet(SnippetViewSet):
         PublishingPanel(),
     ]
 
-register_snippet(CTASnippetViewSet)
+register_snippet(HeroSnippetViewSet)

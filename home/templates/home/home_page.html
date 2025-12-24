@@ -9,8 +9,8 @@
 
 {% block content %}
 
-    {% if page.CTA %}
-        {% include "includes/cta_home.html" with cta=page.CTA %}
+    {% if page.hero %}
+        {% include "includes/cta_home.html" with cta=page.hero %}
     {% endif %}
 
     {% for block in page.body %}

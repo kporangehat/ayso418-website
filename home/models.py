@@ -26,12 +26,12 @@ class HomePage(Page):
 
     max_count = 1  # only allow one home page.
 
-    CTA = models.ForeignKey(
-        'home.CTA',
+    hero = models.ForeignKey(
+        'home.Hero',
         null=True,
         blank=True,
         on_delete=models.PROTECT,
-        related_name='homepage_cta',
+        related_name='homepage_hero',
     )
 
     body = StreamField(
@@ -61,7 +61,7 @@ class HomePage(Page):
 
     # admin panels for the fields
     content_panels = Page.content_panels + [
-        FieldPanel('CTA'),
+        FieldPanel('hero'),
         FieldPanel('body'),
     ]
 
@@ -75,7 +75,7 @@ class HomePage(Page):
         return context
 
 
-class CTA(
+class Hero(
     TranslatableMixin,
     PreviewableMixin,
     LockableMixin,
@@ -85,12 +85,12 @@ class CTA(
     models.Model
 ):
     """
-    A model to represent a call-to-action with optional image and flexible layouts.
+    A model to represent a hero section with optional image and flexible layouts.
 
     This is a snippet model that can be reused across different pages.
     """
-    title = models.CharField(max_length=255, help_text="The CTA title")
-    text = RichTextField(help_text="The main CTA text content")
+    title = models.CharField(max_length=255, help_text="The hero title")
+    text = RichTextField(help_text="The main hero text content")
     button_text = models.CharField(
         max_length=100,
         help_text="Button text",
@@ -109,7 +109,7 @@ class CTA(
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Optional: Make the entire CTA clickable by selecting a target page"
+        help_text="Optional: Make the entire hero clickable by selecting a target page"
     )
     image = models.ForeignKey(
         get_image_model(),
@@ -117,12 +117,12 @@ class CTA(
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Optional image for the CTA"
+        help_text="Optional image for the hero"
     )
     image_layout = models.CharField(
         max_length=20,
         choices=[
-            ('background', 'Background - Image fills entire CTA as background'),
+            ('background', 'Background - Image fills entire hero as background'),
             ('left', 'Left - Image on left, text on right'),
             ('right', 'Right - Image on right, text on left'),
         ],
@@ -139,15 +139,14 @@ class CTA(
         help_text="Style for left/right images (not used for background)"
     )
 
-    revisions = GenericRelation('wagtailcore.Revision', related_query_name="cta")
-    # template = "home/cta_home.html"
+    revisions = GenericRelation('wagtailcore.Revision', related_query_name="hero")
 
     def __str__(self):
         return self.title
 
     def get_preview_template(self, request, mode_name):
         templates = {
-            "": "includes/cta_preview.html",
+            "": "includes/hero_preview.html",
         }
 
         return templates.get(mode_name, "")
