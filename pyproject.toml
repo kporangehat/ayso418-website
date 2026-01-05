@@ -1,0 +1,13 @@
+[project]
+name = "ayso418-uv"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "cr>=1.10",
+    "django-debug-toolbar>=6.1.0",
+    "django-widget-tweaks>=1.5.1",
+    "wagtail>=7.2.1",
+    "wagtail-localize>=1.12.2",
+]

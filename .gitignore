@@ -86,7 +86,7 @@ __pycache__/
 local_settings.py
 media/
 
-.env
+.env*
 db.sqlite3
 .venv/
 Pipfile.lock
