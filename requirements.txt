@@ -12,6 +12,7 @@ certifi==2026.1.4
     # via
     #   cr
     #   requests
+    #   sentry-sdk
 cffi==2.0.0
     # via
     #   cryptography
@@ -100,6 +101,8 @@ requests==2.32.5
     # via wagtail
 rich==13.9.4
     # via cr
+sentry-sdk==2.48.0
+    # via ayso418-uv (pyproject.toml)
 soupsieve==2.8.1
     # via beautifulsoup4
 sqlparse==0.5.5
@@ -115,7 +118,9 @@ typing-extensions==4.15.0
     #   django-tasks
     #   wagtail-localize
 urllib3==2.6.2
-    # via requests
+    # via
+    #   requests
+    #   sentry-sdk
 wagtail==7.2.1
     # via
     #   ayso418-uv (pyproject.toml)
