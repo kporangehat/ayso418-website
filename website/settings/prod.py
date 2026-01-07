@@ -6,9 +6,9 @@ import sentry_sdk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# -- Recommended CodeRed Cloud settings ---------------------------------------
 
-ALLOWED_HOSTS = [os.environ["VIRTUAL_HOST"]]
+ALLOWED_HOSTS = [os.environ["DOMAIN"]]
+CSRF_TRUSTED_ORIGINS=[os.environ["DOMAIN"]]
 
 SECRET_KEY = os.environ["RANDOM_SECRET_KEY"]
 

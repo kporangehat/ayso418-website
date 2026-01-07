@@ -10,6 +10,10 @@ SECRET_KEY = "django-insecure-ijlk1srzd4jeeg^^9q)dj(9h)+86g@qrbr#*aj*+-1$upobi89
 
 # SECURITY WARNING: define the correct hosts in production!
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS=[
+    "http://localhost:8000",
+    "https://*.aldryn.io"
+    ]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
