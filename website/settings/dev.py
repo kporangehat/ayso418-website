@@ -1,5 +1,6 @@
 from .base import *
 import os
+import dj_database_url
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -20,18 +21,28 @@ CACHES = {
     },
 }
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.environ["DEFAULT_DATABASE_HOSTNAME"],
-        "NAME": os.environ["DEFAULT_DATABASE_DATABASE_NAME"],
-        "USER": os.environ["DEFAULT_DATABASE_USERNAME"],
-        "PASSWORD": os.environ["DEFAULT_DATABASE_PASSWORD"],
-        "OPTIONS": {
-            "client_encoding": "UTF8",
-        },
+if "DATABASE_URL" in os.environ:
+    DATABASES = {"default": dj_database_url.config(conn_max_age=500)}
+elif "DEFAULT_DATABASE_HOSTNAME" in os.environ:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "HOST": os.environ.get("DEFAULT_DATABASE_HOSTNAME"),
+            "NAME": os.environ.get("DEFAULT_DATABASE_DATABASE_NAME"),
+            "USER": os.environ.get("DEFAULT_DATABASE_USERNAME"),
+            "PASSWORD": os.environ.get("DEFAULT_DATABASE_PASSWORD"),
+            "OPTIONS": {
+                "client_encoding": "UTF8",
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
+    }
 
 try:
     from .local import *

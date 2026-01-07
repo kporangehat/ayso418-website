@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "cr>=1.10",
+    "dj-database-url>=3.1.0",
     "django-debug-toolbar>=6.1.0",
     "django-widget-tweaks>=1.5.1",
     "psycopg2>=2.9.11",

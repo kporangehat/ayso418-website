@@ -1,5 +1,6 @@
 from .base import *  # noqa
 import os
+import dj_database_url
 import sentry_sdk
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -21,19 +22,18 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Change this to a different backend or SMTP server to use your own.
 EMAIL_BACKEND = "django_sendmail_backend.backends.EmailBackend"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.environ["DEFAULT_DATABASE_HOSTNAME"],
-        "NAME": os.environ["DEFAULT_DATABASE_DATABASE_NAME"],
-        "USER": os.environ["DEFAULT_DATABASE_USERNAME"],
-        "PASSWORD": os.environ["DEFAULT_DATABASE_PASSWORD"],
-        "OPTIONS": {
-            "client_encoding": "UTF8",
-            "sslmode": "require",
-        },
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+if "DATABASE_URL" in os.environ:
+    DATABASES = {"default": dj_database_url.config(conn_max_age=500)}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
     }
-}
 
 WAGTAILADMIN_BASE_URL = f"http://{os.environ['VIRTUAL_HOST']}"
 

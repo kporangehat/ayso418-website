@@ -25,8 +25,11 @@ cryptography==46.0.3
     # via paramiko
 defusedxml==0.7.1
     # via willow
+dj-database-url==3.1.0
+    # via ayso418-uv (pyproject.toml)
 django==5.2.9
     # via
+    #   dj-database-url
     #   django-debug-toolbar
     #   django-filter
     #   django-modelcluster
