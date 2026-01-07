@@ -1,0 +1,21 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:80"
+    volumes:
+      - ".:/app:rw"
+      - "./data:/data:rw"
+    environment:
+      DATABASE_URL: postgres://postgres@database_default:5432/db
+    links:
+      - "database_default"
+    command: python manage.py runserver 0.0.0.0:80
+
+  database_default:
+    image: postgres:15.7-alpine
+    environment:
+      POSTGRES_DB: "db"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    volumes:
+      - ".:/app:rw"

@@ -91,6 +91,8 @@ pillow-heif==1.1.1
     # via willow
 polib==1.2.0
     # via wagtail-localize
+psycopg2==2.9.11
+    # via ayso418-uv (pyproject.toml)
 pycparser==2.23
     # via cffi
 pygments==2.19.2

@@ -28,6 +28,7 @@ dependencies = [
     { name = "cr" },
     { name = "django-debug-toolbar" },
     { name = "django-widget-tweaks" },
+    { name = "psycopg2" },
     { name = "sentry-sdk" },
     { name = "wagtail" },
     { name = "wagtail-localize" },
@@ -38,6 +39,7 @@ requires-dist = [
     { name = "cr", specifier = ">=1.10" },
     { name = "django-debug-toolbar", specifier = ">=6.1.0" },
     { name = "django-widget-tweaks", specifier = ">=1.5.1" },
+    { name = "psycopg2", specifier = ">=2.9.11" },
     { name = "sentry-sdk", specifier = ">=2.48.0" },
     { name = "wagtail", specifier = ">=7.2.1" },
     { name = "wagtail-localize", specifier = ">=1.12.2" },
@@ -632,6 +634,16 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/10/9a/79b1067d27e38ddf84fe7da6ec516f1743f31f752c6122193e7bce38bdbf/polib-1.2.0.tar.gz", hash = "sha256:f3ef94aefed6e183e342a8a269ae1fc4742ba193186ad76f175938621dbfc26b", size = 161658, upload-time = "2023-02-23T17:53:56.873Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/6b/99/45bb1f9926efe370c6dbe324741c749658e44cb060124f28dad201202274/polib-1.2.0-py2.py3-none-any.whl", hash = "sha256:1c77ee1b81feb31df9bca258cbc58db1bbb32d10214b173882452c73af06d62d", size = 20634, upload-time = "2023-02-23T17:53:59.919Z" },
+]
+
+[[package]]
+name = "psycopg2"
+version = "2.9.11"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/89/8d/9d12bc8677c24dad342ec777529bce705b3e785fa05d85122b5502b9ab55/psycopg2-2.9.11.tar.gz", hash = "sha256:964d31caf728e217c697ff77ea69c2ba0865fa41ec20bb00f0977e62fdcc52e3", size = 379598, upload-time = "2025-10-10T11:14:46.075Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/88/5a/18c8cb13fc6908dc41a483d2c14d927a7a3f29883748747e8cb625da6587/psycopg2-2.9.11-cp313-cp313-win_amd64.whl", hash = "sha256:8dc379166b5b7d5ea66dcebf433011dfc51a7bb8a5fc12367fa05668e5fc53c8", size = 2714048, upload-time = "2025-10-10T11:10:19.816Z" },
+    { url = "https://files.pythonhosted.org/packages/47/08/737aa39c78d705a7ce58248d00eeba0e9fc36be488f9b672b88736fbb1f7/psycopg2-2.9.11-cp314-cp314-win_amd64.whl", hash = "sha256:f10a48acba5fe6e312b891f290b4d2ca595fc9a06850fe53320beac353575578", size = 2803738, upload-time = "2025-10-10T11:10:23.196Z" },
 ]
 
 [[package]]

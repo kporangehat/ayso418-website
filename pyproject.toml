@@ -8,6 +8,7 @@ dependencies = [
     "cr>=1.10",
     "django-debug-toolbar>=6.1.0",
     "django-widget-tweaks>=1.5.1",
+    "psycopg2>=2.9.11",
     "sentry-sdk>=2.48.0",
     "wagtail>=7.2.1",
     "wagtail-localize>=1.12.2",
