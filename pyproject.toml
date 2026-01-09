@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "boto3>=1.42.24",
     "cr>=1.10",
     "divio-cli>=4.0.5",
     "dj-database-url>=3.1.0",
