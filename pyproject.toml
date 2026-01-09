@@ -10,6 +10,7 @@ dependencies = [
     "divio-cli>=4.0.5",
     "dj-database-url>=3.1.0",
     "django-debug-toolbar>=6.1.0",
+    "django-storages>=1.14.6",
     "django-widget-tweaks>=1.5.1",
     "psycopg2>=2.9.11",
     "sentry-sdk>=2.48.0",

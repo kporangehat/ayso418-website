@@ -62,6 +62,7 @@ django==5.2.9
     #   django-filter
     #   django-modelcluster
     #   django-permissionedforms
+    #   django-storages
     #   django-stubs-ext
     #   django-taggit
     #   django-tasks
@@ -80,6 +81,8 @@ django-modelcluster==6.4.1
     # via wagtail
 django-permissionedforms==0.1
     # via wagtail
+django-storages==1.14.6
+    # via ayso418-uv (pyproject.toml)
 django-stubs-ext==5.2.8
     # via django-tasks
 django-taggit==6.1.0
