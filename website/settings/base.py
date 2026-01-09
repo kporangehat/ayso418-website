@@ -97,6 +97,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "wagtail.contrib.settings.context_processors.settings",
                 "site_settings.context_processors.navbar",
+                "site_settings.context_processors.active_banner",
             ],
         },
     },

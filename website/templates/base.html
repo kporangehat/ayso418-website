@@ -19,15 +19,20 @@
 
 <body class="bg-base-200">
 
-<div class="relative isolate flex items-center gap-x-6 overflow-hidden bg-blue-800/90 px-6 py-2.5 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 sm:px-3.5 sm:before:flex-1">
+<!-- BEGIN Announcement Banner -->
+{% if active_banner %}
+<div id="announcement-banner" class="relative isolate flex items-center gap-x-6 overflow-hidden {{ active_banner.color }} px-6 py-2.5 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 sm:px-3.5 sm:before:flex-1" data-banner-id="{{ active_banner.id }}">
   <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
     <p class="text-sm/6 text-gray-100">
-      <strong class="font-semibold">Winter Indoor Season</strong><svg viewBox="0 0 2 2" aria-hidden="true" class="mx-2 inline size-0.5 fill-current"><circle r="2" cx="2" cy="2" /></svg>Spaces are filling up fast!
+      <strong class="font-black">{{ active_banner.title }}</strong>
+      {% if active_banner.content %}
+        <svg viewBox="0 0 2 2" aria-hidden="true" class="mx-2 inline size-0.5 fill-current"><circle r="2" cx="2" cy="2" /></svg>
+        <span>{{ active_banner.content|richtext|striptags }}</span>
+      {% endif %}
     </p>
-    <a href="#" class="flex-none rounded-full bg-white/10 px-3.5 py-1 text-sm font-semibold text-white shadow-xs inset-ring-white/20 hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Register now <span aria-hidden="true">&rarr;</span></a>
   </div>
   <div class="flex flex-1 justify-end">
-    <button type="button" class="-m-3 p-3 focus-visible:-outline-offset-4">
+    <button type="button" class="-m-3 p-3 focus-visible:-outline-offset-4" onclick="dismissBanner({{ active_banner.id }})">
       <span class="sr-only">Dismiss</span>
       <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-gray-100">
         <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
@@ -35,6 +40,8 @@
     </button>
   </div>
 </div>
+{% endif %}
+<!-- END Announcement Banner -->
 
     {% wagtailuserbar %}
 
@@ -237,6 +244,39 @@
 
     {# Load compiled JavaScript from Vite #}
     <script src="{% static 'js/main.min.js' %}"></script>
+
+    <script>
+        // Banner dismissal functionality
+        function dismissBanner(bannerId) {
+            const banner = document.getElementById('announcement-banner');
+            if (banner) {
+                // Hide the banner with a fade-out effect
+                banner.style.transition = 'opacity 0.3s ease-out';
+                banner.style.opacity = '0';
+                setTimeout(() => {
+                    banner.style.display = 'none';
+                }, 300);
+
+                // Store the dismissed banner ID in sessionStorage
+                // This ensures the banner won't show again during this session
+                sessionStorage.setItem('dismissedBanner', bannerId.toString());
+            }
+        }
+
+        // Check if the current banner has been dismissed in this session
+        document.addEventListener('DOMContentLoaded', function() {
+            const banner = document.getElementById('announcement-banner');
+            if (banner) {
+                const bannerId = banner.getAttribute('data-banner-id');
+                const dismissedBannerId = sessionStorage.getItem('dismissedBanner');
+
+                // If this banner was dismissed in this session, hide it
+                if (dismissedBannerId === bannerId) {
+                    banner.style.display = 'none';
+                }
+            }
+        });
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>

@@ -1,7 +1,7 @@
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 
-from site_settings.models import FAQ, FAQCategory
+from site_settings.models import FAQ, FAQCategory, Banner
 
 
 @register_snippet
@@ -26,4 +26,17 @@ class FAQSnippetViewSet(SnippetViewSet):
     list_display = ["question", "category", "order"]
     list_filter = ["category"]
     search_fields = ("question", "answer")
+    list_per_page = 50
+
+
+@register_snippet
+class BannerSnippetViewSet(SnippetViewSet):
+    model = Banner
+    icon = "warning"
+    add_to_admin_menu = True
+    menu_label = "Banners"
+    menu_order = 298
+    list_display = ["title", "is_active", "color"]
+    list_filter = ["is_active", "color"]
+    search_fields = ("title", "content")
     list_per_page = 50

@@ -177,3 +177,78 @@ class FAQ(
         verbose_name = "FAQ"
         verbose_name_plural = "FAQs"
         ordering = ['category', 'order', 'question']
+
+
+class Banner(
+    PreviewableMixin,
+    LockableMixin,
+    DraftStateMixin,
+    RevisionMixin,
+    index.Indexed,
+    ClusterableModel
+):
+    """
+    A snippet model for site-wide announcement banners.
+    Only one banner can be active at a time.
+    """
+
+    COLOR_CHOICES = [
+        ('banner-bg-blue', 'Blue (Default)'),
+        ('banner-bg-green', 'Green'),
+        ('banner-bg-red', 'Red'),
+        ('banner-bg-yellow', 'Yellow'),
+        ('banner-bg-purple', 'Purple'),
+        ('banner-bg-gray', 'Gray'),
+    ]
+
+    title = models.CharField(
+        max_length=255,
+        help_text="The banner title (will be displayed in bold)"
+    )
+    content = RichTextField(
+        help_text="The banner content/message",
+        features=['bold', 'italic', 'link']
+    )
+    color = models.CharField(
+        max_length=50,
+        choices=COLOR_CHOICES,
+        default='banner-bg-blue',
+        help_text="Banner background color"
+    )
+    is_active = models.BooleanField(
+        default=False,
+        help_text="Only one banner should be active at a time"
+    )
+    revisions = GenericRelation('wagtailcore.Revision', related_query_name="banner")
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('content'),
+        FieldPanel('color'),
+        FieldPanel('is_active'),
+    ]
+
+    search_fields = [
+        index.SearchField('title', boost=10),
+        index.SearchField('content'),
+    ]
+
+    def __str__(self):
+        return self.title
+
+    def get_preview_template(self, request, mode_name):
+        return "includes/banner_preview.html"
+
+    def save(self, *args, **kwargs):
+        """
+        Ensure only one banner is active at a time.
+        """
+        if self.is_active:
+            # Deactivate all other banners
+            Banner.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Banner"
+        verbose_name_plural = "Banners"
+        ordering = ['-is_active', '-pk']

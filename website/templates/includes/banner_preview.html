@@ -1,0 +1,51 @@
+{% load static wagtailcore_tags %}
+
+<!DOCTYPE html>
+<html lang="en" class="h-full" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banner Preview - AYSO Chicago Lakefront Soccer</title>
+
+    {# Load compiled CSS from Vite #}
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Open+Sans:wght@100;200;300;400&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-base-200">
+    <div class="p-8">
+        <div class="mb-4 text-sm text-gray-600">
+            Preview of announcement banner (as it will appear at the top of all pages):
+        </div>
+
+        <div id="announcement-banner" class="relative isolate flex items-center gap-x-6 overflow-hidden {{ object.color }} px-6 py-2.5 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 sm:px-3.5 sm:before:flex-1">
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                <p class="text-sm/6 text-gray-100">
+                    <strong class="font-semibold">{{ object.title }}</strong>
+                    {% if object.content %}
+                        <svg viewBox="0 0 2 2" aria-hidden="true" class="mx-2 inline size-0.5 fill-current"><circle r="2" cx="2" cy="2" /></svg>
+                        <span>{{ object.content|richtext|striptags }}</span>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="flex flex-1 justify-end">
+                <button type="button" class="-m-3 p-3 focus-visible:-outline-offset-4" onclick="alert('Dismiss button clicked (preview only)')">
+                    <span class="sr-only">Dismiss</span>
+                    <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-gray-100">
+                        <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-4 text-sm text-gray-600">
+            <strong>Settings:</strong><br>
+            Active: {% if object.is_active %}Yes{% else %}No{% endif %}<br>
+            Color: {{ object.get_color_display }}<br>
+            Published: {% if object.live %}Yes (visible to users){% else %}No (draft only){% endif %}
+        </div>
+    </div>
+</body>
+</html>
