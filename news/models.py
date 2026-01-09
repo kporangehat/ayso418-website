@@ -22,6 +22,7 @@ from wagtail.api import APIField
 from wagtail.images import get_image_model
 from wagtail.templatetags.wagtailcore_tags import richtext
 from wagtail.models import TranslatableMixin, BootstrapTranslatableMixin, Locale
+from wagtail.users.utils import get_gravatar_url
 from rest_framework.fields import Field
 
 from blocks import blocks as custom_blocks
@@ -309,6 +310,17 @@ class NewsItem(Page):
         Add recent news block data to the context.
         """
         context = super().get_context(request)
+
+        # Add the parent page title as section_title
+        parent_page = self.get_parent()
+        if parent_page:
+            context['section_title'] = parent_page.title
+
+
+        if not self.owner.wagtail_userprofile.avatar:
+            context['owner_avatar_url'] = get_gravatar_url(self.owner.email)
+        else:
+            context['owner_avatar_url'] = self.owner.wagtail_userprofile.avatar.url
 
         # Create a RecentNewsBlock instance with desired config
         from blocks.blocks import RecentNewsBlock

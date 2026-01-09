@@ -3,26 +3,22 @@
 
 {% block content %}
 
-{% image page.image width-1024 as header_image %}
-
-
 
 <div class="">
 
-                <div
-                  class="hero min-h-[10vh] lg:col-span-3 bg-white "
-                  style="background-image: url('{{ header_image.url }}'); {{ header_image.background_position_style }};"
-                >
-                  <div class="hero-overlay"></div>
-                  <div class="hero-content text-neutral-content text-left w-full">
-                    <div class="rounded-2xl py-8 max-w-4xl w-full">
-                      <h1 class="mb-5 text-5xl font-bold">AYSO Chicago Lakefront News</h1>
-                    </div>
-                  </div>
-                </div>
+    <section id="news-hero" class="hero bg-slate-900 relative" style="min-height: 20vh;">
+        <div class="hero-pattern absolute inset-0" style="z-index: 0;"></div>
+        <div class="hero-content text-center text-white relative z-10 hero-animated">
+            <div class="max-w-4xl">
+                <h1 class="text-5xl md:text-6xl font-black mb-4" style="text-shadow: 0 4px 20px rgba(0,0,0,0.2)">
+                    {{ section_title }}
+                </h1>
+            </div>
+        </div>
+    </section>
 
         <!-- Main Content -->
-        <div class="container mx-auto px-4 max-w-7xl">
+        <div class="mx-auto">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
             <!-- News Content Section -->
@@ -33,22 +29,23 @@
                             <div class="max-w-3xl mx-auto">
 
                                 <!-- Title -->
-                                <h1 class="mb-5 text-5xl font-bold text-primary prose">
+                                <h1 class="my-5 text-5xl font-bold text-primary prose">
                                     {{ page.title}}
                                 </h1>
                                 <h3 class="mb-5 text-2xl font-semibold">{{ page.subtitle }}</h3>
-                                <div class="mb-5">
-                                  {{ page.intro|richtext }}
-                                </div>
 
                                 <!-- User -->
                                 <div class="flex items-center gap-3 mb-5">
+                                    {% if owner_avatar_url %}
                                     <div class="avatar">
-                                      <div class="rounded-full w-12">
-                                        <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
+                                      <div class="rounded-full w-14">
+                                        <img src="{{ owner_avatar_url }}" alt="{{ page.owner.get_full_name }}">
                                       </div>
                                     </div>
-                                    <p class="text-gray-500 font-extralight prose">{{ page.owner.first_name }} {{ page.owner.last_name }}</p>
+                                    {% endif %}
+                                    <p class="text-gray-500 font-extralight prose">
+                                      {{ page.owner.get_full_name }}
+                                    </p>
                                 </div>
                                 <!-- Date and Tags -->
                                 <div class="flex justify-between items-center">
