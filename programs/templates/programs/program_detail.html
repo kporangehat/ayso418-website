@@ -81,6 +81,7 @@
 
             <!-- Program Details Card -->
             <div class="card bg-base-100 shadow-xl">
+
                 <div class="card-body">
                     <h2 class="card-title text-3xl text-primary mb-6 justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
@@ -90,56 +91,68 @@
                     </h2>
 
                     <!-- Details Grid -->
-                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="grid md:grid-cols-3 gap-6 mb-6">
                         <!-- Ages -->
-                        <div class="flex items-start gap-3">
-                            <div class="badge badge-soft badge-primary badge-lg p-4">
-                                <div class="text-sm font-extralight uppercase">Ages</div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="prose text-sm">{{ page.ages | richtext }}</div>
+                        <div class="bg-white border border-gray-200 shadow-md w-full max-w-sm rounded-lg overflow-hidden mx-auto mt-4">
+                            <div class="p-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold badge badge-soft badge-primary badge-lg py-4">Ages</h3>
+                                    <div class="mt-2 text-sm text-slate-500 leading-relaxed prose">
+                                        {{ page.ages | richtext }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Tryouts -->
-                        <div class="flex items-start gap-3">
-                            <div class="badge badge-soft badge-secondary badge-lg p-4">
-                                <div class="text-sm font-extralight uppercase">Tryouts</div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="prose text-sm">{{ page.tryouts | richtext }}</div>
-                            </div>
-                        </div>
-
-                        <!-- Equipment -->
-                        <div class="flex items-start gap-3">
-                            <div class="badge badge-soft badge-accent badge-lg p-4">
-                                <div class="text-sm font-extralight uppercase">Equipment</div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="prose text-sm">{{ page.equipment | richtext }}</div>
+                        <div class="bg-white border border-gray-200 shadow-md w-full max-w-sm rounded-lg overflow-hidden mx-auto mt-4">
+                            <div class="p-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold badge badge-soft badge-secondary badge-lg py-4">Tryouts</h3>
+                                    <div class="mt-2 text-sm text-slate-500 leading-relaxed prose">
+                                        {{ page.tryouts | richtext }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Location -->
-                        <div class="flex items-start gap-3">
-                            <div class="badge badge-soft badge-info badge-lg p-4">
-                                <div class="text-sm font-extralight uppercase">Location</div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="prose text-sm">{{ page.location | richtext }}</div>
+                        <div class="bg-white border border-gray-200 shadow-md w-full max-w-sm rounded-lg overflow-hidden mx-auto mt-4">
+                            <div class="p-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold badge badge-soft badge-info badge-lg py-4">Location</h3>
+                                    <div class="mt-2 text-sm text-slate-500 leading-relaxed prose">
+                                        {{ page.location | richtext }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Schedule -->
-                        <div class="flex items-start gap-3 md:col-span-2">
-                            <div class="badge badge-soft badge-warning badge-lg p-4">
-                                <div class="text-sm font-extralight uppercase">Schedule</div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="prose text-sm">{{ page.schedule | richtext }}</div>
+                        <div class="bg-white border border-gray-200 shadow-md w-full max-w-sm rounded-lg overflow-hidden mx-auto mt-4">
+                            <div class="p-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold badge badge-soft badge-warning badge-lg py-4">Schedule</h3>
+                                    <div class="mt-2 text-sm text-slate-500 leading-relaxed prose">
+                                        {{ page.schedule | richtext }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+
+                        <!-- Equipment -->
+                        <div class="bg-white border border-gray-200 shadow-md w-full max-w-sm rounded-lg overflow-hidden mx-auto mt-4">
+                            <div class="p-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold badge badge-soft badge-accent badge-lg py-4">Equipment</h3>
+                                    <div class="mt-2 text-sm text-slate-500 leading-relaxed prose">
+                                        {{ page.equipment | richtext }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="divider"></div>
