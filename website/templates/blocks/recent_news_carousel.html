@@ -18,8 +18,8 @@
             <!-- Carousel -->
             <div id="newsCarousel-{{ block.id }}" class="{% if news_items|length > 1 %}carousel{% endif %} w-full border border-base-300 {% if news_items|length == 1 %}flex justify-center{% endif %}">
                 {% for article in news_items %}
-                <div id="slide-{{ block.id }}-{{ forloop.counter }}" class="{% if news_items|length > 1 %}carousel-item news-slide{% endif %} border-r border-base-300 last:border-r-0 {% if news_items|length == 1 %}max-w-md{% endif %}">
-                    <div class="w-full bg-base-100 hover:bg-base-200 transition-colors cursor-pointer h-full flex flex-col">
+                <div id="slide-{{ block.id }}-{{ forloop.counter }}" class="{% if news_items|length > 1 %}carousel-item news-slide{% else %}w-full max-w-md{% endif %} border-r border-base-300 last:border-r-0">
+                    <div class="w-full bg-base-100 hover:bg-base-200 transition-colors h-full flex flex-col min-h-100">
                         <figure class="h-48 flex-shrink-0 overflow-hidden flex items-center justify-center {% if article.image %}bg-transparent{% else %}gradient-purple{% endif %}">
                             {% if article.image %}
                                 {% image article.image fill-600x192 class="w-full h-full object-cover" %}
@@ -32,8 +32,8 @@
                             <h3 class="text-2xl font-bold mb-3">
                                 <a href="{{ article.url }}" class="hover:text-primary transition-colors">{{ article.title }}</a>
                             </h3>
-                            <p class="text-gray-600 flex-grow">{{ article.intro|richtext }}</p>
-                            <div class="mt-4">
+                            <p class="text-gray-600">{{ article.intro|richtext }}</p>
+                            <div class="mt-auto pt-4">
                                 <a href="{{ article.url }}" class="btn btn-primary btn-sm">Read More</a>
                             </div>
                         </div>
