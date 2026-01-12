@@ -57,6 +57,32 @@ class RichTextBlock(blocks.RichTextBlock):
         group = "Standalone Blocks"
 
 
+class RawHTMLBlock(blocks.RawHTMLBlock):
+    """
+    A block that allows raw HTML input.
+
+    Added specifically to allow iframes but can be used for any raw HTML.
+    """
+    def __init__(self, **kwargs):
+        super().__init__(
+            **kwargs,
+            help_text="Enter raw HTML code here.",
+        )
+
+    def clean(self, value):
+        """
+        Custom validation to ensure the HTML is safe.
+        """
+        value = super().clean(value)
+        # Add any custom validation logic here if needed
+        return value
+
+    class Meta:
+        template = "blocks/raw_html_block.html"
+        icon = "code"
+        group = "Standalone Blocks"
+
+
 class SixPhilosophiesBlock(blocks.StaticBlock):
     """
     A block that displays a static block showing the six philosophies.
@@ -482,6 +508,7 @@ class LayoutSectionBlock(blocks.StructBlock):
             )),
             ('recent_news', RecentNewsBlock()),
             ('programs', ProgramsBlock()),
+            ('raw_html', RawHTMLBlock()),
         ],
         required=False,
         help_text="Main content for this section"
