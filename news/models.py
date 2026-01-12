@@ -18,6 +18,7 @@ from wagtail.admin.panels import PublishingPanel
 from wagtail.models import DraftStateMixin, RevisionMixin, LockableMixin, PreviewableMixin
 from wagtail.search import index
 from wagtail.contrib.routable_page.models import RoutablePageMixin, path, re_path
+from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.api import APIField
 from wagtail.images import get_image_model
 from wagtail.templatetags.wagtailcore_tags import richtext
@@ -243,6 +244,7 @@ class NewsItem(Page):
     body = StreamField(
         [
             ("text", custom_blocks.RichTextBlock()),
+            ("table", TableBlock()),
             ("image", custom_blocks.ImageBlock()),
             ("doc", DocumentChooserBlock(
                 # can set your own template here if you want
@@ -316,11 +318,14 @@ class NewsItem(Page):
         if parent_page:
             context['section_title'] = parent_page.title
 
-
-        if not self.owner.wagtail_userprofile.avatar:
-            context['owner_avatar_url'] = get_gravatar_url(self.owner.email)
+        # drafts don't have an owner so there's no avatar yet
+        if self.owner:
+            if not self.owner.wagtail_userprofile.avatar:
+                context['owner_avatar_url'] = get_gravatar_url(self.owner.email)
+            else:
+                context['owner_avatar_url'] = self.owner.wagtail_userprofile.avatar.url
         else:
-            context['owner_avatar_url'] = self.owner.wagtail_userprofile.avatar.url
+            context['owner_avatar_url'] = None
 
         # Create a RecentNewsBlock instance with desired config
         from blocks.blocks import RecentNewsBlock
