@@ -1,5 +1,4 @@
 {% load static wagtailcore_tags wagtailuserbar %}
-
 <!DOCTYPE html>
 <html lang="en" class="h-full" data-theme="light">
 <head>
@@ -56,10 +55,9 @@
                 </label>
                 <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow navbar-gradient rounded-box w-52 gap-2">
                     <li><a href="/" class="nav-link text-white hover:text-blue-300">Home</a></li>
-                    <li><a href="/news" class="nav-link text-white hover:text-blue-300">News</a></li>
-                    <li><a href="/programs" class="nav-link text-white hover:text-blue-300">Programs</a></li>
-                    <li><a href="/resources" class="nav-link text-white hover:text-blue-300">Resources</a></li>
-                    <li><a href="/about-us" class="nav-link text-white hover:text-blue-300">About</a></li>
+                    {% for menuitem in navbar_pages %}
+                        <li><a href="{% pageurl menuitem %}" class="nav-link text-white hover:text-blue-300">{{ menuitem.title }}</a></li>
+                    {% endfor %}
                     <li>
                         <form action="{% url 'search' %}" method="get"><input type="search" name="query" placeholder="Search..." class="input input-sm input-search rounded-full w-full" /></form>
                     </li>
@@ -77,10 +75,10 @@
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1 gap-6 items-center text-base">
                 <li><a href="/" class="nav-link text-white hover:text-blue-300 font-medium text-base">Home</a></li>
-                <li><a href="/news" class="nav-link text-white hover:text-blue-300 font-medium text-base">News</a></li>
-                <li><a href="/programs" class="nav-link text-white hover:text-blue-300 font-medium text-base">Programs</a></li>
-                <li><a href="/resources" class="nav-link text-white hover:text-blue-300 font-medium text-base">Resources</a></li>
-                <li><a href="/about-us" class="nav-link text-white hover:text-blue-300 font-medium text-base">About</a></li>
+                {% for menuitem in navbar_pages %}
+                    <li><a href="{% pageurl menuitem %}" class="nav-link text-white hover:text-blue-300 font-medium text-base">{{ menuitem.title }}</a></li>
+                {% endfor %}
+
             </ul>
         </div>
 
@@ -143,12 +141,9 @@
                 <div>
                     <h3 class="text-white font-semibold text-sm mb-4">Programs</h3>
                     <ul class="space-y-3">
-                        <li><a href="/programs/ayso-core" class="text-gray-400 hover:text-blue-400 transition-colors text-sm">Core Program</a></li>
-                        <li><a href="/programs/extra" class="text-gray-400 hover:text-blue-400 transition-colors text-sm">Extra Program</a></li>
-                        <li><a href="/programs/chicago-northwind-fc" class="text-gray-400 hover:text-blue-400 transition-colors text-sm">Northwind SC</a></li>
-                        <li><a href="/programs/epic" class="text-gray-400 hover:text-blue-400 transition-colors text-sm">EPIC Program</a></li>
-                        <li><a href="/programs/soccer-camps" class="text-gray-400 hover:text-blue-400 transition-colors text-sm">Camps & Clinics</a></li>
-                        <li><a href="/programs/ayso-winter-indoor" class="text-gray-400 hover:text-blue-400 transition-colors text-sm">Winter Indoor</a></li>
+                        {% for menuitem in program_pages %}
+                            <li><a href="{% pageurl menuitem %}" class="text-gray-400 hover:text-blue-400 transition-colors text-sm">{{ menuitem.title }}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
 

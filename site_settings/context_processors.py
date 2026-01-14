@@ -1,5 +1,6 @@
-from wagtail.models import Page, Locale
+from wagtail.models import Page, Locale, Site
 from site_settings.models import Banner
+from programs.models import Program
 
 
 def navbar(request):
@@ -10,16 +11,22 @@ def navbar(request):
     This function is called in the settings in the
     TEMPLATES['OPTIONS']['context_processors'] list.
     """
+    # Get the current site based on the request
+    current_site = Site.find_for_request(request)
+    root_page = current_site.root_page
     # this is currently UNUSED but left here for future use
     if request.user.is_authenticated:
         # If the user is authenticated, show all pages
-        return {
-            "navbar_pages": Page.objects.all().in_menu().filter(locale=Locale.get_active())
-        }
+        root_nav = root_page.get_children().live().in_menu().filter(locale=Locale.get_active())
+        program_nav = Program.objects.live().in_menu().filter(locale=Locale.get_active())
     else:
-        return {
-            "navbar_pages": Page.objects.live().in_menu().public().filter(locale=Locale.get_active())
-        }
+        root_nav = root_page.get_children().live().in_menu().public().filter(locale=Locale.get_active())
+        program_nav = Program.objects.live().in_menu().public().filter(locale=Locale.get_active())
+
+    return {
+        "navbar_pages": root_nav,
+        "program_pages": program_nav
+    }
 
 
 def active_banner(request):
