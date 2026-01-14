@@ -95,7 +95,11 @@
                 function scrollToIndex(index) {
                     const slideElement = document.getElementById('slide-' + blockId + '-' + (index + 1));
                     if (slideElement) {
-                        slideElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                        // Scroll only within the carousel container, don't scroll the page
+                        carousel.scrollTo({
+                            left: slideElement.offsetLeft,
+                            behavior: 'smooth'
+                        });
                         currentIndex = index;
                     }
                 }
