@@ -184,6 +184,85 @@ h1, h2, h3, h4, h5, h6,
     background: rgba(255, 255, 255, 0.2);
 }
 
+/* Navbar dropdown styles */
+.navbar .dropdown {
+    position: relative;
+}
+
+.navbar .dropdown .dropdown-content {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0);
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+    top: 100%;
+    left: 0;
+    margin-top: 0;
+    padding-top: 0.75rem;
+    width: auto;
+    min-width: max-content;
+}
+
+.navbar .dropdown .dropdown-content li,
+.navbar .dropdown .dropdown-content a {
+    width: 100%;
+}
+
+/* Invisible bridge to prevent dropdown from closing when moving mouse */
+.navbar .dropdown::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 1rem;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.navbar .dropdown:hover::after {
+    pointer-events: auto;
+}
+
+.navbar .dropdown:hover .dropdown-content,
+.navbar .dropdown:focus-within .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Rotate chevron on hover */
+.navbar .dropdown:hover svg,
+.navbar .dropdown:focus-within svg {
+    transform: rotate(180deg);
+}
+
+/* Mobile menu details/summary styles */
+.navbar details summary {
+    cursor: pointer;
+    list-style: none;
+}
+
+.navbar details summary::-webkit-details-marker {
+    display: none;
+}
+
+.navbar details summary::after {
+    content: '';
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    margin-left: auto;
+    transition: transform 0.2s ease;
+}
+
+.navbar details[open] summary::after {
+    transform: rotate(45deg);
+}
+
 /* Background Patterns - Overlays that blend with existing backgrounds */
 /* These use ::before pseudo-elements to layer patterns without overriding bg colors/gradients */
 
