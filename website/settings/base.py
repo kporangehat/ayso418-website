@@ -162,53 +162,67 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
-
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATIC_URL = "/static/"
-
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-MEDIA_URL = "/media/"
 
 # AWS S3 storage configuration
-AWS_STORAGE_BUCKET_NAME = os.environ.get('DEFAULT_STORAGE_BUCKET', '')
-AWS_ACCESS_KEY_ID = os.environ.get('DEFAULT_STORAGE_ACCESS_KEY_ID', '')
-AWS_SECRET_ACCESS_KEY = os.environ.get('DEFAULT_STORAGE_SECRET_ACCESS_KEY', '')
-AWS_S3_CUSTOM_DOMAIN = os.environ.get('DEFAULT_STORAGE_CUSTOM_DOMAIN', '')
-AWS_S3_REGION_NAME = os.environ.get('DEFAULT_STORAGE_REGION', '')
-AWS_S3_OBJECT_PARAMETERS = {
-    'ACL': 'public-read',
-    'CacheControl': 'max-age=86400',
-}
-AWS_S3_FILE_OVERWRITE = False
+USE_S3 = bool(os.environ.get('DEFAULT_STORAGE_SECRET_ACCESS_KEY', False))
 
+if USE_S3:
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('DEFAULT_STORAGE_BUCKET', '')
+    AWS_ACCESS_KEY_ID = os.environ.get('DEFAULT_STORAGE_ACCESS_KEY_ID', '')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('DEFAULT_STORAGE_SECRET_ACCESS_KEY', '')
+    AWS_S3_CUSTOM_DOMAIN = os.environ.get('DEFAULT_STORAGE_CUSTOM_DOMAIN', '')
+    AWS_S3_REGION_NAME = os.environ.get('DEFAULT_STORAGE_REGION', '')
+    AWS_S3_OBJECT_PARAMETERS = {
+        'ACL': 'public-read',
+        'CacheControl': 'max-age=86400',
+    }
+    AWS_S3_FILE_OVERWRITE = False
+    # s3 static settings
+    STATIC_LOCATION = 'static'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+    # s3 public media settings
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
 
-# Default storage settings, with the staticfiles storage updated.
-# See https://docs.djangoproject.com/en/5.2/ref/settings/#std-setting-STORAGES
-STORAGE_BACKEND = "django.core.files.storage.FileSystemStorage"
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                "location": "media", # Media files will be stored in a 'media' folder
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                "location": "static", # Static files in a 'static' folder
+            },
+        },
+    }
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+    STATIC_URL = "/static/"
 
-if AWS_SECRET_ACCESS_KEY:
-    STORAGE_BACKEND = "storages.backends.s3boto3.S3Boto3Storage"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+    MEDIA_URL = "/media/"
 
-STORAGES = {
-    "default": {
-        "BACKEND": STORAGE_BACKEND,
-    },
-    # ManifestStaticFilesStorage is recommended in production, to prevent
-    # outdated JavaScript / CSS assets being served from cache
-    # (e.g. after a Wagtail upgrade).
-    # See https://docs.djangoproject.com/en/5.2/ref/contrib/staticfiles/#manifeststaticfilesstorage
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
-    },
-}
+    STORAGES = {
+        # Default storage settings, with the staticfiles storage updated.
+        # See https://docs.djangoproject.com/en/5.2/ref/settings/#std-setting-STORAGES
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        # ManifestStaticFilesStorage is recommended in production, to prevent
+        # outdated JavaScript / CSS assets being served from cache
+        # (e.g. after a Wagtail upgrade).
+        # See https://docs.djangoproject.com/en/5.2/ref/contrib/staticfiles/#manifeststaticfilesstorage
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        },
+    }
 
 # Django sets a maximum of 1000 fields per form by default, but particularly complex page models
 # can exceed this limit within Wagtail's page editor.
