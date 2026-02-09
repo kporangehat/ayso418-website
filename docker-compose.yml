@@ -1,5 +1,7 @@
 services:
   web:
+    env_file:
+      - .env-local
     build: .
     ports:
       - "8000:80"

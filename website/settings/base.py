@@ -168,7 +168,7 @@ STATICFILES_DIRS = [
 
 
 # AWS S3 storage configuration
-USE_S3 = bool(os.environ.get('DEFAULT_STORAGE_SECRET_ACCESS_KEY', False))
+USE_S3 = bool(os.environ.get('USE_S3', False))
 
 if USE_S3:
     AWS_STORAGE_BUCKET_NAME = os.environ.get('DEFAULT_STORAGE_BUCKET', '')
