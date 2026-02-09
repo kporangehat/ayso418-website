@@ -14,6 +14,7 @@ dependencies = [
     "django-widget-tweaks>=1.5.1",
     "psycopg2>=2.9.11",
     "sentry-sdk>=2.48.0",
+    "setuptools>=82.0.0",
     "wagtail>=7.2.1",
     "wagtail-localize>=1.12.2",
 ]
