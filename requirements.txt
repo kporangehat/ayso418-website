@@ -107,6 +107,8 @@ filetype==1.2.0
     # via willow
 giturl==0.1.3
     # via divio-cli
+gunicorn==25.0.3
+    # via ayso418-uv (pyproject.toml)
 idna==3.11
     # via requests
 inquirer==3.4.1
@@ -128,7 +130,9 @@ modelsearch==1.1.1
 openpyxl==3.1.5
     # via wagtail
 packaging==25.0
-    # via divio-cli
+    # via
+    #   divio-cli
+    #   gunicorn
 paramiko==3.5.1
     # via cr
 pillow==12.1.0
@@ -174,8 +178,6 @@ sentry-sdk==2.48.0
     # via
     #   ayso418-uv (pyproject.toml)
     #   divio-cli
-setuptools==82.0.0
-    # via ayso418-uv (pyproject.toml)
 simple-logging-setup==0.5
     # via divio-cli
 six==1.17.0

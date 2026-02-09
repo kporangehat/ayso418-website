@@ -24,8 +24,10 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     libwebp-dev \
  && rm -rf /var/lib/apt/lists/*
 
+# upgrade pip
+RUN pip install --upgrade pip
 # Install the application server.
-RUN pip install "gunicorn==20.0.4"
+# RUN pip install "gunicorn==20.0.4"
 
 # Install the project requirements.
 COPY requirements.txt /
