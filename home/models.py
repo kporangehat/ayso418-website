@@ -48,12 +48,14 @@ class HomePage(Page):
                 group="Standalone Blocks"
             )),
             ("recent_news", custom_blocks.RecentNewsBlock()),
+            ("upcoming_events", custom_blocks.UpcomingEventsBlock()),
         ],
         block_counts={
             "cta_text": {"max_num": 1},
             "six_philosophies": {"max_num": 1},
             "programs": {"max_num": 1},
             "recent_news": {"max_num": 1},
+            "upcoming_events": {"max_num": 1},
         },
         blank=True,
         null=True,

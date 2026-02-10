@@ -127,11 +127,19 @@ class Program(Page):
 
     def get_context(self, request):
         """
-        Add all programs to the context for navigation.
+        Add all programs to the context for navigation,
+        and any upcoming events linked to this program.
         """
+        from events.models import Event
+        from django.utils import timezone
+
         context = super().get_context(request)
         current_locale = Locale.get_active()
         context['all_programs'] = Program.objects.live().public().filter(locale=current_locale)
+        context['program_events'] = (
+            Event.objects.filter(live=True, program=self, end_date__gte=timezone.now().date())
+            .order_by('start_date')
+        )
         return context
 
     def clean(self):

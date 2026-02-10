@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "blocks",
     "site_settings",
     "contact",
+    "events",
     "storages",
     "wagtail_localize",  # supposedly needs to be between search and wagtail.contrib.forms
     "wagtail_localize.locales",  # supposedly needs to be between search and wagtail.contrib.forms
@@ -69,6 +70,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -78,7 +80,6 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     "django.middleware.locale.LocaleMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "website.urls"
@@ -108,7 +109,11 @@ WSGI_APPLICATION = "website.wsgi.application"
 
 INTERNAL_IPS = [
     "127.0.0.1",
+    "0.0.0.0",
+    "172.18.0.1",  # default gateway for Docker containers on Linux
 ]
+
+# DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": "debug_toolbar.middleware.show_toolbar_with_docker"}
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -168,7 +173,9 @@ STATICFILES_DIRS = [
 
 
 # AWS S3 storage configuration
-USE_S3 = bool(os.environ.get('USE_S3', False))
+print("USE_S3 env var:", os.environ.get('USE_S3', False))
+USE_S3 = os.environ.get('USE_S3') == "1"
+print("USE_S3:", USE_S3)
 
 if USE_S3:
     AWS_STORAGE_BUCKET_NAME = os.environ.get('DEFAULT_STORAGE_BUCKET', '')

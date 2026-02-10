@@ -328,6 +328,90 @@ class ProgramsBlock(blocks.StructBlock):
         group = "Standalone Blocks"
 
 
+class UpcomingEventsBlock(blocks.StructBlock):
+    """
+    A block that displays upcoming events with optional filtering by type.
+    """
+    title = blocks.CharBlock(
+        max_length=100,
+        required=True,
+        default="Upcoming Events",
+        help_text="Main heading for this events section"
+    )
+    subtitle = blocks.TextBlock(
+        max_length=200,
+        required=False,
+        help_text="Optional description text"
+    )
+    num_items = blocks.IntegerBlock(
+        default=5,
+        min_value=1,
+        max_value=20,
+        required=True,
+        help_text="Maximum number of events to display"
+    )
+    filter_by_type = blocks.ChoiceBlock(
+        choices=[
+            ('', 'All Types'),
+            ('registration', 'Registration'),
+            ('referee_training', 'Referee Training'),
+            ('coach_certification', 'Coach Certification'),
+            ('training_camp', 'Training Camp'),
+            ('special_event', 'Special Event'),
+            ('other', 'Other'),
+        ],
+        required=False,
+        help_text="Optional: show only events of this type"
+    )
+    filter_by_status = blocks.ChoiceBlock(
+        choices=[
+            ('', 'All Statuses'),
+            ('pending', 'Pending'),
+            ('active', 'Active'),
+            ('waitlist', 'Waitlist'),
+            ('closed', 'Closed'),
+        ],
+        required=False,
+        help_text="Optional: show only events with this status"
+    )
+    show_past_events = blocks.BooleanBlock(
+        required=False,
+        default=False,
+        help_text="Include events whose start date has passed"
+    )
+
+    def get_context(self, value, parent_context=None):
+        from events.models import Event
+        from django.utils import timezone
+
+        context = super().get_context(value, parent_context=parent_context)
+
+        events = Event.objects.filter(live=True)
+
+        if not value.get('show_past_events', False):
+            events = events.filter(start_date__gte=timezone.now().date())
+
+        event_type = value.get('filter_by_type', '').strip()
+        if event_type:
+            events = events.filter(event_type=event_type)
+
+        status = value.get('filter_by_status', '').strip()
+        if status:
+            events = events.filter(status=status)
+
+        num_items = value.get('num_items', 5)
+        events = events.order_by('start_date')[:num_items]
+
+        context['events'] = events
+        return context
+
+    class Meta:
+        template = "blocks/upcoming_events_block.html"
+        icon = "date"
+        label = "Upcoming Events"
+        group = "Standalone Blocks"
+
+
 class CustomPageChooserBlock(blocks.PageChooserBlock):
     """
     A block that displays a page chooser.
@@ -508,6 +592,7 @@ class LayoutSectionBlock(blocks.StructBlock):
             )),
             ('recent_news', RecentNewsBlock()),
             ('programs', ProgramsBlock()),
+            ('upcoming_events', UpcomingEventsBlock()),
             ('raw_html', RawHTMLBlock()),
         ],
         required=False,

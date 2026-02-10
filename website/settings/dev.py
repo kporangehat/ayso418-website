@@ -12,6 +12,7 @@ SECRET_KEY = "django-insecure-ijlk1srzd4jeeg^^9q)dj(9h)+86g@qrbr#*aj*+-1$upobi89
 ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS=[
     "http://localhost:8000",
+    "http://0.0.0.0:8000",
     "https://*.aldryn.io"
     ]
 

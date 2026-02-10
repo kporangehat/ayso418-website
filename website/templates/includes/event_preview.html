@@ -1,0 +1,77 @@
+{% load static wagtailcore_tags %}
+
+<!DOCTYPE html>
+<html lang="en" class="h-full" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Preview - AYSO Chicago Lakefront Soccer</title>
+
+    {# Load compiled CSS from Vite #}
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Open+Sans:wght@100;200;300;400&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-base-200">
+    <div class="p-8 max-w-2xl mx-auto">
+        <div class="mb-4 text-sm text-gray-600">
+            Preview of event (as it will appear on the site):
+        </div>
+
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="badge badge-primary">{{ object.get_event_type_display }}</div>
+                    <div class="badge badge-outline {% if object.status == 'active' %}badge-success{% elif object.status == 'closed' %}badge-error{% elif object.status == 'waitlist' %}badge-warning{% else %}badge-ghost{% endif %}">
+                        {{ object.get_status_display }}
+                    </div>
+                </div>
+
+                <h2 class="card-title text-2xl">{{ object.title }}</h2>
+
+                {% if object.subtitle %}
+                <p class="text-gray-600">{{ object.subtitle }}</p>
+                {% endif %}
+
+                <div class="flex items-center gap-2 text-sm text-gray-500 mt-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                    </svg>
+                    <span>{{ object.start_date|date:"F j, Y" }}{% if object.end_date %} - {{ object.end_date|date:"F j, Y" }}{% endif %}</span>
+                </div>
+
+                {% if object.program %}
+                <div class="text-sm text-gray-500 mt-1">
+                    Program: {{ object.program.title }}
+                </div>
+                {% endif %}
+
+                {% if object.body %}
+                <div class="prose max-w-none mt-4">
+                    {% for block in object.body %}
+                        {% include_block block %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if object.link %}
+                <div class="card-actions justify-end mt-4">
+                    <a href="{{ object.link }}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
+                        Learn More / Register
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-4 text-sm text-gray-600">
+            <strong>Settings:</strong><br>
+            Status: {{ object.get_status_display }}<br>
+            Type: {{ object.get_event_type_display }}<br>
+            Published: {% if object.live %}Yes (visible to users){% else %}No (draft only){% endif %}
+        </div>
+    </div>
+</body>
+</html>
