@@ -173,9 +173,7 @@ STATICFILES_DIRS = [
 
 
 # AWS S3 storage configuration
-print("USE_S3 env var:", os.environ.get('USE_S3', False))
 USE_S3 = os.environ.get('USE_S3') == "1"
-print("USE_S3:", USE_S3)
 
 if USE_S3:
     AWS_STORAGE_BUCKET_NAME = os.environ.get('DEFAULT_STORAGE_BUCKET', '')
@@ -199,13 +197,15 @@ if USE_S3:
         "default": {
             "BACKEND": "storages.backends.s3.S3Storage",
             "OPTIONS": {
-                "location": "media", # Media files will be stored in a 'media' folder
+                "location": "media",
+                "file_overwrite": False,  # Don't overwrite media uploads with the same name
             },
         },
         "staticfiles": {
             "BACKEND": "storages.backends.s3.S3Storage",
             "OPTIONS": {
-                "location": "static", # Static files in a 'static' folder
+                "location": "static",
+                "file_overwrite": True,  # Always overwrite static files on collectstatic
             },
         },
     }
