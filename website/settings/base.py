@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from curses.ascii import US
 import os
 from pathlib import Path
 
@@ -173,7 +174,9 @@ STATICFILES_DIRS = [
 
 
 # AWS S3 storage configuration
-USE_S3 = os.environ.get('USE_S3') == "1"
+# manual env vars on divio aren't loaded yet at deploy time so we have
+# to check for the presence of an S3 access key to determine whether to use S3 or local storage
+USE_S3 = os.environ.get('DEFAULT_STORAGE_ACCESS_KEY_ID', False)
 
 if USE_S3:
     AWS_STORAGE_BUCKET_NAME = os.environ.get('DEFAULT_STORAGE_BUCKET', '')
