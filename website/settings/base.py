@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    'django.contrib.postgres',  # needed for wagtailsearch postgres search backend
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
     "debug_toolbar",

@@ -55,8 +55,9 @@ divio-cli==4.0.5
     # via ayso418-uv (pyproject.toml)
 dj-database-url==3.1.0
     # via ayso418-uv (pyproject.toml)
-django==5.2.9
+django==6.0.2
     # via
+    #   ayso418-uv (pyproject.toml)
     #   dj-database-url
     #   django-debug-toolbar
     #   django-filter
@@ -73,7 +74,7 @@ django==5.2.9
     #   modelsearch
     #   wagtail
     #   wagtail-localize
-django-debug-toolbar==6.1.0
+django-debug-toolbar==6.2.0
     # via ayso418-uv (pyproject.toml)
 django-filter==25.2
     # via wagtail
@@ -174,7 +175,7 @@ runs==1.2.2
     # via editor
 s3transfer==0.16.0
     # via boto3
-sentry-sdk==2.48.0
+sentry-sdk==2.52.0
     # via
     #   ayso418-uv (pyproject.toml)
     #   divio-cli
@@ -206,11 +207,11 @@ urllib3==2.6.2
     #   divio-cli
     #   requests
     #   sentry-sdk
-wagtail==7.2.1
+wagtail==7.3
     # via
     #   ayso418-uv (pyproject.toml)
     #   wagtail-localize
-wagtail-localize==1.12.2
+wagtail-localize==1.13
     # via ayso418-uv (pyproject.toml)
 wcwidth==0.2.14
     # via blessed
