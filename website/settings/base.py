@@ -176,7 +176,9 @@ STATICFILES_DIRS = [
 # AWS S3 storage configuration
 # manual env vars on divio aren't loaded yet at deploy time so we have
 # to check for the presence of an S3 access key to determine whether to use S3 or local storage
+USE_S3_ENV = os.environ.get('USE_S3') == "1"
 USE_S3 = bool(os.environ.get('DEFAULT_STORAGE_SECRET_ACCESS_KEY', False))
+print(f"USE_S3_ENV: {USE_S3_ENV}")
 print(f"Using S3 storage: {USE_S3}")
 print("--- ENV VARS ---")
 for key, value in sorted(os.environ.items()):
