@@ -178,6 +178,10 @@ STATICFILES_DIRS = [
 # to check for the presence of an S3 access key to determine whether to use S3 or local storage
 USE_S3 = bool(os.environ.get('DEFAULT_STORAGE_SECRET_ACCESS_KEY', False))
 print(f"Using S3 storage: {USE_S3}")
+print("--- ENV VARS ---")
+for key, value in sorted(os.environ.items()):
+    print(f"{key}: {value}")
+print("----------------")
 
 if USE_S3:
     AWS_STORAGE_BUCKET_NAME = os.environ.get('DEFAULT_STORAGE_BUCKET', '')
