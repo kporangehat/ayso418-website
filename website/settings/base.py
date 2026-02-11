@@ -172,19 +172,14 @@ STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "static"),
 ]
 
+# Static files are always served locally
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = "/static/"
 
 # AWS S3 storage configuration
-# manual env vars on divio aren't loaded yet at deploy time so we have
-# to check for the presence of an S3 access key to determine whether to use S3 or local storage
-USE_S3_ENV = os.environ.get('USE_S3') == "1"
-USE_S3 = bool(os.environ.get('DEFAULT_STORAGE_SECRET_ACCESS_KEY', False))
-print(f"USE_S3_ENV: {USE_S3_ENV}")
-print(f"Using S3 storage: {USE_S3}")
-print("--- ENV VARS ---")
-for key, value in sorted(os.environ.items()):
-    print(f"{key}: {value}")
-print("----------------")
+USE_S3 = os.environ.get('USE_S3') == "1"
 
+# media files are stored in s3 if enabled
 if USE_S3:
     AWS_STORAGE_BUCKET_NAME = os.environ.get('DEFAULT_STORAGE_BUCKET', '')
     AWS_ACCESS_KEY_ID = os.environ.get('DEFAULT_STORAGE_ACCESS_KEY_ID', '')
@@ -195,9 +190,6 @@ if USE_S3:
         'ACL': 'public-read',
         'CacheControl': 'max-age=86400',
     }
-    # s3 static settings
-    STATIC_LOCATION = 'static'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
     # s3 public media settings
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
@@ -211,17 +203,10 @@ if USE_S3:
             },
         },
         "staticfiles": {
-            "BACKEND": "website.storage_backends.ManifestS3Storage",
-            "OPTIONS": {
-                "location": "static",
-                "file_overwrite": True,  # Always overwrite static files on collectstatic
-            },
+            "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
         },
     }
 else:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
-    STATIC_URL = "/static/"
-
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
     MEDIA_URL = "/media/"
 

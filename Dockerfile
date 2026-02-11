@@ -47,8 +47,8 @@ COPY --chown=wagtail:wagtail . .
 # Use user "wagtail" to run the build commands below and the server itself.
 USER wagtail
 
-# Collect static files. - trying this in release process in divio
-# RUN python manage.py collectstatic --noinput --clear
+# Collect static files.
+RUN python manage.py collectstatic --noinput --clear
 
 # Runtime command that executes when "docker run" is called, it does the
 # following:

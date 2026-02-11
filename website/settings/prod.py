@@ -8,14 +8,10 @@ DEBUG = False
 
 
 ALLOWED_HOSTS = [os.environ["DOMAIN"]]
-CSRF_TRUSTED_ORIGINS=[f"https://{os.environ['DOMAIN']}]
+CSRF_TRUSTED_ORIGINS = [f"https://{os.environ['DOMAIN']}"]
 
 SECRET_KEY = os.environ["RANDOM_SECRET_KEY"]
 
-# we assume we're using AWS S3 for static and media files in production, so we set the URLs accordingly
-# STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
-
-# MEDIA_URL = "/media/"
 
 # Built-in email sending service provided by CodeRed Cloud.
 # Change this to a different backend or SMTP server to use your own.
