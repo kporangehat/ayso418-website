@@ -189,7 +189,6 @@ if USE_S3:
         'ACL': 'public-read',
         'CacheControl': 'max-age=86400',
     }
-    AWS_S3_FILE_OVERWRITE = False
     # s3 static settings
     STATIC_LOCATION = 'static'
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
@@ -206,7 +205,7 @@ if USE_S3:
             },
         },
         "staticfiles": {
-            "BACKEND": "storages.backends.s3.S3Storage",
+            "BACKEND": "website.storage_backends.ManifestS3Storage",
             "OPTIONS": {
                 "location": "static",
                 "file_overwrite": True,  # Always overwrite static files on collectstatic
