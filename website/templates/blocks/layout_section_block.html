@@ -1,4 +1,4 @@
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags section_nav_tags %}
 
 {% if value.layout == 'full_width' %}
     <!-- Full Width Layout -->
@@ -22,9 +22,10 @@
 
         <!-- Sidebar (25% on large screens) -->
         <aside class="lg:col-span-1 space-y-6" aria-label="Sidebar content">
-            <!-- Resources Navigation - Show if enabled and resources_index exists -->
-            {% if value.show_resources_nav and resources_index %}
-                {% include "blocks/resources_navigation_block.html" %}
+            <!-- Section Navigation - Show if enabled and page is within a section -->
+            {% get_section_nav page as section_nav %}
+            {% if value.show_resources_nav and section_nav.section_index %}
+                {% include "blocks/resources_navigation_block.html" with category_page=section_nav.category_page sibling_pages=section_nav.sibling_pages current_page=section_nav.current_page %}
             {% endif %}
 
             <!-- Custom Sidebar Blocks -->

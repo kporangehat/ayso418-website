@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags section_nav_tags %}
 {% load static %}
 
 {% block body_class %}template-flexpage{% endblock %}
@@ -19,9 +19,10 @@
                     <div class="card-body max-w-none">
                         <div class="max-w-7xl">
                             <!-- Category Badge -->
-                            {% if category_page %}
+                            {% get_section_nav page as section_nav %}
+                            {% if section_nav.category_page and section_nav.category_page.id != page.id %}
                               <div class="badge badge-soft py-5 mb-10">
-                                <a href="{{ category_page.url }}">{{ category_page.title }}</a>
+                                <a href="{{ section_nav.category_page.url }}">{{ section_nav.category_page.title }}</a>
                               </div>
                             {% else %}
                               <div class="mb-10"></div>
@@ -64,5 +65,6 @@
                 {% endfor %}
             </div>
         {% endif %}
+
 
 {% endblock content %}
