@@ -14,7 +14,16 @@
             </h3>
             <div class="px-12 pb-12 text-center text-lg text-gray-200">
                 {{ page.description | richtext }}
+              <ul class="steps  text-center">
+                <li class="step step-primary">Core Program</li>
+                <li class="step step-primary">Extra</li>
+                <li class="step step-primary">Northwind SC</li>
+                <li class="step step-primary"><span class="step-icon">⚽</span>Beyond</li>
+              </ul>
             </div>
+
+
+
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {% for program in program_list %}
 

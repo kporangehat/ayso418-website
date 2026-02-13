@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "site_settings",
     "contact",
     "events",
+    "faq",
     "storages",
     "wagtail_localize",  # supposedly needs to be between search and wagtail.contrib.forms
     "wagtail_localize.locales",  # supposedly needs to be between search and wagtail.contrib.forms
