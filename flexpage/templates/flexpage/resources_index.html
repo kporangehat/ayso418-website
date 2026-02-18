@@ -41,7 +41,7 @@
                 <div class="card bg-base-100 w-96 shadow-sm">
                   <figure>
                     {% if category.category_page.image %}
-                      {% image category.category_page.image width-400 as category_img %}
+                      {% image category.category_page.image fill-400x250 as category_img %}
                       <img src="{{ category_img.url }}" alt="{{ category.category_page.title }}" />
                     {% else %}
                     <img
