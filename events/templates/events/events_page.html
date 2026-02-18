@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block content %}
+
+    <section class="hero bg-slate-900 relative" style="min-height: 20vh;">
+        <div class="hero-pattern absolute inset-0" style="z-index: 0;"></div>
+        <div class="hero-content text-center text-white relative z-10 hero-animated">
+            <div class="max-w-4xl">
+                <h1 class="text-5xl md:text-6xl font-black mb-4" style="text-shadow: 0 4px 20px rgba(0,0,0,0.2)">
+                    {{ page.title }}
+                </h1>
+                {% if page.subtitle %}
+                <p class="text-xl text-gray-300">{{ page.subtitle }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 px-4 bg-base-100">
+        <div class="max-w-5xl mx-auto">
+
+            {% if event_types %}
+            <div class="flex flex-wrap gap-2 mb-12 justify-center">
+                <a href="{{ page.url }}"
+                   class="badge badge-lg {% if not active_type %}badge-primary{% else %}badge-outline{% endif %} cursor-pointer hover:badge-primary transition-all">
+                    All
+                </a>
+                {% for type_value, type_label in event_types %}
+                <a href="{% routablepageurl page 'type' type_value %}"
+                   class="badge badge-lg {% if active_type == type_value %}badge-primary{% else %}badge-outline{% endif %} cursor-pointer hover:badge-primary transition-all">
+                    {{ type_label }}
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if active_type %}
+            <p class="text-center text-gray-600 mb-8">
+                Showing <span class="font-semibold">{{ active_type_label }}</span> events
+            </p>
+            {% endif %}
+
+            {% if events %}
+            <div class="space-y-6">
+                {% for event in events %}
+                <div class="card bg-base-100 shadow-md border border-base-300">
+                    <div class="card-body">
+                        <div class="flex flex-col md:flex-row md:items-start gap-4">
+                            <!-- Calendar widget -->
+                            <div class="block rounded-t overflow-hidden bg-white text-center w-20 shrink-0 shadow-sm">
+                                <div class="bg-red-600 text-white py-1 text-xs font-bold">{{ event.start_date|date:"M" }}</div>
+                                <div class="pt-1 border-l border-r">
+                                    <span class="text-3xl font-bold">{{ event.start_date|date:"j" }}</span>
+                                </div>
+                                <div class="pb-1 px-2 border-l border-r border-b rounded-b flex justify-between">
+                                    <span class="text-xs font-bold">{{ event.start_date|date:"D" }}</span>
+                                    <span class="text-xs font-bold">{{ event.start_date|date:"Y" }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Event details -->
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-2 flex-wrap">
+                                    <div class="badge badge-primary badge-sm">{{ event.get_event_type_display }}</div>
+                                    <div class="badge badge-sm {% if event.status == 'active' %}badge-success{% elif event.status == 'closed' %}badge-error{% elif event.status == 'waitlist' %}badge-warning{% else %}badge-ghost{% endif %}">
+                                        {{ event.get_status_display }}
+                                    </div>
+                                </div>
+
+                                <h3 class="text-xl font-bold">{{ event.title }}</h3>
+
+                                {% if event.subtitle %}
+                                <p class="text-gray-600 text-sm mt-1">{{ event.subtitle }}</p>
+                                {% endif %}
+
+                                <div class="flex items-center gap-2 text-sm text-gray-500 mt-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                    </svg>
+                                    <span>{{ event.start_date|date:"F j, Y" }}{% if event.end_date %} – {{ event.end_date|date:"F j, Y" }}{% endif %}</span>
+                                </div>
+
+                                {% if event.program %}
+                                <div class="text-sm text-gray-500 mt-1">
+                                    Program: <a href="{{ event.program.url }}" class="link link-primary">{{ event.program.title }}</a>
+                                </div>
+                                {% endif %}
+
+                                {% if event.body %}
+                                <div class="mt-3">
+                                    <button onclick="var body=document.getElementById('event-body-{{ event.pk }}'); body.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-90');"
+                                            class="text-sm font-semibold cursor-pointer flex items-center gap-1 hover:underline text-primary">
+                                        More Details <span class="arrow transition-transform">&rsaquo;</span>
+                                    </button>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Action button -->
+                            {% if event.link %}
+                            <div class="shrink-0 md:self-center">
+                                <a href="{{ event.link }}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Register</a>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {% if event.body %}
+                        <div id="event-body-{{ event.pk }}" class="hidden mt-4 border-t border-base-300 pt-4">
+                            <div class="prose max-w-none">
+                                {% for block in event.body %}
+                                    {% include_block block %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto text-gray-400 mb-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                </svg>
+                <p class="text-gray-500 text-lg">
+                    {% if active_type %}
+                        No upcoming {{ active_type_label }} events.
+                        <a href="{{ page.url }}" class="link link-primary">View all events</a>
+                    {% else %}
+                        No upcoming events at this time.
+                    {% endif %}
+                </p>
+            </div>
+            {% endif %}
+
+        </div>
+    </section>
+
+{% endblock %}

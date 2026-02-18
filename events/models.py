@@ -1,12 +1,14 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
+from django.utils import timezone
 
 from modelcluster.models import ClusterableModel
 
-from wagtail.models import DraftStateMixin, RevisionMixin, LockableMixin, PreviewableMixin
+from wagtail.models import Page, DraftStateMixin, RevisionMixin, LockableMixin, PreviewableMixin
 from wagtail.search import index
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PublishingPanel
 from wagtail.fields import StreamField
+from wagtail.contrib.routable_page.models import RoutablePageMixin, path
 
 from blocks import blocks as custom_blocks
 
@@ -123,3 +125,54 @@ class Event(
         verbose_name = "Event"
         verbose_name_plural = "Events"
         ordering = ["start_date", "title"]
+
+
+class EventsPage(RoutablePageMixin, Page):
+    max_count = 1
+    subpage_types = []
+
+    subtitle = models.CharField(max_length=200, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('subtitle'),
+    ]
+    template = "events/events_page.html"
+
+    def _get_events(self, event_type=None):
+        events = Event.objects.filter(
+            live=True,
+            end_date__gte=timezone.now().date(),
+        ).select_related('program')
+        if event_type:
+            events = events.filter(event_type=event_type)
+        return events.order_by('start_date')
+
+    def _get_event_types_in_use(self):
+        """Get event types that have at least one upcoming published event."""
+        type_values = (
+            Event.objects.filter(live=True, end_date__gte=timezone.now().date())
+            .values_list('event_type', flat=True)
+            .distinct()
+        )
+        type_map = dict(Event.EVENT_TYPE_CHOICES)
+        return [(val, type_map[val]) for val in type_values if val in type_map]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        context['events'] = self._get_events()
+        context['event_types'] = self._get_event_types_in_use()
+        context['active_type'] = None
+        return context
+
+    @path("type/<str:event_type>/", name="type")
+    def events_by_type(self, request, event_type=None):
+        type_map = dict(Event.EVENT_TYPE_CHOICES)
+        return self.render(
+            request,
+            context_overrides={
+                'events': self._get_events(event_type=event_type),
+                'event_types': self._get_event_types_in_use(),
+                'active_type': event_type,
+                'active_type_label': type_map.get(event_type, event_type),
+            },
+        )
