@@ -85,6 +85,9 @@
                         <div class="flex-1">
                             <h3 class="font-bold text-xl">{{ event.title }}</h3>
                             <div class="text-sm">{{ event.start_date|date:"M j, Y" }}{% if event.end_date %} &ndash; {{ event.end_date|date:"M j, Y" }}{% endif %}{% if event.subtitle %} &middot; {{ event.subtitle }}{% endif %}</div>
+                            {% if event.reg_start or event.reg_end %}
+                            <div class="text-sm">Registration: {% if event.reg_start %}{{ event.reg_start|date:"M j, Y" }}{% endif %}{% if event.reg_start and event.reg_end %} &ndash; {% endif %}{% if event.reg_end %}{{ event.reg_end|date:"M j, Y" }}{% endif %}</div>
+                            {% endif %}
                             {% if event.body %}
                             <button onclick="var body=document.getElementById('event-body-{{ event.pk }}'); body.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-90');" class="text-sm font-semibold cursor-pointer shrink-0 flex items-center gap-1 hover:underline">
                                 More Details <span class="arrow transition-transform">&rsaquo;</span>

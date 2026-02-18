@@ -61,6 +61,16 @@ class Event(
         blank=True,
         help_text="Optional end date (leave blank for single-day events)",
     )
+    reg_start = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Optional: when registration opens",
+    )
+    reg_end = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Optional: when registration closes",
+    )
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -98,6 +108,8 @@ class Event(
             [
                 FieldPanel("start_date"),
                 FieldPanel("end_date"),
+                FieldPanel("reg_start"),
+                FieldPanel("reg_end"),
                 FieldPanel("status"),
             ],
             heading="Scheduling",
