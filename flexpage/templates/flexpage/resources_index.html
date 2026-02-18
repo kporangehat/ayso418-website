@@ -42,7 +42,7 @@
                   <figure>
                     {% if category.category_page.image %}
                       {% image category.category_page.image width-400 as category_img %}
-                      <img src="{{ category_img }}" alt="{{ category.category_page.title }}" />
+                      <img src="{{ category_img.url }}" alt="{{ category.category_page.title }}" />
                     {% else %}
                     <img
                       src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
