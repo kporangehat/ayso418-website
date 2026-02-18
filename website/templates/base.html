@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags wagtailuserbar %}
+{% load static wagtailcore_tags wagtailuserbar section_nav_tags %}
 <!DOCTYPE html>
 <html lang="en" class="h-full" data-theme="light">
 <head>
@@ -123,6 +123,30 @@
             </a>
         </div>
     </div>
+
+    <!-- Secondary Section Navigation -->
+    {% if page %}
+    {% get_section_nav page as section_nav %}
+    {% if section_nav.sibling_pages %}
+    <div class="bg-base-300 shadow-sm border-b border-base-content/10">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center gap-4 py-2 overflow-x-auto">
+                <a href="{{ section_nav.category_page.url }}"
+                   class="font-bold text-sm whitespace-nowrap text-base-content">
+                    {{ section_nav.category_page.title }}
+                </a>
+                <span class="text-base-content/30">|</span>
+                {% for p in section_nav.sibling_pages %}
+                    <a href="{{ p.url }}"
+                       class="text-sm whitespace-nowrap transition-colors {% if p.id == page.id %}font-semibold text-primary{% else %}text-base-content/70 hover:text-primary{% endif %}">
+                        {{ p.title }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
 
     <!-- Main Content Area -->
     <main class="flex-grow">
