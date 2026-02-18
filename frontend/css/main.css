@@ -9,6 +9,10 @@
   exclude: properties;
 }
 
+/* force inclusion of these classes in the final CSS */
+@source inline("bg-radial-[at_50%_75%] from-cyan-800 to-cyan-950 to-90% bg-teal-400 text-teal-800 bg-red-400 text-red-800 bg-blue-400 text-blue-800 bg-fuchsia-400 text-fuchsia-800 text-slate-100");
+@source inline("text-rotate");
+
 /* Banner background color utilities */
 .banner-bg-blue {
   background-color: rgb(30 64 175 / 0.9);
