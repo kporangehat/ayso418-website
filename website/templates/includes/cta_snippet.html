@@ -3,23 +3,28 @@
 {% comment %}
   Renders a CTA snippet.
   Expects `cta` in context (a CTA model instance).
+
+  Dark backgrounds (cta-bg-blue/green/purple/warm/dark): white text + outlined white button.
+  Light backgrounds (default, cta-bg-light/primary/secondary): dark text + neutral solid button.
 {% endcomment %}
 
-<div class="w-full py-10 px-4 sm:px-6 lg:px-8 {% if cta.background %}{{ cta.background }}{% endif %}">
+<div class="not-prose w-full py-14 px-4 sm:px-6 lg:px-8 {% if cta.background %}{{ cta.background }}{% endif %} {% if cta.is_dark_background %}text-white{% endif %}">
   <div class="max-w-6xl mx-auto">
 
     {% if cta.layout == "text_left" %}
       {# ── Layout 1: Text left, image right ── #}
-      <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-        <div class="w-full lg:w-1/2 flex flex-col justify-center">
-          <h2 class="text-2xl sm:text-3xl font-bold mb-4">{{ cta.heading }}</h2>
-          <div class="prose prose-lg max-w-none mb-6">
+      <div class="{% if cta.image %}flex flex-col lg:flex-row items-center gap-8 lg:gap-16{% endif %}">
+        <div class="{% if cta.image %}w-full lg:w-1/2 {% endif %}flex flex-col justify-center">
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight mb-5 {% if cta.is_dark_background %}text-white{% else %}text-base-content{% endif %}">
+            {{ cta.heading }}
+          </h2>
+          <div class="prose prose-xl max-w-none mb-8 [&_p]:font-medium [&_p]:text-lg {% if cta.is_dark_background %}prose-invert{% endif %}">
             {{ cta.text|richtext }}
           </div>
           {% with url=cta.get_button_url label=cta.get_button_label %}
             {% if url %}
               <div>
-                <a href="{{ url }}" class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all">
+                <a href="{{ url }}" class="btn btn-lg rounded-full gap-2 shadow-lg hover:shadow-xl transition-all {% if cta.is_dark_background %}btn-outline border-white/80 text-white hover:bg-white hover:text-neutral hover:border-white{% else %}btn-neutral{% endif %}">
                   {{ label }}
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -29,30 +34,32 @@
             {% endif %}
           {% endwith %}
         </div>
-        <div class="w-full lg:w-1/2">
-          {% if cta.image %}
+        {% if cta.image %}
+          <div class="w-full lg:w-1/2">
             {% image cta.image fill-700x500 class="w-full h-auto rounded-2xl shadow-xl object-cover" %}
-          {% endif %}
-        </div>
+          </div>
+        {% endif %}
       </div>
 
     {% elif cta.layout == "image_left" %}
       {# ── Layout 2: Image left, text right ── #}
-      <div class="flex flex-col-reverse lg:flex-row items-center gap-8 lg:gap-12">
-        <div class="w-full lg:w-1/2">
-          {% if cta.image %}
+      <div class="{% if cta.image %}flex flex-col-reverse lg:flex-row items-center gap-8 lg:gap-16{% endif %}">
+        {% if cta.image %}
+          <div class="w-full lg:w-1/2">
             {% image cta.image fill-700x500 class="w-full h-auto rounded-2xl shadow-xl object-cover" %}
-          {% endif %}
-        </div>
-        <div class="w-full lg:w-1/2 flex flex-col justify-center">
-          <h2 class="text-2xl sm:text-3xl font-bold mb-4">{{ cta.heading }}</h2>
-          <div class="prose prose-lg max-w-none mb-6">
+          </div>
+        {% endif %}
+        <div class="{% if cta.image %}w-full lg:w-1/2 {% endif %}flex flex-col justify-center">
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight mb-5 {% if cta.is_dark_background %}text-white{% else %}text-base-content{% endif %}">
+            {{ cta.heading }}
+          </h2>
+          <div class="prose prose-xl max-w-none mb-8 [&_p]:font-medium [&_p]:text-lg {% if cta.is_dark_background %}prose-invert{% endif %}">
             {{ cta.text|richtext }}
           </div>
           {% with url=cta.get_button_url label=cta.get_button_label %}
             {% if url %}
               <div>
-                <a href="{{ url }}" class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all">
+                <a href="{{ url }}" class="btn btn-lg rounded-full gap-2 shadow-lg hover:shadow-xl transition-all {% if cta.is_dark_background %}btn-outline border-white/80 text-white hover:bg-white hover:text-neutral hover:border-white{% else %}btn-neutral{% endif %}">
                   {{ label }}
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -66,14 +73,16 @@
 
     {% else %}
       {# ── Layout 3: Text centered ── #}
-      <div class="text-center max-w-3xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold mb-4">{{ cta.heading }}</h2>
-        <div class="prose prose-lg max-w-none mb-6 mx-auto">
+      <div class="text-center max-w-4xl mx-auto">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight mb-5 {% if cta.is_dark_background %}text-white{% else %}text-base-content{% endif %}">
+          {{ cta.heading }}
+        </h2>
+        <div class="prose prose-xl max-w-none mb-8 mx-auto [&_p]:font-medium [&_p]:text-lg {% if cta.is_dark_background %}prose-invert{% endif %}">
           {{ cta.text|richtext }}
         </div>
         {% with url=cta.get_button_url label=cta.get_button_label %}
           {% if url %}
-            <a href="{{ url }}" class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all">
+            <a href="{{ url }}" class="btn btn-lg rounded-full gap-2 shadow-lg hover:shadow-xl transition-all {% if cta.is_dark_background %}btn-outline border-white/80 text-white hover:bg-white hover:text-neutral hover:border-white{% else %}btn-neutral{% endif %}">
               {{ label }}
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />

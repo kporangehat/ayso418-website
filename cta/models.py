@@ -110,6 +110,17 @@ class CTA(
     def __str__(self):
         return self.title
 
+    @property
+    def is_dark_background(self):
+        """True for backgrounds that need white text and a light-coloured button."""
+        return self.background in (
+            "cta-bg-blue",
+            "cta-bg-green",
+            "cta-bg-purple",
+            "cta-bg-warm",
+            "cta-bg-dark",
+        )
+
     def get_button_url(self):
         """Return the resolved button URL, preferring button_page over button_url."""
         if self.button_page:
