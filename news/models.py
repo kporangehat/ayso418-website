@@ -257,6 +257,7 @@ class NewsItem(Page):
                 group="Standalone Blocks"
             )),
             ("cta_text", custom_blocks.CTATextBlock()),
+            ("cta_snippet", custom_blocks.CTASnippetBlock()),
             ("recent_news", custom_blocks.RecentNewsBlock()),
 
         ],

@@ -1,8 +1,11 @@
+import random
+
 from django.core.exceptions import ValidationError
 
 from wagtail import blocks
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
+from wagtail.snippets.blocks import SnippetChooserBlock
 
 
 class TextBlock(blocks.TextBlock):
@@ -563,6 +566,32 @@ class ResourcesNavigationBlock(blocks.StaticBlock):
         group = "Standalone Blocks"
 
 
+class CTASnippetBlock(blocks.StructBlock):
+    """
+    A block that randomly selects and displays one CTA from a list of chosen CTA snippets.
+
+    Add multiple CTAs and the block will show a different one each page load,
+    useful for A/B testing or rotating promotional content.
+    """
+    ctas = blocks.ListBlock(
+        SnippetChooserBlock("cta.CTA"),
+        min_num=1,
+        help_text="Select one or more CTAs. A random live one will be displayed each page load.",
+    )
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        live_ctas = [cta for cta in (value.get("ctas") or []) if cta and getattr(cta, "live", True)]
+        context["selected_cta"] = random.choice(live_ctas) if live_ctas else None
+        return context
+
+    class Meta:
+        template = "blocks/cta_snippet_block.html"
+        icon = "expand-right"
+        label = "CTA (Snippet)"
+        group = "Standalone Blocks"
+
+
 class LayoutSectionBlock(blocks.StructBlock):
     """
     A flexible layout block that allows choosing between full-width or content-with-sidebar layouts.
@@ -585,6 +614,7 @@ class LayoutSectionBlock(blocks.StructBlock):
             ('richtext', RichTextBlock()),
             ('image', ImageBlock()),
             ('call_to_action_1', CallToActionBlock()),
+            ('cta_snippet', CTASnippetBlock()),
             ('faq', FAQBlock()),
             ('table', TableBlock(
                 # template="includes/table.html",

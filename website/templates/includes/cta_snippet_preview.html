@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CTA Preview: {{ cta.title }}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
+</head>
+<body class="bg-base-100 p-4">
+  {% include "includes/cta_snippet.html" with cta=cta %}
+</body>
+</html>

@@ -31,6 +31,7 @@ class ResourcesIndex(Page):
             ("richtext", custom_blocks.RichTextBlock()),
             ("image", custom_blocks.ImageBlock()),
             ("call_to_action_1", custom_blocks.CallToActionBlock()),
+            ("cta_snippet", custom_blocks.CTASnippetBlock()),
             ("resources_navigation", custom_blocks.ResourcesNavigationBlock()),
         ],
         block_counts={
@@ -104,6 +105,7 @@ class FlexPage(Page):
     callouts = StreamField(
         [
             ("call_to_action", custom_blocks.CallToActionBlock()),
+            ("cta_snippet", custom_blocks.CTASnippetBlock()),
             ("recent_news", custom_blocks.RecentNewsBlock()),
             ("programs", custom_blocks.ProgramsBlock()),
             ("faq", custom_blocks.FAQBlock()),

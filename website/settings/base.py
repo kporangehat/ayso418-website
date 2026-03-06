@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "flexpage",
     "blocks",
     "site_settings",
+    "cta",
     "contact",
     "events",
     "faq",

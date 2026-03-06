@@ -293,6 +293,44 @@ h1, h2, h3, h4, h5, h6,
     transform: rotate(45deg);
 }
 
+/* CTA snippet background utilities */
+.cta-bg-light {
+    background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.cta-bg-primary {
+    background: linear-gradient(135deg, rgba(0, 102, 204, 0.08) 0%, rgba(66, 195, 254, 0.12) 100%);
+}
+
+.cta-bg-secondary {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.12) 100%);
+}
+
+.cta-bg-blue {
+    background: linear-gradient(135deg, #0066CC 0%, #42c3fe 100%);
+    color: white;
+}
+
+.cta-bg-green {
+    background: linear-gradient(135deg, #166534 0%, #16a34a 100%);
+    color: white;
+}
+
+.cta-bg-purple {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.cta-bg-warm {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.cta-bg-dark {
+    background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 100%);
+    color: white;
+}
+
 /* Background Patterns - Overlays that blend with existing backgrounds */
 /* These use ::before pseudo-elements to layer patterns without overriding bg colors/gradients */
 

@@ -1,0 +1,9 @@
+{% load wagtailcore_tags %}
+{% comment %}
+  Block template for CTASnippetBlock.
+  `selected_cta` is a randomly chosen live CTA snippet from the list.
+{% endcomment %}
+
+{% if selected_cta %}
+  {% include "includes/cta_snippet.html" with cta=selected_cta %}
+{% endif %}

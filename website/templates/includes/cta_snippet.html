@@ -1,0 +1,88 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% comment %}
+  Renders a CTA snippet.
+  Expects `cta` in context (a CTA model instance).
+{% endcomment %}
+
+<div class="w-full py-10 px-4 sm:px-6 lg:px-8 {% if cta.background %}{{ cta.background }}{% endif %}">
+  <div class="max-w-6xl mx-auto">
+
+    {% if cta.layout == "text_left" %}
+      {# ── Layout 1: Text left, image right ── #}
+      <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+        <div class="w-full lg:w-1/2 flex flex-col justify-center">
+          <h2 class="text-2xl sm:text-3xl font-bold mb-4">{{ cta.heading }}</h2>
+          <div class="prose prose-lg max-w-none mb-6">
+            {{ cta.text|richtext }}
+          </div>
+          {% with url=cta.get_button_url label=cta.get_button_label %}
+            {% if url %}
+              <div>
+                <a href="{{ url }}" class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all">
+                  {{ label }}
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </a>
+              </div>
+            {% endif %}
+          {% endwith %}
+        </div>
+        <div class="w-full lg:w-1/2">
+          {% if cta.image %}
+            {% image cta.image fill-700x500 class="w-full h-auto rounded-2xl shadow-xl object-cover" %}
+          {% endif %}
+        </div>
+      </div>
+
+    {% elif cta.layout == "image_left" %}
+      {# ── Layout 2: Image left, text right ── #}
+      <div class="flex flex-col-reverse lg:flex-row items-center gap-8 lg:gap-12">
+        <div class="w-full lg:w-1/2">
+          {% if cta.image %}
+            {% image cta.image fill-700x500 class="w-full h-auto rounded-2xl shadow-xl object-cover" %}
+          {% endif %}
+        </div>
+        <div class="w-full lg:w-1/2 flex flex-col justify-center">
+          <h2 class="text-2xl sm:text-3xl font-bold mb-4">{{ cta.heading }}</h2>
+          <div class="prose prose-lg max-w-none mb-6">
+            {{ cta.text|richtext }}
+          </div>
+          {% with url=cta.get_button_url label=cta.get_button_label %}
+            {% if url %}
+              <div>
+                <a href="{{ url }}" class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all">
+                  {{ label }}
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </a>
+              </div>
+            {% endif %}
+          {% endwith %}
+        </div>
+      </div>
+
+    {% else %}
+      {# ── Layout 3: Text centered ── #}
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4">{{ cta.heading }}</h2>
+        <div class="prose prose-lg max-w-none mb-6 mx-auto">
+          {{ cta.text|richtext }}
+        </div>
+        {% with url=cta.get_button_url label=cta.get_button_label %}
+          {% if url %}
+            <a href="{{ url }}" class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all">
+              {{ label }}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+          {% endif %}
+        {% endwith %}
+      </div>
+    {% endif %}
+
+  </div>
+</div>
